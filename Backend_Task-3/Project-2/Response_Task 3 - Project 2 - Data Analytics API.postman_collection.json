@@ -1,0 +1,714 @@
+{
+  "info": {
+    "_postman_id": "6367181b-c22d-4439-ac1a-b3362c6fc69a",
+    "name": "Task 3 - Project 2 - Data Analytics API",
+    "description": "MongoDB aggregation analytics. Run 'Seed Records' first to populate data, then call the /analytics endpoints (optionally with ?author=&category=&from=&to= filters).",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "43522881"
+  },
+  "item": [
+    {
+      "name": "Health Check",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            ""
+          ]
+        }
+      },
+      "response": [
+        {
+          "name": "Health Check",
+          "originalRequest": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                ""
+              ]
+            }
+          },
+          "status": "OK",
+          "code": 200,
+          "_postman_previewlanguage": null,
+          "header": [
+            {
+              "key": "X-Powered-By",
+              "value": "Express"
+            },
+            {
+              "key": "Content-Type",
+              "value": "application/json; charset=utf-8"
+            },
+            {
+              "key": "Content-Length",
+              "value": "58"
+            },
+            {
+              "key": "ETag",
+              "value": "W/\"3a-/qIbB1Wje5BaFm5SdI+ZxwWFmOg\""
+            },
+            {
+              "key": "Date",
+              "value": "Mon, 22 Jun 2026 06:30:10 GMT"
+            },
+            {
+              "key": "Connection",
+              "value": "keep-alive"
+            },
+            {
+              "key": "Keep-Alive",
+              "value": "timeout=5"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n    \"success\": true,\n    \"message\": \"Data Analytics API is running\"\n}"
+        }
+      ]
+    },
+    {
+      "name": "Create Record",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"title\": \"Sample\",\n  \"category\": \"work\",\n  \"author\": \"john\",\n  \"amount\": 100,\n  \"date\": \"2024-03-15\"\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/records",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "records"
+          ]
+        }
+      },
+      "response": [
+        {
+          "name": "Create Record",
+          "originalRequest": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Sample\",\n  \"category\": \"work\",\n  \"author\": \"john\",\n  \"amount\": 100,\n  \"date\": \"2024-03-15\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/records",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "records"
+              ]
+            }
+          },
+          "status": "Created",
+          "code": 201,
+          "_postman_previewlanguage": null,
+          "header": [
+            {
+              "key": "X-Powered-By",
+              "value": "Express"
+            },
+            {
+              "key": "Content-Type",
+              "value": "application/json; charset=utf-8"
+            },
+            {
+              "key": "Content-Length",
+              "value": "242"
+            },
+            {
+              "key": "ETag",
+              "value": "W/\"f2-146OzpAaYZybGF0Hgo4JfyBo8+c\""
+            },
+            {
+              "key": "Date",
+              "value": "Mon, 22 Jun 2026 06:30:21 GMT"
+            },
+            {
+              "key": "Connection",
+              "value": "keep-alive"
+            },
+            {
+              "key": "Keep-Alive",
+              "value": "timeout=5"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n    \"success\": true,\n    \"data\": {\n        \"title\": \"Sample\",\n        \"category\": \"work\",\n        \"author\": \"john\",\n        \"amount\": 100,\n        \"date\": \"2024-03-15T00:00:00.000Z\",\n        \"_id\": \"6a38d67c335437e0a293e7fa\",\n        \"createdAt\": \"2026-06-22T06:30:20.887Z\",\n        \"updatedAt\": \"2026-06-22T06:30:20.887Z\",\n        \"__v\": 0\n    }\n}"
+        }
+      ]
+    },
+    {
+      "name": "Seed Records (bulk)",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "[\n  { \"title\": \"A\", \"category\": \"work\",     \"author\": \"john\",  \"amount\": 100, \"date\": \"2024-01-10\" },\n  { \"title\": \"B\", \"category\": \"work\",     \"author\": \"john\",  \"amount\": 200, \"date\": \"2024-01-20\" },\n  { \"title\": \"C\", \"category\": \"personal\", \"author\": \"alice\", \"amount\": 50,  \"date\": \"2024-02-05\" },\n  { \"title\": \"D\", \"category\": \"work\",     \"author\": \"alice\", \"amount\": 300, \"date\": \"2024-02-15\" },\n  { \"title\": \"E\", \"category\": \"ideas\",    \"author\": \"john\",  \"amount\": 0,   \"date\": \"2024-03-01\" }\n]"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/records/seed",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "records",
+            "seed"
+          ]
+        }
+      },
+      "response": [
+        {
+          "name": "Seed Records (bulk)",
+          "originalRequest": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "[\n  { \"title\": \"A\", \"category\": \"work\",     \"author\": \"john\",  \"amount\": 100, \"date\": \"2024-01-10\" },\n  { \"title\": \"B\", \"category\": \"work\",     \"author\": \"john\",  \"amount\": 200, \"date\": \"2024-01-20\" },\n  { \"title\": \"C\", \"category\": \"personal\", \"author\": \"alice\", \"amount\": 50,  \"date\": \"2024-02-05\" },\n  { \"title\": \"D\", \"category\": \"work\",     \"author\": \"alice\", \"amount\": 300, \"date\": \"2024-02-15\" },\n  { \"title\": \"E\", \"category\": \"ideas\",    \"author\": \"john\",  \"amount\": 0,   \"date\": \"2024-03-01\" }\n]"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/records/seed",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "records",
+                "seed"
+              ]
+            }
+          },
+          "status": "Created",
+          "code": 201,
+          "_postman_previewlanguage": null,
+          "header": [
+            {
+              "key": "X-Powered-By",
+              "value": "Express"
+            },
+            {
+              "key": "Content-Type",
+              "value": "application/json; charset=utf-8"
+            },
+            {
+              "key": "Content-Length",
+              "value": "1109"
+            },
+            {
+              "key": "ETag",
+              "value": "W/\"455-UdnUVeN/5ncp1oWPjEHWUiWXeCk\""
+            },
+            {
+              "key": "Date",
+              "value": "Mon, 22 Jun 2026 06:30:40 GMT"
+            },
+            {
+              "key": "Connection",
+              "value": "keep-alive"
+            },
+            {
+              "key": "Keep-Alive",
+              "value": "timeout=5"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n    \"success\": true,\n    \"count\": 5,\n    \"data\": [\n        {\n            \"title\": \"A\",\n            \"category\": \"work\",\n            \"author\": \"john\",\n            \"amount\": 100,\n            \"date\": \"2024-01-10T00:00:00.000Z\",\n            \"_id\": \"6a38d690335437e0a293e7fc\",\n            \"__v\": 0,\n            \"createdAt\": \"2026-06-22T06:30:40.299Z\",\n            \"updatedAt\": \"2026-06-22T06:30:40.299Z\"\n        },\n        {\n            \"title\": \"B\",\n            \"category\": \"work\",\n            \"author\": \"john\",\n            \"amount\": 200,\n            \"date\": \"2024-01-20T00:00:00.000Z\",\n            \"_id\": \"6a38d690335437e0a293e7fd\",\n            \"__v\": 0,\n            \"createdAt\": \"2026-06-22T06:30:40.299Z\",\n            \"updatedAt\": \"2026-06-22T06:30:40.299Z\"\n        },\n        {\n            \"title\": \"C\",\n            \"category\": \"personal\",\n            \"author\": \"alice\",\n            \"amount\": 50,\n            \"date\": \"2024-02-05T00:00:00.000Z\",\n            \"_id\": \"6a38d690335437e0a293e7fe\",\n            \"__v\": 0,\n            \"createdAt\": \"2026-06-22T06:30:40.299Z\",\n            \"updatedAt\": \"2026-06-22T06:30:40.299Z\"\n        },\n        {\n            \"title\": \"D\",\n            \"category\": \"work\",\n            \"author\": \"alice\",\n            \"amount\": 300,\n            \"date\": \"2024-02-15T00:00:00.000Z\",\n            \"_id\": \"6a38d690335437e0a293e7ff\",\n            \"__v\": 0,\n            \"createdAt\": \"2026-06-22T06:30:40.299Z\",\n            \"updatedAt\": \"2026-06-22T06:30:40.299Z\"\n        },\n        {\n            \"title\": \"E\",\n            \"category\": \"ideas\",\n            \"author\": \"john\",\n            \"amount\": 0,\n            \"date\": \"2024-03-01T00:00:00.000Z\",\n            \"_id\": \"6a38d690335437e0a293e800\",\n            \"__v\": 0,\n            \"createdAt\": \"2026-06-22T06:30:40.299Z\",\n            \"updatedAt\": \"2026-06-22T06:30:40.299Z\"\n        }\n    ]\n}"
+        }
+      ]
+    },
+    {
+      "name": "Get Records",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/records",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "records"
+          ]
+        }
+      },
+      "response": [
+        {
+          "name": "Get Records",
+          "originalRequest": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/records",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "records"
+              ]
+            }
+          },
+          "status": "OK",
+          "code": 200,
+          "_postman_previewlanguage": null,
+          "header": [
+            {
+              "key": "X-Powered-By",
+              "value": "Express"
+            },
+            {
+              "key": "Content-Type",
+              "value": "application/json; charset=utf-8"
+            },
+            {
+              "key": "Content-Length",
+              "value": "1328"
+            },
+            {
+              "key": "ETag",
+              "value": "W/\"530-nkpbJde7G83TRiep8hPffAHcXEU\""
+            },
+            {
+              "key": "Date",
+              "value": "Mon, 22 Jun 2026 06:30:55 GMT"
+            },
+            {
+              "key": "Connection",
+              "value": "keep-alive"
+            },
+            {
+              "key": "Keep-Alive",
+              "value": "timeout=5"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n    \"success\": true,\n    \"count\": 6,\n    \"data\": [\n        {\n            \"_id\": \"6a38d67c335437e0a293e7fa\",\n            \"title\": \"Sample\",\n            \"category\": \"work\",\n            \"author\": \"john\",\n            \"amount\": 100,\n            \"date\": \"2024-03-15T00:00:00.000Z\",\n            \"createdAt\": \"2026-06-22T06:30:20.887Z\",\n            \"updatedAt\": \"2026-06-22T06:30:20.887Z\",\n            \"__v\": 0\n        },\n        {\n            \"_id\": \"6a38d690335437e0a293e800\",\n            \"title\": \"E\",\n            \"category\": \"ideas\",\n            \"author\": \"john\",\n            \"amount\": 0,\n            \"date\": \"2024-03-01T00:00:00.000Z\",\n            \"__v\": 0,\n            \"createdAt\": \"2026-06-22T06:30:40.299Z\",\n            \"updatedAt\": \"2026-06-22T06:30:40.299Z\"\n        },\n        {\n            \"_id\": \"6a38d690335437e0a293e7ff\",\n            \"title\": \"D\",\n            \"category\": \"work\",\n            \"author\": \"alice\",\n            \"amount\": 300,\n            \"date\": \"2024-02-15T00:00:00.000Z\",\n            \"__v\": 0,\n            \"createdAt\": \"2026-06-22T06:30:40.299Z\",\n            \"updatedAt\": \"2026-06-22T06:30:40.299Z\"\n        },\n        {\n            \"_id\": \"6a38d690335437e0a293e7fe\",\n            \"title\": \"C\",\n            \"category\": \"personal\",\n            \"author\": \"alice\",\n            \"amount\": 50,\n            \"date\": \"2024-02-05T00:00:00.000Z\",\n            \"__v\": 0,\n            \"createdAt\": \"2026-06-22T06:30:40.299Z\",\n            \"updatedAt\": \"2026-06-22T06:30:40.299Z\"\n        },\n        {\n            \"_id\": \"6a38d690335437e0a293e7fd\",\n            \"title\": \"B\",\n            \"category\": \"work\",\n            \"author\": \"john\",\n            \"amount\": 200,\n            \"date\": \"2024-01-20T00:00:00.000Z\",\n            \"__v\": 0,\n            \"createdAt\": \"2026-06-22T06:30:40.299Z\",\n            \"updatedAt\": \"2026-06-22T06:30:40.299Z\"\n        },\n        {\n            \"_id\": \"6a38d690335437e0a293e7fc\",\n            \"title\": \"A\",\n            \"category\": \"work\",\n            \"author\": \"john\",\n            \"amount\": 100,\n            \"date\": \"2024-01-10T00:00:00.000Z\",\n            \"__v\": 0,\n            \"createdAt\": \"2026-06-22T06:30:40.299Z\",\n            \"updatedAt\": \"2026-06-22T06:30:40.299Z\"\n        }\n    ]\n}"
+        }
+      ]
+    },
+    {
+      "name": "Analytics - By Category",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/analytics/by-category",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "analytics",
+            "by-category"
+          ]
+        }
+      },
+      "response": [
+        {
+          "name": "Analytics - By Category",
+          "originalRequest": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/analytics/by-category",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "analytics",
+                "by-category"
+              ]
+            }
+          },
+          "status": "OK",
+          "code": 200,
+          "_postman_previewlanguage": null,
+          "header": [
+            {
+              "key": "X-Powered-By",
+              "value": "Express"
+            },
+            {
+              "key": "Content-Type",
+              "value": "application/json; charset=utf-8"
+            },
+            {
+              "key": "Content-Length",
+              "value": "226"
+            },
+            {
+              "key": "ETag",
+              "value": "W/\"e2-s8tlCMQcKXN+mnMJiYKZBMzwQpQ\""
+            },
+            {
+              "key": "Date",
+              "value": "Mon, 22 Jun 2026 06:31:05 GMT"
+            },
+            {
+              "key": "Connection",
+              "value": "keep-alive"
+            },
+            {
+              "key": "Keep-Alive",
+              "value": "timeout=5"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n    \"success\": true,\n    \"count\": 3,\n    \"data\": [\n        {\n            \"count\": 4,\n            \"totalAmount\": 700,\n            \"category\": \"work\",\n            \"avgAmount\": 175\n        },\n        {\n            \"count\": 1,\n            \"totalAmount\": 0,\n            \"category\": \"ideas\",\n            \"avgAmount\": 0\n        },\n        {\n            \"count\": 1,\n            \"totalAmount\": 50,\n            \"category\": \"personal\",\n            \"avgAmount\": 50\n        }\n    ]\n}"
+        }
+      ]
+    },
+    {
+      "name": "Analytics - By Month",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/analytics/by-month",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "analytics",
+            "by-month"
+          ]
+        }
+      },
+      "response": [
+        {
+          "name": "Analytics - By Month",
+          "originalRequest": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/analytics/by-month",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "analytics",
+                "by-month"
+              ]
+            }
+          },
+          "status": "OK",
+          "code": 200,
+          "_postman_previewlanguage": null,
+          "header": [
+            {
+              "key": "X-Powered-By",
+              "value": "Express"
+            },
+            {
+              "key": "Content-Type",
+              "value": "application/json; charset=utf-8"
+            },
+            {
+              "key": "Content-Length",
+              "value": "248"
+            },
+            {
+              "key": "ETag",
+              "value": "W/\"f8-JjYG5GbrWAJ3YmY+ajSLLFhlHqs\""
+            },
+            {
+              "key": "Date",
+              "value": "Mon, 22 Jun 2026 06:31:19 GMT"
+            },
+            {
+              "key": "Connection",
+              "value": "keep-alive"
+            },
+            {
+              "key": "Keep-Alive",
+              "value": "timeout=5"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n    \"success\": true,\n    \"count\": 3,\n    \"data\": [\n        {\n            \"count\": 2,\n            \"totalAmount\": 300,\n            \"year\": 2024,\n            \"month\": 1,\n            \"period\": \"2024-01\"\n        },\n        {\n            \"count\": 2,\n            \"totalAmount\": 350,\n            \"year\": 2024,\n            \"month\": 2,\n            \"period\": \"2024-02\"\n        },\n        {\n            \"count\": 2,\n            \"totalAmount\": 100,\n            \"year\": 2024,\n            \"month\": 3,\n            \"period\": \"2024-03\"\n        }\n    ]\n}"
+        }
+      ]
+    },
+    {
+      "name": "Analytics - By Author",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/analytics/by-author",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "analytics",
+            "by-author"
+          ]
+        }
+      },
+      "response": [
+        {
+          "name": "Analytics - By Author",
+          "originalRequest": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/analytics/by-author",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "analytics",
+                "by-author"
+              ]
+            }
+          },
+          "status": "OK",
+          "code": 200,
+          "_postman_previewlanguage": null,
+          "header": [
+            {
+              "key": "X-Powered-By",
+              "value": "Express"
+            },
+            {
+              "key": "Content-Type",
+              "value": "application/json; charset=utf-8"
+            },
+            {
+              "key": "Content-Length",
+              "value": "128"
+            },
+            {
+              "key": "ETag",
+              "value": "W/\"80-iiedT6pTSEi/Qtmo5o4Hmd7Qjeg\""
+            },
+            {
+              "key": "Date",
+              "value": "Mon, 22 Jun 2026 06:32:06 GMT"
+            },
+            {
+              "key": "Connection",
+              "value": "keep-alive"
+            },
+            {
+              "key": "Keep-Alive",
+              "value": "timeout=5"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n    \"success\": true,\n    \"count\": 2,\n    \"data\": [\n        {\n            \"count\": 4,\n            \"totalAmount\": 400,\n            \"author\": \"john\"\n        },\n        {\n            \"count\": 2,\n            \"totalAmount\": 350,\n            \"author\": \"alice\"\n        }\n    ]\n}"
+        }
+      ]
+    },
+    {
+      "name": "Analytics - Summary",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/analytics/summary",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "analytics",
+            "summary"
+          ]
+        }
+      },
+      "response": [
+        {
+          "name": "Analytics - Summary",
+          "originalRequest": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/analytics/summary",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "analytics",
+                "summary"
+              ]
+            }
+          },
+          "status": "OK",
+          "code": 200,
+          "_postman_previewlanguage": null,
+          "header": [
+            {
+              "key": "X-Powered-By",
+              "value": "Express"
+            },
+            {
+              "key": "Content-Type",
+              "value": "application/json; charset=utf-8"
+            },
+            {
+              "key": "Content-Length",
+              "value": "106"
+            },
+            {
+              "key": "ETag",
+              "value": "W/\"6a-UYqAvoKZ8DZXIEV3D5uy6Dbglg4\""
+            },
+            {
+              "key": "Date",
+              "value": "Mon, 22 Jun 2026 06:31:43 GMT"
+            },
+            {
+              "key": "Connection",
+              "value": "keep-alive"
+            },
+            {
+              "key": "Keep-Alive",
+              "value": "timeout=5"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n    \"success\": true,\n    \"data\": {\n        \"totalRecords\": 6,\n        \"totalAmount\": 750,\n        \"minAmount\": 0,\n        \"maxAmount\": 300,\n        \"avgAmount\": 125\n    }\n}"
+        }
+      ]
+    },
+    {
+      "name": "Analytics - By Category (filtered)",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/analytics/by-category?author=john&from=2024-01-01&to=2024-12-31",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "analytics",
+            "by-category"
+          ],
+          "query": [
+            {
+              "key": "author",
+              "value": "john"
+            },
+            {
+              "key": "from",
+              "value": "2024-01-01"
+            },
+            {
+              "key": "to",
+              "value": "2024-12-31"
+            }
+          ]
+        }
+      },
+      "response": [
+        {
+          "name": "Analytics - By Category (filtered)",
+          "originalRequest": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/analytics/by-category?author=john&from=2024-01-01&to=2024-12-31",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "analytics",
+                "by-category"
+              ],
+              "query": [
+                {
+                  "key": "author",
+                  "value": "john"
+                },
+                {
+                  "key": "from",
+                  "value": "2024-01-01"
+                },
+                {
+                  "key": "to",
+                  "value": "2024-12-31"
+                }
+              ]
+            }
+          },
+          "status": "OK",
+          "code": 200,
+          "_postman_previewlanguage": null,
+          "header": [
+            {
+              "key": "X-Powered-By",
+              "value": "Express"
+            },
+            {
+              "key": "Content-Type",
+              "value": "application/json; charset=utf-8"
+            },
+            {
+              "key": "Content-Length",
+              "value": "163"
+            },
+            {
+              "key": "ETag",
+              "value": "W/\"a3-K1RbWnIaly/Z6crVcdutDD/Xmhs\""
+            },
+            {
+              "key": "Date",
+              "value": "Mon, 22 Jun 2026 06:31:58 GMT"
+            },
+            {
+              "key": "Connection",
+              "value": "keep-alive"
+            },
+            {
+              "key": "Keep-Alive",
+              "value": "timeout=5"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n    \"success\": true,\n    \"count\": 2,\n    \"data\": [\n        {\n            \"count\": 3,\n            \"totalAmount\": 400,\n            \"category\": \"work\",\n            \"avgAmount\": 133.33\n        },\n        {\n            \"count\": 1,\n            \"totalAmount\": 0,\n            \"category\": \"ideas\",\n            \"avgAmount\": 0\n        }\n    ]\n}"
+        }
+      ]
+    }
+  ],
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:5007"
+    }
+  ]
+}

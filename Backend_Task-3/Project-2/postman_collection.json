@@ -1,0 +1,74 @@
+{
+  "info": {
+    "name": "Task 3 - Project 2 - Data Analytics API",
+    "description": "MongoDB aggregation analytics. Run 'Seed Records' first to populate data, then call the /analytics endpoints (optionally with ?author=&category=&from=&to= filters).",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    { "key": "baseUrl", "value": "http://localhost:5007" }
+  ],
+  "item": [
+    {
+      "name": "Health Check",
+      "request": { "method": "GET", "header": [], "url": { "raw": "{{baseUrl}}/", "host": ["{{baseUrl}}"], "path": [""] } }
+    },
+    {
+      "name": "Create Record",
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "body": { "mode": "raw", "raw": "{\n  \"title\": \"Sample\",\n  \"category\": \"work\",\n  \"author\": \"john\",\n  \"amount\": 100,\n  \"date\": \"2024-03-15\"\n}" },
+        "url": { "raw": "{{baseUrl}}/records", "host": ["{{baseUrl}}"], "path": ["records"] }
+      }
+    },
+    {
+      "name": "Seed Records (bulk)",
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "body": {
+          "mode": "raw",
+          "raw": "[\n  { \"title\": \"A\", \"category\": \"work\",     \"author\": \"john\",  \"amount\": 100, \"date\": \"2024-01-10\" },\n  { \"title\": \"B\", \"category\": \"work\",     \"author\": \"john\",  \"amount\": 200, \"date\": \"2024-01-20\" },\n  { \"title\": \"C\", \"category\": \"personal\", \"author\": \"alice\", \"amount\": 50,  \"date\": \"2024-02-05\" },\n  { \"title\": \"D\", \"category\": \"work\",     \"author\": \"alice\", \"amount\": 300, \"date\": \"2024-02-15\" },\n  { \"title\": \"E\", \"category\": \"ideas\",    \"author\": \"john\",  \"amount\": 0,   \"date\": \"2024-03-01\" }\n]"
+        },
+        "url": { "raw": "{{baseUrl}}/records/seed", "host": ["{{baseUrl}}"], "path": ["records", "seed"] }
+      }
+    },
+    {
+      "name": "Get Records",
+      "request": { "method": "GET", "header": [], "url": { "raw": "{{baseUrl}}/records", "host": ["{{baseUrl}}"], "path": ["records"] } }
+    },
+    {
+      "name": "Analytics - By Category",
+      "request": { "method": "GET", "header": [], "url": { "raw": "{{baseUrl}}/analytics/by-category", "host": ["{{baseUrl}}"], "path": ["analytics", "by-category"] } }
+    },
+    {
+      "name": "Analytics - By Month",
+      "request": { "method": "GET", "header": [], "url": { "raw": "{{baseUrl}}/analytics/by-month", "host": ["{{baseUrl}}"], "path": ["analytics", "by-month"] } }
+    },
+    {
+      "name": "Analytics - By Author",
+      "request": { "method": "GET", "header": [], "url": { "raw": "{{baseUrl}}/analytics/by-author", "host": ["{{baseUrl}}"], "path": ["analytics", "by-author"] } }
+    },
+    {
+      "name": "Analytics - Summary",
+      "request": { "method": "GET", "header": [], "url": { "raw": "{{baseUrl}}/analytics/summary", "host": ["{{baseUrl}}"], "path": ["analytics", "summary"] } }
+    },
+    {
+      "name": "Analytics - By Category (filtered)",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/analytics/by-category?author=john&from=2024-01-01&to=2024-12-31",
+          "host": ["{{baseUrl}}"],
+          "path": ["analytics", "by-category"],
+          "query": [
+            { "key": "author", "value": "john" },
+            { "key": "from", "value": "2024-01-01" },
+            { "key": "to", "value": "2024-12-31" }
+          ]
+        }
+      }
+    }
+  ]
+}
