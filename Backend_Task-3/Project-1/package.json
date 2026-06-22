@@ -1,0 +1,25 @@
+{
+  "name": "backend_task-3_project-1",
+  "version": "1.0.0",
+  "description": "Notes App Backend — users + notes (owner-only CRUD), Mongoose populate, soft-delete/archive (Syntecxhub Backend Task 3 / Project 1)",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon server.js",
+    "dev": "node --watch server.js"
+  },
+  "keywords": ["express", "mongoose", "mongodb", "notes", "jwt", "populate", "rest-api"],
+  "author": "Shubhanjali",
+  "license": "ISC",
+  "type": "commonjs",
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "dotenv": "^16.4.5",
+    "express": "^4.21.2",
+    "jsonwebtoken": "^9.0.2",
+    "mongoose": "^8.9.5"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.9"
+  }
+}
