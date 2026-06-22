@@ -1,0 +1,730 @@
+{
+  "info": {
+    "_postman_id": "b6da815d-115f-455b-acc4-d376645f6f6e",
+    "name": "Task 2 - Project 2 - Blog API",
+    "description": "Blog API with CRUD, pagination, filtering (tag/author/date) and sorting. Run 'Create Post' first; it stores the new id in {{postId}}.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "43522881"
+  },
+  "item": [
+    {
+      "name": "Health Check",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            ""
+          ]
+        }
+      },
+      "response": [
+        {
+          "name": "Health Check",
+          "originalRequest": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                ""
+              ]
+            }
+          },
+          "status": "OK",
+          "code": 200,
+          "_postman_previewlanguage": null,
+          "header": [
+            {
+              "key": "X-Powered-By",
+              "value": "Express"
+            },
+            {
+              "key": "Content-Type",
+              "value": "application/json; charset=utf-8"
+            },
+            {
+              "key": "Content-Length",
+              "value": "48"
+            },
+            {
+              "key": "ETag",
+              "value": "W/\"30-2D2AtfsfqyXe16oh3esOLtBjp/E\""
+            },
+            {
+              "key": "Date",
+              "value": "Mon, 22 Jun 2026 05:45:17 GMT"
+            },
+            {
+              "key": "Connection",
+              "value": "keep-alive"
+            },
+            {
+              "key": "Keep-Alive",
+              "value": "timeout=5"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n    \"success\": true,\n    \"message\": \"Blog API is running\"\n}"
+        }
+      ]
+    },
+    {
+      "name": "Create Post",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "const res = pm.response.json();",
+              "if (res.data && res.data._id) pm.collectionVariables.set('postId', res.data._id);",
+              "pm.test('status is 201', () => pm.response.to.have.status(201));"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"title\": \"Getting Started with Node\",\n  \"body\": \"Node.js is a JavaScript runtime...\",\n  \"author\": \"john\",\n  \"tags\": [\"node\", \"backend\"]\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/posts",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "posts"
+          ]
+        }
+      },
+      "response": [
+        {
+          "name": "Create Post",
+          "originalRequest": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Getting Started with Node\",\n  \"body\": \"Node.js is a JavaScript runtime...\",\n  \"author\": \"john\",\n  \"tags\": [\"node\", \"backend\"]\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/posts",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "posts"
+              ]
+            }
+          },
+          "status": "Created",
+          "code": 201,
+          "_postman_previewlanguage": null,
+          "header": [
+            {
+              "key": "X-Powered-By",
+              "value": "Express"
+            },
+            {
+              "key": "Content-Type",
+              "value": "application/json; charset=utf-8"
+            },
+            {
+              "key": "Content-Length",
+              "value": "266"
+            },
+            {
+              "key": "ETag",
+              "value": "W/\"10a-ibfOqR7H1aKSOKZklK6ZwUqcPs8\""
+            },
+            {
+              "key": "Date",
+              "value": "Mon, 22 Jun 2026 05:45:31 GMT"
+            },
+            {
+              "key": "Connection",
+              "value": "keep-alive"
+            },
+            {
+              "key": "Keep-Alive",
+              "value": "timeout=5"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n    \"success\": true,\n    \"data\": {\n        \"title\": \"Getting Started with Node\",\n        \"body\": \"Node.js is a JavaScript runtime...\",\n        \"author\": \"john\",\n        \"tags\": [\n            \"node\",\n            \"backend\"\n        ],\n        \"_id\": \"6a38cbfb6b2fcb2d57e6b419\",\n        \"createdAt\": \"2026-06-22T05:45:31.653Z\",\n        \"updatedAt\": \"2026-06-22T05:45:31.653Z\",\n        \"__v\": 0\n    }\n}"
+        }
+      ]
+    },
+    {
+      "name": "Create Post - Invalid (missing body)",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"title\": \"No Body\",\n  \"author\": \"john\"\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/posts",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "posts"
+          ]
+        }
+      },
+      "response": [
+        {
+          "name": "Create Post - Invalid (missing body)",
+          "originalRequest": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"No Body\",\n  \"author\": \"john\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/posts",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "posts"
+              ]
+            }
+          },
+          "status": "Bad Request",
+          "code": 400,
+          "_postman_previewlanguage": null,
+          "header": [
+            {
+              "key": "X-Powered-By",
+              "value": "Express"
+            },
+            {
+              "key": "Content-Type",
+              "value": "application/json; charset=utf-8"
+            },
+            {
+              "key": "Content-Length",
+              "value": "46"
+            },
+            {
+              "key": "ETag",
+              "value": "W/\"2e-T5CB0eT6zhO2mtjVeX2TqRRwbrg\""
+            },
+            {
+              "key": "Date",
+              "value": "Mon, 22 Jun 2026 05:45:43 GMT"
+            },
+            {
+              "key": "Connection",
+              "value": "keep-alive"
+            },
+            {
+              "key": "Keep-Alive",
+              "value": "timeout=5"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n    \"success\": false,\n    \"message\": \"Body is required\"\n}"
+        }
+      ]
+    },
+    {
+      "name": "Get All Posts",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/posts",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "posts"
+          ]
+        }
+      },
+      "response": [
+        {
+          "name": "Get All Posts",
+          "originalRequest": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/posts",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "posts"
+              ]
+            }
+          },
+          "status": "OK",
+          "code": 200,
+          "_postman_previewlanguage": null,
+          "header": [
+            {
+              "key": "X-Powered-By",
+              "value": "Express"
+            },
+            {
+              "key": "Content-Type",
+              "value": "application/json; charset=utf-8"
+            },
+            {
+              "key": "Content-Length",
+              "value": "1119"
+            },
+            {
+              "key": "ETag",
+              "value": "W/\"45f-1wI7DrC/bePzeEq3xDG4a52ozBs\""
+            },
+            {
+              "key": "Date",
+              "value": "Mon, 22 Jun 2026 05:45:52 GMT"
+            },
+            {
+              "key": "Connection",
+              "value": "keep-alive"
+            },
+            {
+              "key": "Keep-Alive",
+              "value": "timeout=5"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n    \"success\": true,\n    \"count\": 3,\n    \"total\": 3,\n    \"page\": 1,\n    \"pages\": 1,\n    \"data\": [\n        {\n            \"_id\": \"6a38cbfb6b2fcb2d57e6b419\",\n            \"title\": \"Getting Started with Node\",\n            \"body\": \"Node.js is a JavaScript runtime...\",\n            \"author\": \"john\",\n            \"tags\": [\n                \"node\",\n                \"backend\"\n            ],\n            \"createdAt\": \"2026-06-22T05:45:31.653Z\",\n            \"updatedAt\": \"2026-06-22T05:45:31.653Z\",\n            \"__v\": 0\n        },\n        {\n            \"_id\": \"6a3208c4151e975612cc874d\",\n            \"title\": \"React Hooks - useState and useEffect\",\n            \"body\": \"React Hooks let you use state and lifecycle features in functional components. useState manages local state while useEffect handles side effects like API calls.\",\n            \"author\": \"Shubhanjali\",\n            \"tags\": [\n                \"react\",\n                \"javascript\",\n                \"frontend\"\n            ],\n            \"createdAt\": \"2026-06-17T02:39:00.111Z\",\n            \"updatedAt\": \"2026-06-17T02:39:00.111Z\",\n            \"__v\": 0\n        },\n        {\n            \"_id\": \"6a3208a9151e975612cc874c\",\n            \"title\": \"MongoDB Aggregation Pipeline Explained\",\n            \"body\": \"The MongoDB aggregation pipeline is a powerful framework for data transformation. Using stages like $match, $group, and $project, you can perform complex queries efficiently.\",\n            \"author\": \"Riya\",\n            \"tags\": [\n                \"mongodb\",\n                \"database\",\n                \"backend\"\n            ],\n            \"createdAt\": \"2026-06-17T02:38:33.801Z\",\n            \"updatedAt\": \"2026-06-17T02:38:33.801Z\",\n            \"__v\": 0\n        }\n    ]\n}"
+        }
+      ]
+    },
+    {
+      "name": "Get Posts - Filter by Tag",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/posts?tag=node",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "posts"
+          ],
+          "query": [
+            {
+              "key": "tag",
+              "value": "node"
+            }
+          ]
+        }
+      },
+      "response": [
+        {
+          "name": "Get Posts - Filter by Tag",
+          "originalRequest": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/posts?tag=node",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "posts"
+              ],
+              "query": [
+                {
+                  "key": "tag",
+                  "value": "node"
+                }
+              ]
+            }
+          },
+          "status": "OK",
+          "code": 200,
+          "_postman_previewlanguage": null,
+          "header": [
+            {
+              "key": "X-Powered-By",
+              "value": "Express"
+            },
+            {
+              "key": "Content-Type",
+              "value": "application/json; charset=utf-8"
+            },
+            {
+              "key": "Content-Length",
+              "value": "307"
+            },
+            {
+              "key": "ETag",
+              "value": "W/\"133-0AcAlE8nvFSJB7bkTFDU4lBgGoc\""
+            },
+            {
+              "key": "Date",
+              "value": "Mon, 22 Jun 2026 05:46:00 GMT"
+            },
+            {
+              "key": "Connection",
+              "value": "keep-alive"
+            },
+            {
+              "key": "Keep-Alive",
+              "value": "timeout=5"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n    \"success\": true,\n    \"count\": 1,\n    \"total\": 1,\n    \"page\": 1,\n    \"pages\": 1,\n    \"data\": [\n        {\n            \"_id\": \"6a38cbfb6b2fcb2d57e6b419\",\n            \"title\": \"Getting Started with Node\",\n            \"body\": \"Node.js is a JavaScript runtime...\",\n            \"author\": \"john\",\n            \"tags\": [\n                \"node\",\n                \"backend\"\n            ],\n            \"createdAt\": \"2026-06-22T05:45:31.653Z\",\n            \"updatedAt\": \"2026-06-22T05:45:31.653Z\",\n            \"__v\": 0\n        }\n    ]\n}"
+        }
+      ]
+    },
+    {
+      "name": "Get Posts - Filter by Author",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/posts?author=john",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "posts"
+          ],
+          "query": [
+            {
+              "key": "author",
+              "value": "john"
+            }
+          ]
+        }
+      },
+      "response": [
+        {
+          "name": "Get Posts - Filter by Author",
+          "originalRequest": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/posts?author=john",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "posts"
+              ],
+              "query": [
+                {
+                  "key": "author",
+                  "value": "john"
+                }
+              ]
+            }
+          },
+          "status": "OK",
+          "code": 200,
+          "_postman_previewlanguage": null,
+          "header": [
+            {
+              "key": "X-Powered-By",
+              "value": "Express"
+            },
+            {
+              "key": "Content-Type",
+              "value": "application/json; charset=utf-8"
+            },
+            {
+              "key": "Content-Length",
+              "value": "307"
+            },
+            {
+              "key": "ETag",
+              "value": "W/\"133-0AcAlE8nvFSJB7bkTFDU4lBgGoc\""
+            },
+            {
+              "key": "Date",
+              "value": "Mon, 22 Jun 2026 05:46:09 GMT"
+            },
+            {
+              "key": "Connection",
+              "value": "keep-alive"
+            },
+            {
+              "key": "Keep-Alive",
+              "value": "timeout=5"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n    \"success\": true,\n    \"count\": 1,\n    \"total\": 1,\n    \"page\": 1,\n    \"pages\": 1,\n    \"data\": [\n        {\n            \"_id\": \"6a38cbfb6b2fcb2d57e6b419\",\n            \"title\": \"Getting Started with Node\",\n            \"body\": \"Node.js is a JavaScript runtime...\",\n            \"author\": \"john\",\n            \"tags\": [\n                \"node\",\n                \"backend\"\n            ],\n            \"createdAt\": \"2026-06-22T05:45:31.653Z\",\n            \"updatedAt\": \"2026-06-22T05:45:31.653Z\",\n            \"__v\": 0\n        }\n    ]\n}"
+        }
+      ]
+    },
+    {
+      "name": "Get Posts - Date Range",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/posts?from=2024-01-01&to=2030-12-31",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "posts"
+          ],
+          "query": [
+            {
+              "key": "from",
+              "value": "2024-01-01"
+            },
+            {
+              "key": "to",
+              "value": "2030-12-31"
+            }
+          ]
+        }
+      },
+      "response": [
+        {
+          "name": "Get Posts - Date Range",
+          "originalRequest": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/posts?from=2024-01-01&to=2030-12-31",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "posts"
+              ],
+              "query": [
+                {
+                  "key": "from",
+                  "value": "2024-01-01"
+                },
+                {
+                  "key": "to",
+                  "value": "2030-12-31"
+                }
+              ]
+            }
+          },
+          "status": "OK",
+          "code": 200,
+          "_postman_previewlanguage": null,
+          "header": [
+            {
+              "key": "X-Powered-By",
+              "value": "Express"
+            },
+            {
+              "key": "Content-Type",
+              "value": "application/json; charset=utf-8"
+            },
+            {
+              "key": "Content-Length",
+              "value": "1119"
+            },
+            {
+              "key": "ETag",
+              "value": "W/\"45f-1wI7DrC/bePzeEq3xDG4a52ozBs\""
+            },
+            {
+              "key": "Date",
+              "value": "Mon, 22 Jun 2026 05:46:17 GMT"
+            },
+            {
+              "key": "Connection",
+              "value": "keep-alive"
+            },
+            {
+              "key": "Keep-Alive",
+              "value": "timeout=5"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n    \"success\": true,\n    \"count\": 3,\n    \"total\": 3,\n    \"page\": 1,\n    \"pages\": 1,\n    \"data\": [\n        {\n            \"_id\": \"6a38cbfb6b2fcb2d57e6b419\",\n            \"title\": \"Getting Started with Node\",\n            \"body\": \"Node.js is a JavaScript runtime...\",\n            \"author\": \"john\",\n            \"tags\": [\n                \"node\",\n                \"backend\"\n            ],\n            \"createdAt\": \"2026-06-22T05:45:31.653Z\",\n            \"updatedAt\": \"2026-06-22T05:45:31.653Z\",\n            \"__v\": 0\n        },\n        {\n            \"_id\": \"6a3208c4151e975612cc874d\",\n            \"title\": \"React Hooks - useState and useEffect\",\n            \"body\": \"React Hooks let you use state and lifecycle features in functional components. useState manages local state while useEffect handles side effects like API calls.\",\n            \"author\": \"Shubhanjali\",\n            \"tags\": [\n                \"react\",\n                \"javascript\",\n                \"frontend\"\n            ],\n            \"createdAt\": \"2026-06-17T02:39:00.111Z\",\n            \"updatedAt\": \"2026-06-17T02:39:00.111Z\",\n            \"__v\": 0\n        },\n        {\n            \"_id\": \"6a3208a9151e975612cc874c\",\n            \"title\": \"MongoDB Aggregation Pipeline Explained\",\n            \"body\": \"The MongoDB aggregation pipeline is a powerful framework for data transformation. Using stages like $match, $group, and $project, you can perform complex queries efficiently.\",\n            \"author\": \"Riya\",\n            \"tags\": [\n                \"mongodb\",\n                \"database\",\n                \"backend\"\n            ],\n            \"createdAt\": \"2026-06-17T02:38:33.801Z\",\n            \"updatedAt\": \"2026-06-17T02:38:33.801Z\",\n            \"__v\": 0\n        }\n    ]\n}"
+        }
+      ]
+    },
+    {
+      "name": "Get Posts - Pagination + Sort",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/posts?page=1&limit=5&sort=oldest",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "posts"
+          ],
+          "query": [
+            {
+              "key": "page",
+              "value": "1"
+            },
+            {
+              "key": "limit",
+              "value": "5"
+            },
+            {
+              "key": "sort",
+              "value": "oldest"
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Get Posts - Combined Filters",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/posts?tag=node&author=john&sort=newest&page=1&limit=10",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "posts"
+          ],
+          "query": [
+            {
+              "key": "tag",
+              "value": "node"
+            },
+            {
+              "key": "author",
+              "value": "john"
+            },
+            {
+              "key": "sort",
+              "value": "newest"
+            },
+            {
+              "key": "page",
+              "value": "1"
+            },
+            {
+              "key": "limit",
+              "value": "10"
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Get Post By Id",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/posts/{{postId}}",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "posts",
+            "{{postId}}"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Update Post",
+      "request": {
+        "method": "PUT",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"title\": \"Getting Started with Node (updated)\",\n  \"tags\": [\"node\", \"express\"]\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/posts/{{postId}}",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "posts",
+            "{{postId}}"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Delete Post",
+      "request": {
+        "method": "DELETE",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/posts/{{postId}}",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "posts",
+            "{{postId}}"
+          ]
+        }
+      },
+      "response": []
+    }
+  ],
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:5004"
+    },
+    {
+      "key": "postId",
+      "value": ""
+    }
+  ]
+}
