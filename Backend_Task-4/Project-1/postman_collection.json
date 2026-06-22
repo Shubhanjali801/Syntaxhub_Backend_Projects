@@ -1,0 +1,155 @@
+{
+  "info": {
+    "name": "Task 4 - Project 1 - Role-Based User Management",
+    "description": "RBAC API. Flow: Signup Admin (with adminSecret) -> Login Admin (stores {{adminToken}}). Signup User -> Login User (stores {{userToken}}, {{targetUserId}}). Then exercise admin endpoints.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    { "key": "baseUrl", "value": "http://localhost:5009" },
+    { "key": "adminToken", "value": "" },
+    { "key": "userToken", "value": "" },
+    { "key": "targetUserId", "value": "" }
+  ],
+  "item": [
+    {
+      "name": "Health Check",
+      "request": { "method": "GET", "header": [], "url": { "raw": "{{baseUrl}}/", "host": ["{{baseUrl}}"], "path": [""] } }
+    },
+    {
+      "name": "Signup Admin (with adminSecret)",
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "body": { "mode": "raw", "raw": "{\n  \"username\": \"admin1\",\n  \"email\": \"admin1@example.com\",\n  \"password\": \"secret123\",\n  \"role\": \"admin\",\n  \"adminSecret\": \"super_admin_bootstrap_secret\"\n}" },
+        "url": { "raw": "{{baseUrl}}/auth/signup", "host": ["{{baseUrl}}"], "path": ["auth", "signup"] }
+      }
+    },
+    {
+      "name": "Login Admin",
+      "event": [
+        { "listen": "test", "script": { "type": "text/javascript", "exec": [
+          "const res = pm.response.json();",
+          "if (res.token) pm.collectionVariables.set('adminToken', res.token);",
+          "pm.test('admin login 200', () => pm.response.to.have.status(200));"
+        ] } }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "body": { "mode": "raw", "raw": "{\n  \"identifier\": \"admin1@example.com\",\n  \"password\": \"secret123\"\n}" },
+        "url": { "raw": "{{baseUrl}}/auth/login", "host": ["{{baseUrl}}"], "path": ["auth", "login"] }
+      }
+    },
+    {
+      "name": "Signup User",
+      "event": [
+        { "listen": "test", "script": { "type": "text/javascript", "exec": [
+          "const res = pm.response.json();",
+          "if (res.data && res.data.id) pm.collectionVariables.set('targetUserId', res.data.id);",
+          "pm.test('signup 201', () => pm.response.to.have.status(201));"
+        ] } }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "body": { "mode": "raw", "raw": "{\n  \"username\": \"user1\",\n  \"email\": \"user1@example.com\",\n  \"password\": \"secret123\"\n}" },
+        "url": { "raw": "{{baseUrl}}/auth/signup", "host": ["{{baseUrl}}"], "path": ["auth", "signup"] }
+      }
+    },
+    {
+      "name": "Login User",
+      "event": [
+        { "listen": "test", "script": { "type": "text/javascript", "exec": [
+          "const res = pm.response.json();",
+          "if (res.token) pm.collectionVariables.set('userToken', res.token);"
+        ] } }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "body": { "mode": "raw", "raw": "{\n  \"identifier\": \"user1@example.com\",\n  \"password\": \"secret123\"\n}" },
+        "url": { "raw": "{{baseUrl}}/auth/login", "host": ["{{baseUrl}}"], "path": ["auth", "login"] }
+      }
+    },
+    {
+      "name": "Admin: List Users",
+      "request": {
+        "method": "GET",
+        "header": [{ "key": "Authorization", "value": "Bearer {{adminToken}}" }],
+        "url": { "raw": "{{baseUrl}}/admin/users", "host": ["{{baseUrl}}"], "path": ["admin", "users"] }
+      }
+    },
+    {
+      "name": "User tries Admin route (expect 403)",
+      "request": {
+        "method": "GET",
+        "header": [{ "key": "Authorization", "value": "Bearer {{userToken}}" }],
+        "url": { "raw": "{{baseUrl}}/admin/users", "host": ["{{baseUrl}}"], "path": ["admin", "users"] }
+      }
+    },
+    {
+      "name": "Admin: Promote User",
+      "request": {
+        "method": "PATCH",
+        "header": [{ "key": "Authorization", "value": "Bearer {{adminToken}}" }],
+        "url": { "raw": "{{baseUrl}}/admin/users/{{targetUserId}}/promote", "host": ["{{baseUrl}}"], "path": ["admin", "users", "{{targetUserId}}", "promote"] }
+      }
+    },
+    {
+      "name": "Admin: Demote User",
+      "request": {
+        "method": "PATCH",
+        "header": [{ "key": "Authorization", "value": "Bearer {{adminToken}}" }],
+        "url": { "raw": "{{baseUrl}}/admin/users/{{targetUserId}}/demote", "host": ["{{baseUrl}}"], "path": ["admin", "users", "{{targetUserId}}", "demote"] }
+      }
+    },
+    {
+      "name": "Admin: Block User",
+      "request": {
+        "method": "PATCH",
+        "header": [{ "key": "Authorization", "value": "Bearer {{adminToken}}" }],
+        "url": { "raw": "{{baseUrl}}/admin/users/{{targetUserId}}/block", "host": ["{{baseUrl}}"], "path": ["admin", "users", "{{targetUserId}}", "block"] }
+      }
+    },
+    {
+      "name": "Blocked user tries /auth/me (expect 403)",
+      "request": {
+        "method": "GET",
+        "header": [{ "key": "Authorization", "value": "Bearer {{userToken}}" }],
+        "url": { "raw": "{{baseUrl}}/auth/me", "host": ["{{baseUrl}}"], "path": ["auth", "me"] }
+      }
+    },
+    {
+      "name": "Admin: Unblock User",
+      "request": {
+        "method": "PATCH",
+        "header": [{ "key": "Authorization", "value": "Bearer {{adminToken}}" }],
+        "url": { "raw": "{{baseUrl}}/admin/users/{{targetUserId}}/unblock", "host": ["{{baseUrl}}"], "path": ["admin", "users", "{{targetUserId}}", "unblock"] }
+      }
+    },
+    {
+      "name": "Admin: View Audit Log",
+      "request": {
+        "method": "GET",
+        "header": [{ "key": "Authorization", "value": "Bearer {{adminToken}}" }],
+        "url": { "raw": "{{baseUrl}}/admin/audit", "host": ["{{baseUrl}}"], "path": ["admin", "audit"] }
+      }
+    },
+    {
+      "name": "Admin: Delete User",
+      "request": {
+        "method": "DELETE",
+        "header": [{ "key": "Authorization", "value": "Bearer {{adminToken}}" }],
+        "url": { "raw": "{{baseUrl}}/admin/users/{{targetUserId}}", "host": ["{{baseUrl}}"], "path": ["admin", "users", "{{targetUserId}}"] }
+      }
+    },
+    {
+      "name": "No token on admin route (expect 401)",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": { "raw": "{{baseUrl}}/admin/users", "host": ["{{baseUrl}}"], "path": ["admin", "users"] }
+      }
+    }
+  ]
+}
