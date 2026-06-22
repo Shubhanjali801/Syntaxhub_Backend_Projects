@@ -1,0 +1,33 @@
+{
+  "name": "backend_task-2_project-1",
+  "version": "1.0.0",
+  "description": "User Authentication System — signup/login with bcrypt password hashing and JWT-protected routes (Syntecxhub Backend Task 2 / Project 1)",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon server.js",
+    "dev": "node --watch server.js"
+  },
+  "keywords": [
+    "express",
+    "mongoose",
+    "mongodb",
+    "auth",
+    "jwt",
+    "bcrypt",
+    "rest-api"
+  ],
+  "author": "Shubhanjali",
+  "license": "ISC",
+  "type": "commonjs",
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "dotenv": "^16.6.1",
+    "express": "^4.22.2",
+    "jsonwebtoken": "^9.0.3",
+    "mongoose": "^8.24.0"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.14"
+  }
+}
