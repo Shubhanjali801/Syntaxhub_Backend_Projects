@@ -1,0 +1,1032 @@
+{
+  "info": {
+    "_postman_id": "a156de81-f858-42de-86c8-09282d3d7e1d",
+    "name": "Task 1 - Project 2 - Product CRUD API",
+    "description": "Product CRUD API with filtering, price range, sorting and pagination. Run 'Create Product' first; it stores the new id in {{productId}}.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "43522881"
+  },
+  "item": [
+    {
+      "name": "Health Check",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            ""
+          ]
+        }
+      },
+      "response": [
+        {
+          "name": "Health Check",
+          "originalRequest": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                ""
+              ]
+            }
+          },
+          "status": "OK",
+          "code": 200,
+          "_postman_previewlanguage": null,
+          "header": [
+            {
+              "key": "X-Powered-By",
+              "value": "Express"
+            },
+            {
+              "key": "Content-Type",
+              "value": "application/json; charset=utf-8"
+            },
+            {
+              "key": "Content-Length",
+              "value": "56"
+            },
+            {
+              "key": "ETag",
+              "value": "W/\"38-FLddeGTL2ptlzdLGBqZ+bDSb+2k\""
+            },
+            {
+              "key": "Date",
+              "value": "Mon, 22 Jun 2026 04:42:49 GMT"
+            },
+            {
+              "key": "Connection",
+              "value": "keep-alive"
+            },
+            {
+              "key": "Keep-Alive",
+              "value": "timeout=5"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n    \"success\": true,\n    \"message\": \"Product CRUD API is running\"\n}"
+        }
+      ]
+    },
+    {
+      "name": "Create Product",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "const res = pm.response.json();",
+              "if (res.data && res.data._id) {",
+              "  pm.collectionVariables.set('productId', res.data._id);",
+              "}",
+              "pm.test('status is 201', () => pm.response.to.have.status(201));"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"name\": \"Laptop\",\n  \"price\": 1200,\n  \"description\": \"14-inch ultrabook\",\n  \"category\": \"electronics\"\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/products",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "products"
+          ]
+        }
+      },
+      "response": [
+        {
+          "name": "Create Product",
+          "originalRequest": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Laptop\",\n  \"price\": 1200,\n  \"description\": \"14-inch ultrabook\",\n  \"category\": \"electronics\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/products",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "products"
+              ]
+            }
+          },
+          "status": "Created",
+          "code": 201,
+          "_postman_previewlanguage": null,
+          "header": [
+            {
+              "key": "X-Powered-By",
+              "value": "Express"
+            },
+            {
+              "key": "Content-Type",
+              "value": "application/json; charset=utf-8"
+            },
+            {
+              "key": "Content-Length",
+              "value": "232"
+            },
+            {
+              "key": "ETag",
+              "value": "W/\"e8-4MlXzXrpzhsknUT3dinw7uF91uQ\""
+            },
+            {
+              "key": "Date",
+              "value": "Mon, 22 Jun 2026 04:42:55 GMT"
+            },
+            {
+              "key": "Connection",
+              "value": "keep-alive"
+            },
+            {
+              "key": "Keep-Alive",
+              "value": "timeout=5"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n    \"success\": true,\n    \"data\": {\n        \"name\": \"Laptop\",\n        \"price\": 1200,\n        \"description\": \"14-inch ultrabook\",\n        \"category\": \"electronics\",\n        \"_id\": \"6a38bd4f1bcd2e6f8aa459ac\",\n        \"createdAt\": \"2026-06-22T04:42:55.622Z\",\n        \"updatedAt\": \"2026-06-22T04:42:55.622Z\",\n        \"__v\": 0\n    }\n}"
+        }
+      ]
+    },
+    {
+      "name": "Create Product - Invalid (missing price)",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"name\": \"NoPrice\"\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/products",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "products"
+          ]
+        }
+      },
+      "response": [
+        {
+          "name": "Create Product - Invalid (missing price)",
+          "originalRequest": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"NoPrice\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/products",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "products"
+              ]
+            }
+          },
+          "status": "Bad Request",
+          "code": 400,
+          "_postman_previewlanguage": null,
+          "header": [
+            {
+              "key": "X-Powered-By",
+              "value": "Express"
+            },
+            {
+              "key": "Content-Type",
+              "value": "application/json; charset=utf-8"
+            },
+            {
+              "key": "Content-Length",
+              "value": "47"
+            },
+            {
+              "key": "ETag",
+              "value": "W/\"2f-yEx/PENKTiwBTUXBJORyXour3dU\""
+            },
+            {
+              "key": "Date",
+              "value": "Mon, 22 Jun 2026 04:43:09 GMT"
+            },
+            {
+              "key": "Connection",
+              "value": "keep-alive"
+            },
+            {
+              "key": "Keep-Alive",
+              "value": "timeout=5"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n    \"success\": false,\n    \"message\": \"Price is required\"\n}"
+        }
+      ]
+    },
+    {
+      "name": "Get All Products",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/products",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "products"
+          ]
+        }
+      },
+      "response": [
+        {
+          "name": "Get All Products",
+          "originalRequest": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/products",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "products"
+              ]
+            }
+          },
+          "status": "OK",
+          "code": 200,
+          "_postman_previewlanguage": null,
+          "header": [
+            {
+              "key": "X-Powered-By",
+              "value": "Express"
+            },
+            {
+              "key": "Content-Type",
+              "value": "application/json; charset=utf-8"
+            },
+            {
+              "key": "Content-Length",
+              "value": "1201"
+            },
+            {
+              "key": "ETag",
+              "value": "W/\"4b1-mlui7hxafjGdZrBW6TuKLt+hmHM\""
+            },
+            {
+              "key": "Date",
+              "value": "Mon, 22 Jun 2026 04:43:16 GMT"
+            },
+            {
+              "key": "Connection",
+              "value": "keep-alive"
+            },
+            {
+              "key": "Keep-Alive",
+              "value": "timeout=5"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n    \"success\": true,\n    \"count\": 5,\n    \"total\": 5,\n    \"page\": 1,\n    \"pages\": 1,\n    \"data\": [\n        {\n            \"_id\": \"6a38bd4f1bcd2e6f8aa459ac\",\n            \"name\": \"Laptop\",\n            \"price\": 1200,\n            \"description\": \"14-inch ultrabook\",\n            \"category\": \"electronics\",\n            \"createdAt\": \"2026-06-22T04:42:55.622Z\",\n            \"updatedAt\": \"2026-06-22T04:42:55.622Z\",\n            \"__v\": 0\n        },\n        {\n            \"_id\": \"6a38bcf21bcd2e6f8aa459aa\",\n            \"name\": \"Laptop\",\n            \"price\": 1200,\n            \"description\": \"14-inch ultrabook\",\n            \"category\": \"electronics\",\n            \"createdAt\": \"2026-06-22T04:41:22.310Z\",\n            \"updatedAt\": \"2026-06-22T04:41:22.310Z\",\n            \"__v\": 0\n        },\n        {\n            \"_id\": \"6a320711151e975612cc8748\",\n            \"name\": \"Clean Code by Robert Martin\",\n            \"price\": 850,\n            \"description\": \"A handbook of agile software craftsmanship\",\n            \"category\": \"books\",\n            \"createdAt\": \"2026-06-17T02:31:45.760Z\",\n            \"updatedAt\": \"2026-06-17T02:31:45.760Z\",\n            \"__v\": 0\n        },\n        {\n            \"_id\": \"6a32070a151e975612cc8747\",\n            \"name\": \"Cotton Round Neck T-Shirt\",\n            \"price\": 499,\n            \"description\": \"Comfortable everyday wear\",\n            \"category\": \"clothing\",\n            \"createdAt\": \"2026-06-17T02:31:38.785Z\",\n            \"updatedAt\": \"2026-06-17T02:31:38.785Z\",\n            \"__v\": 0\n        },\n        {\n            \"_id\": \"6a320702151e975612cc8746\",\n            \"name\": \"Samsung Galaxy S24\",\n            \"price\": 74999,\n            \"description\": \"Latest Samsung flagship smartphone\",\n            \"category\": \"electronics\",\n            \"createdAt\": \"2026-06-17T02:31:30.843Z\",\n            \"updatedAt\": \"2026-06-17T02:31:30.843Z\",\n            \"__v\": 0\n        }\n    ]\n}"
+        }
+      ]
+    },
+    {
+      "name": "Get Products - Filter by Category",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/products?category=electronics",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "products"
+          ],
+          "query": [
+            {
+              "key": "category",
+              "value": "electronics"
+            }
+          ]
+        }
+      },
+      "response": [
+        {
+          "name": "Get Products - Filter by Category",
+          "originalRequest": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/products?category=electronics",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "products"
+              ],
+              "query": [
+                {
+                  "key": "category",
+                  "value": "electronics"
+                }
+              ]
+            }
+          },
+          "status": "OK",
+          "code": 200,
+          "_postman_previewlanguage": null,
+          "header": [
+            {
+              "key": "X-Powered-By",
+              "value": "Express"
+            },
+            {
+              "key": "Content-Type",
+              "value": "application/json; charset=utf-8"
+            },
+            {
+              "key": "Content-Length",
+              "value": "721"
+            },
+            {
+              "key": "ETag",
+              "value": "W/\"2d1-ZweY8uokoDK/Ul2jMLO1/fAr2uU\""
+            },
+            {
+              "key": "Date",
+              "value": "Mon, 22 Jun 2026 04:43:30 GMT"
+            },
+            {
+              "key": "Connection",
+              "value": "keep-alive"
+            },
+            {
+              "key": "Keep-Alive",
+              "value": "timeout=5"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n    \"success\": true,\n    \"count\": 3,\n    \"total\": 3,\n    \"page\": 1,\n    \"pages\": 1,\n    \"data\": [\n        {\n            \"_id\": \"6a38bd4f1bcd2e6f8aa459ac\",\n            \"name\": \"Laptop\",\n            \"price\": 1200,\n            \"description\": \"14-inch ultrabook\",\n            \"category\": \"electronics\",\n            \"createdAt\": \"2026-06-22T04:42:55.622Z\",\n            \"updatedAt\": \"2026-06-22T04:42:55.622Z\",\n            \"__v\": 0\n        },\n        {\n            \"_id\": \"6a38bcf21bcd2e6f8aa459aa\",\n            \"name\": \"Laptop\",\n            \"price\": 1200,\n            \"description\": \"14-inch ultrabook\",\n            \"category\": \"electronics\",\n            \"createdAt\": \"2026-06-22T04:41:22.310Z\",\n            \"updatedAt\": \"2026-06-22T04:41:22.310Z\",\n            \"__v\": 0\n        },\n        {\n            \"_id\": \"6a320702151e975612cc8746\",\n            \"name\": \"Samsung Galaxy S24\",\n            \"price\": 74999,\n            \"description\": \"Latest Samsung flagship smartphone\",\n            \"category\": \"electronics\",\n            \"createdAt\": \"2026-06-17T02:31:30.843Z\",\n            \"updatedAt\": \"2026-06-17T02:31:30.843Z\",\n            \"__v\": 0\n        }\n    ]\n}"
+        }
+      ]
+    },
+    {
+      "name": "Get Products - Price Range",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/products?minPrice=100&maxPrice=1000",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "products"
+          ],
+          "query": [
+            {
+              "key": "minPrice",
+              "value": "100"
+            },
+            {
+              "key": "maxPrice",
+              "value": "1000"
+            }
+          ]
+        }
+      },
+      "response": [
+        {
+          "name": "Get Products - Price Range",
+          "originalRequest": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/products?minPrice=100&maxPrice=1000",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "products"
+              ],
+              "query": [
+                {
+                  "key": "minPrice",
+                  "value": "100"
+                },
+                {
+                  "key": "maxPrice",
+                  "value": "1000"
+                }
+              ]
+            }
+          },
+          "status": "OK",
+          "code": 200,
+          "_postman_previewlanguage": null,
+          "header": [
+            {
+              "key": "X-Powered-By",
+              "value": "Express"
+            },
+            {
+              "key": "Content-Type",
+              "value": "application/json; charset=utf-8"
+            },
+            {
+              "key": "Content-Length",
+              "value": "544"
+            },
+            {
+              "key": "ETag",
+              "value": "W/\"220-vmYazNDT5PcLY3fC1h6UDPYQZMI\""
+            },
+            {
+              "key": "Date",
+              "value": "Mon, 22 Jun 2026 04:43:42 GMT"
+            },
+            {
+              "key": "Connection",
+              "value": "keep-alive"
+            },
+            {
+              "key": "Keep-Alive",
+              "value": "timeout=5"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n    \"success\": true,\n    \"count\": 2,\n    \"total\": 2,\n    \"page\": 1,\n    \"pages\": 1,\n    \"data\": [\n        {\n            \"_id\": \"6a320711151e975612cc8748\",\n            \"name\": \"Clean Code by Robert Martin\",\n            \"price\": 850,\n            \"description\": \"A handbook of agile software craftsmanship\",\n            \"category\": \"books\",\n            \"createdAt\": \"2026-06-17T02:31:45.760Z\",\n            \"updatedAt\": \"2026-06-17T02:31:45.760Z\",\n            \"__v\": 0\n        },\n        {\n            \"_id\": \"6a32070a151e975612cc8747\",\n            \"name\": \"Cotton Round Neck T-Shirt\",\n            \"price\": 499,\n            \"description\": \"Comfortable everyday wear\",\n            \"category\": \"clothing\",\n            \"createdAt\": \"2026-06-17T02:31:38.785Z\",\n            \"updatedAt\": \"2026-06-17T02:31:38.785Z\",\n            \"__v\": 0\n        }\n    ]\n}"
+        }
+      ]
+    },
+    {
+      "name": "Get Products - Pagination + Sort",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/products?page=1&limit=10&sort=price_asc",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "products"
+          ],
+          "query": [
+            {
+              "key": "page",
+              "value": "1"
+            },
+            {
+              "key": "limit",
+              "value": "10"
+            },
+            {
+              "key": "sort",
+              "value": "price_asc"
+            }
+          ]
+        }
+      },
+      "response": [
+        {
+          "name": "Get Products - Pagination + Sort",
+          "originalRequest": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/products?page=1&limit=10&sort=price_asc",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "products"
+              ],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "1"
+                },
+                {
+                  "key": "limit",
+                  "value": "10"
+                },
+                {
+                  "key": "sort",
+                  "value": "price_asc"
+                }
+              ]
+            }
+          },
+          "status": "OK",
+          "code": 200,
+          "_postman_previewlanguage": null,
+          "header": [
+            {
+              "key": "X-Powered-By",
+              "value": "Express"
+            },
+            {
+              "key": "Content-Type",
+              "value": "application/json; charset=utf-8"
+            },
+            {
+              "key": "Content-Length",
+              "value": "1201"
+            },
+            {
+              "key": "ETag",
+              "value": "W/\"4b1-irxec66IKWpjodky5ZZjfPprf3s\""
+            },
+            {
+              "key": "Date",
+              "value": "Mon, 22 Jun 2026 04:43:52 GMT"
+            },
+            {
+              "key": "Connection",
+              "value": "keep-alive"
+            },
+            {
+              "key": "Keep-Alive",
+              "value": "timeout=5"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n    \"success\": true,\n    \"count\": 5,\n    \"total\": 5,\n    \"page\": 1,\n    \"pages\": 1,\n    \"data\": [\n        {\n            \"_id\": \"6a32070a151e975612cc8747\",\n            \"name\": \"Cotton Round Neck T-Shirt\",\n            \"price\": 499,\n            \"description\": \"Comfortable everyday wear\",\n            \"category\": \"clothing\",\n            \"createdAt\": \"2026-06-17T02:31:38.785Z\",\n            \"updatedAt\": \"2026-06-17T02:31:38.785Z\",\n            \"__v\": 0\n        },\n        {\n            \"_id\": \"6a320711151e975612cc8748\",\n            \"name\": \"Clean Code by Robert Martin\",\n            \"price\": 850,\n            \"description\": \"A handbook of agile software craftsmanship\",\n            \"category\": \"books\",\n            \"createdAt\": \"2026-06-17T02:31:45.760Z\",\n            \"updatedAt\": \"2026-06-17T02:31:45.760Z\",\n            \"__v\": 0\n        },\n        {\n            \"_id\": \"6a38bcf21bcd2e6f8aa459aa\",\n            \"name\": \"Laptop\",\n            \"price\": 1200,\n            \"description\": \"14-inch ultrabook\",\n            \"category\": \"electronics\",\n            \"createdAt\": \"2026-06-22T04:41:22.310Z\",\n            \"updatedAt\": \"2026-06-22T04:41:22.310Z\",\n            \"__v\": 0\n        },\n        {\n            \"_id\": \"6a38bd4f1bcd2e6f8aa459ac\",\n            \"name\": \"Laptop\",\n            \"price\": 1200,\n            \"description\": \"14-inch ultrabook\",\n            \"category\": \"electronics\",\n            \"createdAt\": \"2026-06-22T04:42:55.622Z\",\n            \"updatedAt\": \"2026-06-22T04:42:55.622Z\",\n            \"__v\": 0\n        },\n        {\n            \"_id\": \"6a320702151e975612cc8746\",\n            \"name\": \"Samsung Galaxy S24\",\n            \"price\": 74999,\n            \"description\": \"Latest Samsung flagship smartphone\",\n            \"category\": \"electronics\",\n            \"createdAt\": \"2026-06-17T02:31:30.843Z\",\n            \"updatedAt\": \"2026-06-17T02:31:30.843Z\",\n            \"__v\": 0\n        }\n    ]\n}"
+        }
+      ]
+    },
+    {
+      "name": "Get Products - Combined Filters",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/products?category=electronics&minPrice=500&sort=price_desc&page=1&limit=5",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "products"
+          ],
+          "query": [
+            {
+              "key": "category",
+              "value": "electronics"
+            },
+            {
+              "key": "minPrice",
+              "value": "500"
+            },
+            {
+              "key": "sort",
+              "value": "price_desc"
+            },
+            {
+              "key": "page",
+              "value": "1"
+            },
+            {
+              "key": "limit",
+              "value": "5"
+            }
+          ]
+        }
+      },
+      "response": [
+        {
+          "name": "Get Products - Combined Filters",
+          "originalRequest": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/products?category=electronics&minPrice=500&sort=price_desc&page=1&limit=5",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "products"
+              ],
+              "query": [
+                {
+                  "key": "category",
+                  "value": "electronics"
+                },
+                {
+                  "key": "minPrice",
+                  "value": "500"
+                },
+                {
+                  "key": "sort",
+                  "value": "price_desc"
+                },
+                {
+                  "key": "page",
+                  "value": "1"
+                },
+                {
+                  "key": "limit",
+                  "value": "5"
+                }
+              ]
+            }
+          },
+          "status": "OK",
+          "code": 200,
+          "_postman_previewlanguage": null,
+          "header": [
+            {
+              "key": "X-Powered-By",
+              "value": "Express"
+            },
+            {
+              "key": "Content-Type",
+              "value": "application/json; charset=utf-8"
+            },
+            {
+              "key": "Content-Length",
+              "value": "721"
+            },
+            {
+              "key": "ETag",
+              "value": "W/\"2d1-2iJPU1kOKJ2e3Y/fxz3bEEqXVLE\""
+            },
+            {
+              "key": "Date",
+              "value": "Mon, 22 Jun 2026 04:44:04 GMT"
+            },
+            {
+              "key": "Connection",
+              "value": "keep-alive"
+            },
+            {
+              "key": "Keep-Alive",
+              "value": "timeout=5"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n    \"success\": true,\n    \"count\": 3,\n    \"total\": 3,\n    \"page\": 1,\n    \"pages\": 1,\n    \"data\": [\n        {\n            \"_id\": \"6a320702151e975612cc8746\",\n            \"name\": \"Samsung Galaxy S24\",\n            \"price\": 74999,\n            \"description\": \"Latest Samsung flagship smartphone\",\n            \"category\": \"electronics\",\n            \"createdAt\": \"2026-06-17T02:31:30.843Z\",\n            \"updatedAt\": \"2026-06-17T02:31:30.843Z\",\n            \"__v\": 0\n        },\n        {\n            \"_id\": \"6a38bcf21bcd2e6f8aa459aa\",\n            \"name\": \"Laptop\",\n            \"price\": 1200,\n            \"description\": \"14-inch ultrabook\",\n            \"category\": \"electronics\",\n            \"createdAt\": \"2026-06-22T04:41:22.310Z\",\n            \"updatedAt\": \"2026-06-22T04:41:22.310Z\",\n            \"__v\": 0\n        },\n        {\n            \"_id\": \"6a38bd4f1bcd2e6f8aa459ac\",\n            \"name\": \"Laptop\",\n            \"price\": 1200,\n            \"description\": \"14-inch ultrabook\",\n            \"category\": \"electronics\",\n            \"createdAt\": \"2026-06-22T04:42:55.622Z\",\n            \"updatedAt\": \"2026-06-22T04:42:55.622Z\",\n            \"__v\": 0\n        }\n    ]\n}"
+        },
+        {
+          "name": "Get Products - Combined Filters",
+          "originalRequest": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/products?category=electronics&minPrice=500&sort=price_desc&page=1&limit=5",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "products"
+              ],
+              "query": [
+                {
+                  "key": "category",
+                  "value": "electronics"
+                },
+                {
+                  "key": "minPrice",
+                  "value": "500"
+                },
+                {
+                  "key": "sort",
+                  "value": "price_desc"
+                },
+                {
+                  "key": "page",
+                  "value": "1"
+                },
+                {
+                  "key": "limit",
+                  "value": "5"
+                }
+              ]
+            }
+          },
+          "status": "OK",
+          "code": 200,
+          "_postman_previewlanguage": null,
+          "header": [
+            {
+              "key": "X-Powered-By",
+              "value": "Express"
+            },
+            {
+              "key": "Content-Type",
+              "value": "application/json; charset=utf-8"
+            },
+            {
+              "key": "Content-Length",
+              "value": "721"
+            },
+            {
+              "key": "ETag",
+              "value": "W/\"2d1-2iJPU1kOKJ2e3Y/fxz3bEEqXVLE\""
+            },
+            {
+              "key": "Date",
+              "value": "Mon, 22 Jun 2026 04:44:04 GMT"
+            },
+            {
+              "key": "Connection",
+              "value": "keep-alive"
+            },
+            {
+              "key": "Keep-Alive",
+              "value": "timeout=5"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n    \"success\": true,\n    \"count\": 3,\n    \"total\": 3,\n    \"page\": 1,\n    \"pages\": 1,\n    \"data\": [\n        {\n            \"_id\": \"6a320702151e975612cc8746\",\n            \"name\": \"Samsung Galaxy S24\",\n            \"price\": 74999,\n            \"description\": \"Latest Samsung flagship smartphone\",\n            \"category\": \"electronics\",\n            \"createdAt\": \"2026-06-17T02:31:30.843Z\",\n            \"updatedAt\": \"2026-06-17T02:31:30.843Z\",\n            \"__v\": 0\n        },\n        {\n            \"_id\": \"6a38bcf21bcd2e6f8aa459aa\",\n            \"name\": \"Laptop\",\n            \"price\": 1200,\n            \"description\": \"14-inch ultrabook\",\n            \"category\": \"electronics\",\n            \"createdAt\": \"2026-06-22T04:41:22.310Z\",\n            \"updatedAt\": \"2026-06-22T04:41:22.310Z\",\n            \"__v\": 0\n        },\n        {\n            \"_id\": \"6a38bd4f1bcd2e6f8aa459ac\",\n            \"name\": \"Laptop\",\n            \"price\": 1200,\n            \"description\": \"14-inch ultrabook\",\n            \"category\": \"electronics\",\n            \"createdAt\": \"2026-06-22T04:42:55.622Z\",\n            \"updatedAt\": \"2026-06-22T04:42:55.622Z\",\n            \"__v\": 0\n        }\n    ]\n}"
+        }
+      ]
+    },
+    {
+      "name": "Get Product By Id",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/products/{{productId}}",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "products",
+            "{{productId}}"
+          ]
+        }
+      },
+      "response": [
+        {
+          "name": "Get Product By Id",
+          "originalRequest": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/products/{{productId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "products",
+                "{{productId}}"
+              ]
+            }
+          },
+          "status": "OK",
+          "code": 200,
+          "_postman_previewlanguage": null,
+          "header": [
+            {
+              "key": "X-Powered-By",
+              "value": "Express"
+            },
+            {
+              "key": "Content-Type",
+              "value": "application/json; charset=utf-8"
+            },
+            {
+              "key": "Content-Length",
+              "value": "232"
+            },
+            {
+              "key": "ETag",
+              "value": "W/\"e8-1DYCD8fAk/LrhaRkODf2k52yYRs\""
+            },
+            {
+              "key": "Date",
+              "value": "Mon, 22 Jun 2026 04:44:14 GMT"
+            },
+            {
+              "key": "Connection",
+              "value": "keep-alive"
+            },
+            {
+              "key": "Keep-Alive",
+              "value": "timeout=5"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n    \"success\": true,\n    \"data\": {\n        \"_id\": \"6a38bd4f1bcd2e6f8aa459ac\",\n        \"name\": \"Laptop\",\n        \"price\": 1200,\n        \"description\": \"14-inch ultrabook\",\n        \"category\": \"electronics\",\n        \"createdAt\": \"2026-06-22T04:42:55.622Z\",\n        \"updatedAt\": \"2026-06-22T04:42:55.622Z\",\n        \"__v\": 0\n    }\n}"
+        }
+      ]
+    },
+    {
+      "name": "Update Product",
+      "request": {
+        "method": "PUT",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"price\": 999\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/products/{{productId}}",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "products",
+            "{{productId}}"
+          ]
+        }
+      },
+      "response": [
+        {
+          "name": "Update Product",
+          "originalRequest": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"price\": 999\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/products/{{productId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "products",
+                "{{productId}}"
+              ]
+            }
+          },
+          "status": "OK",
+          "code": 200,
+          "_postman_previewlanguage": null,
+          "header": [
+            {
+              "key": "X-Powered-By",
+              "value": "Express"
+            },
+            {
+              "key": "Content-Type",
+              "value": "application/json; charset=utf-8"
+            },
+            {
+              "key": "Content-Length",
+              "value": "231"
+            },
+            {
+              "key": "ETag",
+              "value": "W/\"e7-8fyoNmVyseNNO6YBLkW2Q2F9e+k\""
+            },
+            {
+              "key": "Date",
+              "value": "Mon, 22 Jun 2026 04:44:25 GMT"
+            },
+            {
+              "key": "Connection",
+              "value": "keep-alive"
+            },
+            {
+              "key": "Keep-Alive",
+              "value": "timeout=5"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n    \"success\": true,\n    \"data\": {\n        \"_id\": \"6a38bd4f1bcd2e6f8aa459ac\",\n        \"name\": \"Laptop\",\n        \"price\": 999,\n        \"description\": \"14-inch ultrabook\",\n        \"category\": \"electronics\",\n        \"createdAt\": \"2026-06-22T04:42:55.622Z\",\n        \"updatedAt\": \"2026-06-22T04:44:25.580Z\",\n        \"__v\": 0\n    }\n}"
+        }
+      ]
+    },
+    {
+      "name": "Delete Product",
+      "request": {
+        "method": "DELETE",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/products/{{productId}}",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "products",
+            "{{productId}}"
+          ]
+        }
+      },
+      "response": [
+        {
+          "name": "Delete Product",
+          "originalRequest": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/products/{{productId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "products",
+                "{{productId}}"
+              ]
+            }
+          },
+          "status": "OK",
+          "code": 200,
+          "_postman_previewlanguage": null,
+          "header": [
+            {
+              "key": "X-Powered-By",
+              "value": "Express"
+            },
+            {
+              "key": "Content-Type",
+              "value": "application/json; charset=utf-8"
+            },
+            {
+              "key": "Content-Length",
+              "value": "259"
+            },
+            {
+              "key": "ETag",
+              "value": "W/\"103-+sDD2mVjvt5vD5hMwcnnwf0qDiM\""
+            },
+            {
+              "key": "Date",
+              "value": "Mon, 22 Jun 2026 04:44:39 GMT"
+            },
+            {
+              "key": "Connection",
+              "value": "keep-alive"
+            },
+            {
+              "key": "Keep-Alive",
+              "value": "timeout=5"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n    \"success\": true,\n    \"message\": \"Product deleted\",\n    \"data\": {\n        \"_id\": \"6a38bd4f1bcd2e6f8aa459ac\",\n        \"name\": \"Laptop\",\n        \"price\": 999,\n        \"description\": \"14-inch ultrabook\",\n        \"category\": \"electronics\",\n        \"createdAt\": \"2026-06-22T04:42:55.622Z\",\n        \"updatedAt\": \"2026-06-22T04:44:25.580Z\",\n        \"__v\": 0\n    }\n}"
+        }
+      ]
+    }
+  ],
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:5001"
+    },
+    {
+      "key": "productId",
+      "value": ""
+    }
+  ]
+}

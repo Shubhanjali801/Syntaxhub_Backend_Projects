@@ -1,0 +1,155 @@
+{
+  "info": {
+    "name": "Task 1 - Project 2 - Product CRUD API",
+    "description": "Product CRUD API with filtering, price range, sorting and pagination. Run 'Create Product' first; it stores the new id in {{productId}}.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    { "key": "baseUrl", "value": "http://localhost:5001" },
+    { "key": "productId", "value": "" }
+  ],
+  "item": [
+    {
+      "name": "Health Check",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": { "raw": "{{baseUrl}}/", "host": ["{{baseUrl}}"], "path": [""] }
+      }
+    },
+    {
+      "name": "Create Product",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "const res = pm.response.json();",
+              "if (res.data && res.data._id) {",
+              "  pm.collectionVariables.set('productId', res.data._id);",
+              "}",
+              "pm.test('status is 201', () => pm.response.to.have.status(201));"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"name\": \"Laptop\",\n  \"price\": 1200,\n  \"description\": \"14-inch ultrabook\",\n  \"category\": \"electronics\"\n}"
+        },
+        "url": { "raw": "{{baseUrl}}/products", "host": ["{{baseUrl}}"], "path": ["products"] }
+      }
+    },
+    {
+      "name": "Create Product - Invalid (missing price)",
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "body": { "mode": "raw", "raw": "{\n  \"name\": \"NoPrice\"\n}" },
+        "url": { "raw": "{{baseUrl}}/products", "host": ["{{baseUrl}}"], "path": ["products"] }
+      }
+    },
+    {
+      "name": "Get All Products",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": { "raw": "{{baseUrl}}/products", "host": ["{{baseUrl}}"], "path": ["products"] }
+      }
+    },
+    {
+      "name": "Get Products - Filter by Category",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/products?category=electronics",
+          "host": ["{{baseUrl}}"],
+          "path": ["products"],
+          "query": [{ "key": "category", "value": "electronics" }]
+        }
+      }
+    },
+    {
+      "name": "Get Products - Price Range",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/products?minPrice=100&maxPrice=1000",
+          "host": ["{{baseUrl}}"],
+          "path": ["products"],
+          "query": [
+            { "key": "minPrice", "value": "100" },
+            { "key": "maxPrice", "value": "1000" }
+          ]
+        }
+      }
+    },
+    {
+      "name": "Get Products - Pagination + Sort",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/products?page=1&limit=10&sort=price_asc",
+          "host": ["{{baseUrl}}"],
+          "path": ["products"],
+          "query": [
+            { "key": "page", "value": "1" },
+            { "key": "limit", "value": "10" },
+            { "key": "sort", "value": "price_asc" }
+          ]
+        }
+      }
+    },
+    {
+      "name": "Get Products - Combined Filters",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/products?category=electronics&minPrice=500&sort=price_desc&page=1&limit=5",
+          "host": ["{{baseUrl}}"],
+          "path": ["products"],
+          "query": [
+            { "key": "category", "value": "electronics" },
+            { "key": "minPrice", "value": "500" },
+            { "key": "sort", "value": "price_desc" },
+            { "key": "page", "value": "1" },
+            { "key": "limit", "value": "5" }
+          ]
+        }
+      }
+    },
+    {
+      "name": "Get Product By Id",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": { "raw": "{{baseUrl}}/products/{{productId}}", "host": ["{{baseUrl}}"], "path": ["products", "{{productId}}"] }
+      }
+    },
+    {
+      "name": "Update Product",
+      "request": {
+        "method": "PUT",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "body": { "mode": "raw", "raw": "{\n  \"price\": 999\n}" },
+        "url": { "raw": "{{baseUrl}}/products/{{productId}}", "host": ["{{baseUrl}}"], "path": ["products", "{{productId}}"] }
+      }
+    },
+    {
+      "name": "Delete Product",
+      "request": {
+        "method": "DELETE",
+        "header": [],
+        "url": { "raw": "{{baseUrl}}/products/{{productId}}", "host": ["{{baseUrl}}"], "path": ["products", "{{productId}}"] }
+      }
+    }
+  ]
+}

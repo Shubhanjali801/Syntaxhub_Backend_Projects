@@ -22,7 +22,7 @@ app.use('/products', productRoutes);
 app.use(notFound);
 app.use(errorHandler);
 
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 5001;
 
 // Connect to DB, then start the server
 connectDB().then(() => {
