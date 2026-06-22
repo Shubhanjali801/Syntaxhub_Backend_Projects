@@ -1,0 +1,579 @@
+{
+  "info": {
+    "_postman_id": "debe666b-6609-4aa4-b8b7-7e2ca88cc14f",
+    "name": "Task 1 - Project 1 - User CRUD API",
+    "description": "User CRUD API (Express + Mongoose). Run 'Create User' first; it stores the new id in {{userId}} for the other requests.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "43522881"
+  },
+  "item": [
+    {
+      "name": "Health Check",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            ""
+          ]
+        }
+      },
+      "response": [
+        {
+          "name": "Health Check",
+          "originalRequest": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                ""
+              ]
+            }
+          },
+          "status": "OK",
+          "code": 200,
+          "_postman_previewlanguage": null,
+          "header": [
+            {
+              "key": "X-Powered-By",
+              "value": "Express"
+            },
+            {
+              "key": "Content-Type",
+              "value": "application/json; charset=utf-8"
+            },
+            {
+              "key": "Content-Length",
+              "value": "53"
+            },
+            {
+              "key": "ETag",
+              "value": "W/\"35-XQYJqD8RX2OkYSGxV46iQDGapfU\""
+            },
+            {
+              "key": "Date",
+              "value": "Mon, 22 Jun 2026 04:32:17 GMT"
+            },
+            {
+              "key": "Connection",
+              "value": "keep-alive"
+            },
+            {
+              "key": "Keep-Alive",
+              "value": "timeout=5"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n    \"success\": true,\n    \"message\": \"User CRUD API is running\"\n}"
+        }
+      ]
+    },
+    {
+      "name": "Create User",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "const res = pm.response.json();",
+              "if (res.data && res.data._id) {",
+              "  pm.collectionVariables.set('userId', res.data._id);",
+              "}",
+              "pm.test('status is 201', () => pm.response.to.have.status(201));"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"name\": \"Asha\",\n  \"email\": \"asha@example.com\",\n  \"age\": 24\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/users",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "users"
+          ]
+        }
+      },
+      "response": [
+        {
+          "name": "Create User",
+          "originalRequest": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Asha Bhosale\",\n  \"email\": \"ashabhosale@example.com\",\n  \"age\": 24\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/users",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "users"
+              ]
+            }
+          },
+          "status": "Created",
+          "code": 201,
+          "_postman_previewlanguage": null,
+          "header": [
+            {
+              "key": "X-Powered-By",
+              "value": "Express"
+            },
+            {
+              "key": "Content-Type",
+              "value": "application/json; charset=utf-8"
+            },
+            {
+              "key": "Content-Length",
+              "value": "209"
+            },
+            {
+              "key": "ETag",
+              "value": "W/\"d1-gEpC6g1sMPhUEEV+G9BO6gHmmwg\""
+            },
+            {
+              "key": "Date",
+              "value": "Mon, 22 Jun 2026 04:32:38 GMT"
+            },
+            {
+              "key": "Connection",
+              "value": "keep-alive"
+            },
+            {
+              "key": "Keep-Alive",
+              "value": "timeout=5"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n    \"success\": true,\n    \"data\": {\n        \"name\": \"Asha Bhosale\",\n        \"email\": \"ashabhosale@example.com\",\n        \"age\": 24,\n        \"_id\": \"6a38bae68ccfa53706639b7c\",\n        \"createdAt\": \"2026-06-22T04:32:38.759Z\",\n        \"updatedAt\": \"2026-06-22T04:32:38.759Z\",\n        \"__v\": 0\n    }\n}"
+        }
+      ]
+    },
+    {
+      "name": "Create User - Invalid (missing name)",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"email\": \"bad@example.com\"\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/users",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "users"
+          ]
+        }
+      },
+      "response": [
+        {
+          "name": "Create User - Invalid (missing name)",
+          "originalRequest": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"bad@example.com\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/users",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "users"
+              ]
+            }
+          },
+          "status": "Bad Request",
+          "code": 400,
+          "_postman_previewlanguage": null,
+          "header": [
+            {
+              "key": "X-Powered-By",
+              "value": "Express"
+            },
+            {
+              "key": "Content-Type",
+              "value": "application/json; charset=utf-8"
+            },
+            {
+              "key": "Content-Length",
+              "value": "46"
+            },
+            {
+              "key": "ETag",
+              "value": "W/\"2e-YIAMLvLxAyahK44wQXL8LlUfzwQ\""
+            },
+            {
+              "key": "Date",
+              "value": "Mon, 22 Jun 2026 04:32:52 GMT"
+            },
+            {
+              "key": "Connection",
+              "value": "keep-alive"
+            },
+            {
+              "key": "Keep-Alive",
+              "value": "timeout=5"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n    \"success\": false,\n    \"message\": \"Name is required\"\n}"
+        }
+      ]
+    },
+    {
+      "name": "Get All Users",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/users",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "users"
+          ]
+        }
+      },
+      "response": [
+        {
+          "name": "Get All Users",
+          "originalRequest": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/users",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "users"
+              ]
+            }
+          },
+          "status": "OK",
+          "code": 200,
+          "_postman_previewlanguage": null,
+          "header": [
+            {
+              "key": "X-Powered-By",
+              "value": "Express"
+            },
+            {
+              "key": "Content-Type",
+              "value": "application/json; charset=utf-8"
+            },
+            {
+              "key": "Content-Length",
+              "value": "846"
+            },
+            {
+              "key": "ETag",
+              "value": "W/\"34e-GI2t4ZFM7mLAnrSfQeUmD2R2a5c\""
+            },
+            {
+              "key": "Date",
+              "value": "Mon, 22 Jun 2026 04:33:01 GMT"
+            },
+            {
+              "key": "Connection",
+              "value": "keep-alive"
+            },
+            {
+              "key": "Keep-Alive",
+              "value": "timeout=5"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n    \"success\": true,\n    \"count\": 4,\n    \"data\": [\n        {\n            \"_id\": \"6a38bae68ccfa53706639b7c\",\n            \"name\": \"Asha Bhosale\",\n            \"email\": \"ashabhosale@example.com\",\n            \"age\": 24,\n            \"createdAt\": \"2026-06-22T04:32:38.759Z\",\n            \"updatedAt\": \"2026-06-22T04:32:38.759Z\",\n            \"__v\": 0\n        },\n        {\n            \"_id\": \"6a38a5a410494e211cd05741\",\n            \"name\": \"Riyaa Verma\",\n            \"email\": \"riyaa.verma@example.com\",\n            \"age\": 23,\n            \"createdAt\": \"2026-06-22T03:01:56.333Z\",\n            \"updatedAt\": \"2026-06-22T03:01:56.333Z\",\n            \"__v\": 0\n        },\n        {\n            \"_id\": \"6a32083b151e975612cc874a\",\n            \"name\": \"Shubhanjali Sharma\",\n            \"email\": \"shubhanjali@example.com\",\n            \"password\": \"$2b$10$JsA8TRaihk6c/v4aS.giSeQpWbTaeYIf4c2la6NVpugeaPE7aG1Kq\",\n            \"createdAt\": \"2026-06-17T02:36:43.538Z\",\n            \"updatedAt\": \"2026-06-17T02:42:36.141Z\",\n            \"__v\": 0\n        },\n        {\n            \"_id\": \"6a3206b8151e975612cc8743\",\n            \"name\": \"Riya Verma\",\n            \"email\": \"riya.verma@example.com\",\n            \"age\": 23,\n            \"createdAt\": \"2026-06-17T02:30:16.748Z\",\n            \"updatedAt\": \"2026-06-17T02:30:16.748Z\",\n            \"__v\": 0\n        }\n    ]\n}"
+        }
+      ]
+    },
+    {
+      "name": "Get User By Id",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/users/{{userId}}",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "users",
+            "{{userId}}"
+          ]
+        }
+      },
+      "response": [
+        {
+          "name": "Get User By Id",
+          "originalRequest": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/users/{{userId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "users",
+                "{{userId}}"
+              ]
+            }
+          },
+          "status": "OK",
+          "code": 200,
+          "_postman_previewlanguage": null,
+          "header": [
+            {
+              "key": "X-Powered-By",
+              "value": "Express"
+            },
+            {
+              "key": "Content-Type",
+              "value": "application/json; charset=utf-8"
+            },
+            {
+              "key": "Content-Length",
+              "value": "209"
+            },
+            {
+              "key": "ETag",
+              "value": "W/\"d1-ELI3cisBlHAznDUk+0NNnNVkj0s\""
+            },
+            {
+              "key": "Date",
+              "value": "Mon, 22 Jun 2026 04:33:08 GMT"
+            },
+            {
+              "key": "Connection",
+              "value": "keep-alive"
+            },
+            {
+              "key": "Keep-Alive",
+              "value": "timeout=5"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n    \"success\": true,\n    \"data\": {\n        \"_id\": \"6a38bae68ccfa53706639b7c\",\n        \"name\": \"Asha Bhosale\",\n        \"email\": \"ashabhosale@example.com\",\n        \"age\": 24,\n        \"createdAt\": \"2026-06-22T04:32:38.759Z\",\n        \"updatedAt\": \"2026-06-22T04:32:38.759Z\",\n        \"__v\": 0\n    }\n}"
+        }
+      ]
+    },
+    {
+      "name": "Update User",
+      "request": {
+        "method": "PUT",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"age\": 25\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/users/{{userId}}",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "users",
+            "{{userId}}"
+          ]
+        }
+      },
+      "response": [
+        {
+          "name": "Update User",
+          "originalRequest": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"age\": 25\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/users/{{userId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "users",
+                "{{userId}}"
+              ]
+            }
+          },
+          "status": "OK",
+          "code": 200,
+          "_postman_previewlanguage": null,
+          "header": [
+            {
+              "key": "X-Powered-By",
+              "value": "Express"
+            },
+            {
+              "key": "Content-Type",
+              "value": "application/json; charset=utf-8"
+            },
+            {
+              "key": "Content-Length",
+              "value": "209"
+            },
+            {
+              "key": "ETag",
+              "value": "W/\"d1-EUaLzX+jkK4OcGl0QS0PwDVudss\""
+            },
+            {
+              "key": "Date",
+              "value": "Mon, 22 Jun 2026 04:33:49 GMT"
+            },
+            {
+              "key": "Connection",
+              "value": "keep-alive"
+            },
+            {
+              "key": "Keep-Alive",
+              "value": "timeout=5"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n    \"success\": true,\n    \"data\": {\n        \"_id\": \"6a38bae68ccfa53706639b7c\",\n        \"name\": \"Asha Bhosale\",\n        \"email\": \"ashabhosale@example.com\",\n        \"age\": 25,\n        \"createdAt\": \"2026-06-22T04:32:38.759Z\",\n        \"updatedAt\": \"2026-06-22T04:33:49.782Z\",\n        \"__v\": 0\n    }\n}"
+        }
+      ]
+    },
+    {
+      "name": "Delete User",
+      "request": {
+        "method": "DELETE",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/users/{{userId}}",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "users",
+            "{{userId}}"
+          ]
+        }
+      },
+      "response": [
+        {
+          "name": "Delete User",
+          "originalRequest": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/users/{{userId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "users",
+                "{{userId}}"
+              ]
+            }
+          },
+          "status": "Not Found",
+          "code": 404,
+          "_postman_previewlanguage": null,
+          "header": [
+            {
+              "key": "X-Powered-By",
+              "value": "Express"
+            },
+            {
+              "key": "Content-Type",
+              "value": "application/json; charset=utf-8"
+            },
+            {
+              "key": "Content-Length",
+              "value": "44"
+            },
+            {
+              "key": "ETag",
+              "value": "W/\"2c-EAnCIFy1uGovyo/FU6KYwnjLgrc\""
+            },
+            {
+              "key": "Date",
+              "value": "Mon, 22 Jun 2026 04:44:58 GMT"
+            },
+            {
+              "key": "Connection",
+              "value": "keep-alive"
+            },
+            {
+              "key": "Keep-Alive",
+              "value": "timeout=5"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n    \"success\": false,\n    \"message\": \"User not found\"\n}"
+        }
+      ]
+    }
+  ],
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:5000"
+    },
+    {
+      "key": "userId",
+      "value": ""
+    }
+  ]
+}
