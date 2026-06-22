@@ -1,0 +1,500 @@
+{
+  "info": {
+    "_postman_id": "d39c415d-081d-4ec2-a92c-9abb294716e3",
+    "name": "Task 2 - Project 3 - Profile Picture API",
+    "description": "File upload linked to a user profile. Run 'Create User' first (stores {{userId}}), then 'Upload Picture' (select an image for the 'image' form-data field).",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "43522881"
+  },
+  "item": [
+    {
+      "name": "Health Check",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            ""
+          ]
+        }
+      },
+      "response": [
+        {
+          "name": "Health Check",
+          "originalRequest": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                ""
+              ]
+            }
+          },
+          "status": "OK",
+          "code": 200,
+          "_postman_previewlanguage": null,
+          "header": [
+            {
+              "key": "X-Powered-By",
+              "value": "Express"
+            },
+            {
+              "key": "Content-Type",
+              "value": "application/json; charset=utf-8"
+            },
+            {
+              "key": "Content-Length",
+              "value": "64"
+            },
+            {
+              "key": "ETag",
+              "value": "W/\"40-v1wN4KC2DynJLxVrd3gHHPk5c24\""
+            },
+            {
+              "key": "Date",
+              "value": "Mon, 22 Jun 2026 06:01:19 GMT"
+            },
+            {
+              "key": "Connection",
+              "value": "keep-alive"
+            },
+            {
+              "key": "Keep-Alive",
+              "value": "timeout=5"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n    \"success\": true,\n    \"message\": \"User Profile Picture API is running\"\n}"
+        }
+      ]
+    },
+    {
+      "name": "Create User",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "const res = pm.response.json();",
+              "if (res.data && res.data._id) pm.collectionVariables.set('userId', res.data._id);",
+              "pm.test('status is 201', () => pm.response.to.have.status(201));"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"name\": \"Asha\",\n  \"email\": \"asha@example.com\"\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/users",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "users"
+          ]
+        }
+      },
+      "response": [
+        {
+          "name": "Create User",
+          "originalRequest": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Ashha\",\n  \"email\": \"ashha@example.com\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/users",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "users"
+              ]
+            }
+          },
+          "status": "Created",
+          "code": 201,
+          "_postman_previewlanguage": null,
+          "header": [
+            {
+              "key": "X-Powered-By",
+              "value": "Express"
+            },
+            {
+              "key": "Content-Type",
+              "value": "application/json; charset=utf-8"
+            },
+            {
+              "key": "Content-Length",
+              "value": "209"
+            },
+            {
+              "key": "ETag",
+              "value": "W/\"d1-tSjP+rhp2ocjMpYiHuqIm7w5nuU\""
+            },
+            {
+              "key": "Date",
+              "value": "Mon, 22 Jun 2026 06:01:50 GMT"
+            },
+            {
+              "key": "Connection",
+              "value": "keep-alive"
+            },
+            {
+              "key": "Keep-Alive",
+              "value": "timeout=5"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n    \"success\": true,\n    \"data\": {\n        \"name\": \"Ashha\",\n        \"email\": \"ashha@example.com\",\n        \"profilePicture\": null,\n        \"_id\": \"6a38cfce63c31c6ea5fe8f06\",\n        \"createdAt\": \"2026-06-22T06:01:50.156Z\",\n        \"updatedAt\": \"2026-06-22T06:01:50.156Z\",\n        \"__v\": 0\n    }\n}"
+        }
+      ]
+    },
+    {
+      "name": "Get User",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/users/{{userId}}",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "users",
+            "{{userId}}"
+          ]
+        }
+      },
+      "response": [
+        {
+          "name": "Get User",
+          "originalRequest": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/users/{{userId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "users",
+                "{{userId}}"
+              ]
+            }
+          },
+          "status": "OK",
+          "code": 200,
+          "_postman_previewlanguage": null,
+          "header": [
+            {
+              "key": "X-Powered-By",
+              "value": "Express"
+            },
+            {
+              "key": "Content-Type",
+              "value": "application/json; charset=utf-8"
+            },
+            {
+              "key": "Content-Length",
+              "value": "209"
+            },
+            {
+              "key": "ETag",
+              "value": "W/\"d1-IAR/H6j4wghOzd5JAVyQV5EKDXw\""
+            },
+            {
+              "key": "Date",
+              "value": "Mon, 22 Jun 2026 06:02:32 GMT"
+            },
+            {
+              "key": "Connection",
+              "value": "keep-alive"
+            },
+            {
+              "key": "Keep-Alive",
+              "value": "timeout=5"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n    \"success\": true,\n    \"data\": {\n        \"_id\": \"6a38cfce63c31c6ea5fe8f06\",\n        \"name\": \"Ashha\",\n        \"email\": \"ashha@example.com\",\n        \"profilePicture\": null,\n        \"createdAt\": \"2026-06-22T06:01:50.156Z\",\n        \"updatedAt\": \"2026-06-22T06:01:50.156Z\",\n        \"__v\": 0\n    }\n}"
+        }
+      ]
+    },
+    {
+      "name": "Upload Picture",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "formdata",
+          "formdata": [
+            {
+              "key": "image",
+              "type": "file",
+              "value": null
+            }
+          ]
+        },
+        "url": {
+          "raw": "{{baseUrl}}/users/{{userId}}/picture",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "users",
+            "{{userId}}",
+            "picture"
+          ]
+        }
+      },
+      "response": [
+        {
+          "name": "Upload Picture",
+          "originalRequest": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "image",
+                  "type": "file",
+                  "src": "postman-cloud:///1f169f50-9a7c-4550-930b-f01162bdf283"
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{baseUrl}}/users/{{userId}}/picture",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "users",
+                "{{userId}}",
+                "picture"
+              ]
+            }
+          },
+          "status": "OK",
+          "code": 200,
+          "_postman_previewlanguage": null,
+          "header": [
+            {
+              "key": "X-Powered-By",
+              "value": "Express"
+            },
+            {
+              "key": "Content-Type",
+              "value": "application/json; charset=utf-8"
+            },
+            {
+              "key": "Content-Length",
+              "value": "559"
+            },
+            {
+              "key": "ETag",
+              "value": "W/\"22f-3Af3/k0Yxniwwwk5Bmgfe0BvedQ\""
+            },
+            {
+              "key": "Date",
+              "value": "Mon, 22 Jun 2026 06:02:55 GMT"
+            },
+            {
+              "key": "Connection",
+              "value": "keep-alive"
+            },
+            {
+              "key": "Keep-Alive",
+              "value": "timeout=5"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n    \"success\": true,\n    \"data\": {\n        \"_id\": \"6a38cfce63c31c6ea5fe8f06\",\n        \"name\": \"Ashha\",\n        \"email\": \"ashha@example.com\",\n        \"profilePicture\": {\n            \"filename\": \"1782108174825-722519694.jpg\",\n            \"originalName\": \"anime.jpg\",\n            \"path\": \"C:\\\\Users\\\\shubhi\\\\Desktop\\\\ENGINEERING\\\\Syntaxhub_Backend_Projects\\\\Backend_Task-2\\\\Project-3\\\\uploads\\\\1782108174825-722519694.jpg\",\n            \"url\": \"http://localhost:5005/uploads/1782108174825-722519694.jpg\",\n            \"mimetype\": \"image/jpeg\",\n            \"size\": 39993,\n            \"uploadedAt\": \"2026-06-22T06:02:54.972Z\"\n        },\n        \"createdAt\": \"2026-06-22T06:01:50.156Z\",\n        \"updatedAt\": \"2026-06-22T06:02:54.989Z\",\n        \"__v\": 0\n    }\n}"
+        }
+      ]
+    },
+    {
+      "name": "Get Picture (metadata + URL)",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/users/{{userId}}/picture",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "users",
+            "{{userId}}",
+            "picture"
+          ]
+        }
+      },
+      "response": [
+        {
+          "name": "Get Picture (metadata + URL)",
+          "originalRequest": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/users/{{userId}}/picture",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "users",
+                "{{userId}}",
+                "picture"
+              ]
+            }
+          },
+          "status": "OK",
+          "code": 200,
+          "_postman_previewlanguage": null,
+          "header": [
+            {
+              "key": "X-Powered-By",
+              "value": "Express"
+            },
+            {
+              "key": "Content-Type",
+              "value": "application/json; charset=utf-8"
+            },
+            {
+              "key": "Content-Length",
+              "value": "378"
+            },
+            {
+              "key": "ETag",
+              "value": "W/\"17a-SJptSwFdCA68GA/hOyykhYoE1Pk\""
+            },
+            {
+              "key": "Date",
+              "value": "Mon, 22 Jun 2026 06:03:08 GMT"
+            },
+            {
+              "key": "Connection",
+              "value": "keep-alive"
+            },
+            {
+              "key": "Keep-Alive",
+              "value": "timeout=5"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n    \"success\": true,\n    \"data\": {\n        \"filename\": \"1782108174825-722519694.jpg\",\n        \"originalName\": \"anime.jpg\",\n        \"path\": \"C:\\\\Users\\\\shubhi\\\\Desktop\\\\ENGINEERING\\\\Syntaxhub_Backend_Projects\\\\Backend_Task-2\\\\Project-3\\\\uploads\\\\1782108174825-722519694.jpg\",\n        \"url\": \"http://localhost:5005/uploads/1782108174825-722519694.jpg\",\n        \"mimetype\": \"image/jpeg\",\n        \"size\": 39993,\n        \"uploadedAt\": \"2026-06-22T06:02:54.972Z\"\n    }\n}"
+        }
+      ]
+    },
+    {
+      "name": "Delete Picture",
+      "request": {
+        "method": "DELETE",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/users/{{userId}}/picture",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "users",
+            "{{userId}}",
+            "picture"
+          ]
+        }
+      },
+      "response": [
+        {
+          "name": "Delete Picture",
+          "originalRequest": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/users/{{userId}}/picture",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "users",
+                "{{userId}}",
+                "picture"
+              ]
+            }
+          },
+          "status": "OK",
+          "code": 200,
+          "_postman_previewlanguage": null,
+          "header": [
+            {
+              "key": "X-Powered-By",
+              "value": "Express"
+            },
+            {
+              "key": "Content-Type",
+              "value": "application/json; charset=utf-8"
+            },
+            {
+              "key": "Content-Length",
+              "value": "245"
+            },
+            {
+              "key": "ETag",
+              "value": "W/\"f5-EOp70uGWTtGgiBGFqCn/GV/98NM\""
+            },
+            {
+              "key": "Date",
+              "value": "Mon, 22 Jun 2026 06:03:19 GMT"
+            },
+            {
+              "key": "Connection",
+              "value": "keep-alive"
+            },
+            {
+              "key": "Keep-Alive",
+              "value": "timeout=5"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n    \"success\": true,\n    \"message\": \"Profile picture removed\",\n    \"data\": {\n        \"_id\": \"6a38cfce63c31c6ea5fe8f06\",\n        \"name\": \"Ashha\",\n        \"email\": \"ashha@example.com\",\n        \"profilePicture\": null,\n        \"createdAt\": \"2026-06-22T06:01:50.156Z\",\n        \"updatedAt\": \"2026-06-22T06:03:19.233Z\",\n        \"__v\": 0\n    }\n}"
+        }
+      ]
+    }
+  ],
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:5005"
+    },
+    {
+      "key": "userId",
+      "value": ""
+    }
+  ]
+}

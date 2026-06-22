@@ -1,0 +1,24 @@
+{
+  "name": "backend_task-2_project-3",
+  "version": "1.0.0",
+  "description": "File Upload API with metadata linked to a user profile — upload/update/delete profile picture (Syntecxhub Backend Task 2 / Project 3)",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon server.js",
+    "dev": "node --watch server.js"
+  },
+  "keywords": ["express", "mongoose", "mongodb", "multer", "file-upload", "profile", "rest-api"],
+  "author": "Shubhanjali",
+  "license": "ISC",
+  "type": "commonjs",
+  "dependencies": {
+    "dotenv": "^16.4.5",
+    "express": "^4.21.2",
+    "mongoose": "^8.9.5",
+    "multer": "^1.4.5-lts.1"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.9"
+  }
+}
