@@ -1,0 +1,99 @@
+{
+  "info": {
+    "name": "Task 3 - Project 3 - Text Search API",
+    "description": "Full-text ($text) + regex search over title/body with tag/author filters. Run 'Seed Articles' first, then try the /search requests.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    { "key": "baseUrl", "value": "http://localhost:5008" }
+  ],
+  "item": [
+    {
+      "name": "Health Check",
+      "request": { "method": "GET", "header": [], "url": { "raw": "{{baseUrl}}/", "host": ["{{baseUrl}}"], "path": [""] } }
+    },
+    {
+      "name": "Seed Articles (bulk)",
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "body": {
+          "mode": "raw",
+          "raw": "[\n  { \"title\": \"Intro to Node.js\", \"body\": \"Node is a JavaScript runtime for building servers\", \"author\": \"john\", \"tags\": [\"node\", \"backend\"] },\n  { \"title\": \"Express Routing\", \"body\": \"Express makes Node web servers easy\", \"author\": \"john\", \"tags\": [\"node\", \"express\"] },\n  { \"title\": \"MongoDB Aggregation\", \"body\": \"Pipelines transform documents in MongoDB\", \"author\": \"alice\", \"tags\": [\"mongodb\", \"database\"] },\n  { \"title\": \"React Basics\", \"body\": \"Components are the heart of React apps\", \"author\": \"alice\", \"tags\": [\"react\", \"frontend\"] }\n]"
+        },
+        "url": { "raw": "{{baseUrl}}/articles/seed", "host": ["{{baseUrl}}"], "path": ["articles", "seed"] }
+      }
+    },
+    {
+      "name": "Get Articles",
+      "request": { "method": "GET", "header": [], "url": { "raw": "{{baseUrl}}/articles", "host": ["{{baseUrl}}"], "path": ["articles"] } }
+    },
+    {
+      "name": "Search - Full Text (q=node)",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/search?q=node",
+          "host": ["{{baseUrl}}"],
+          "path": ["search"],
+          "query": [{ "key": "q", "value": "node" }]
+        }
+      }
+    },
+    {
+      "name": "Search - Multi-word (q=mongodb pipeline)",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/search?q=mongodb pipeline",
+          "host": ["{{baseUrl}}"],
+          "path": ["search"],
+          "query": [{ "key": "q", "value": "mongodb pipeline" }]
+        }
+      }
+    },
+    {
+      "name": "Search - With Filters (q=node&author=john&tag=express)",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/search?q=node&author=john&tag=express",
+          "host": ["{{baseUrl}}"],
+          "path": ["search"],
+          "query": [
+            { "key": "q", "value": "node" },
+            { "key": "author", "value": "john" },
+            { "key": "tag", "value": "express" }
+          ]
+        }
+      }
+    },
+    {
+      "name": "Search - Regex Mode (q=react&mode=regex)",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/search?q=react&mode=regex",
+          "host": ["{{baseUrl}}"],
+          "path": ["search"],
+          "query": [
+            { "key": "q", "value": "react" },
+            { "key": "mode", "value": "regex" }
+          ]
+        }
+      }
+    },
+    {
+      "name": "Search - Missing q (expect 400)",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": { "raw": "{{baseUrl}}/search", "host": ["{{baseUrl}}"], "path": ["search"] }
+      }
+    }
+  ]
+}

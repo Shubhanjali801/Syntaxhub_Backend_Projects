@@ -1,0 +1,661 @@
+{
+  "info": {
+    "_postman_id": "a58a0638-0aec-4408-aafe-77a62aefccd0",
+    "name": "Task 3 - Project 3 - Text Search API",
+    "description": "Full-text ($text) + regex search over title/body with tag/author filters. Run 'Seed Articles' first, then try the /search requests.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "43522881"
+  },
+  "item": [
+    {
+      "name": "Health Check",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            ""
+          ]
+        }
+      },
+      "response": [
+        {
+          "name": "Health Check",
+          "originalRequest": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                ""
+              ]
+            }
+          },
+          "status": "OK",
+          "code": 200,
+          "_postman_previewlanguage": null,
+          "header": [
+            {
+              "key": "X-Powered-By",
+              "value": "Express"
+            },
+            {
+              "key": "Content-Type",
+              "value": "application/json; charset=utf-8"
+            },
+            {
+              "key": "Content-Length",
+              "value": "55"
+            },
+            {
+              "key": "ETag",
+              "value": "W/\"37-YjSGzrZ6Hl5R9WnsZMHpWfa3WGQ\""
+            },
+            {
+              "key": "Date",
+              "value": "Mon, 22 Jun 2026 06:51:13 GMT"
+            },
+            {
+              "key": "Connection",
+              "value": "keep-alive"
+            },
+            {
+              "key": "Keep-Alive",
+              "value": "timeout=5"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n    \"success\": true,\n    \"message\": \"Text Search API is running\"\n}"
+        }
+      ]
+    },
+    {
+      "name": "Seed Articles (bulk)",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "[\n  { \"title\": \"Intro to Node.js\", \"body\": \"Node is a JavaScript runtime for building servers\", \"author\": \"john\", \"tags\": [\"node\", \"backend\"] },\n  { \"title\": \"Express Routing\", \"body\": \"Express makes Node web servers easy\", \"author\": \"john\", \"tags\": [\"node\", \"express\"] },\n  { \"title\": \"MongoDB Aggregation\", \"body\": \"Pipelines transform documents in MongoDB\", \"author\": \"alice\", \"tags\": [\"mongodb\", \"database\"] },\n  { \"title\": \"React Basics\", \"body\": \"Components are the heart of React apps\", \"author\": \"alice\", \"tags\": [\"react\", \"frontend\"] }\n]"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/articles/seed",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "articles",
+            "seed"
+          ]
+        }
+      },
+      "response": [
+        {
+          "name": "Seed Articles (bulk)",
+          "originalRequest": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "[\n    {\n        \"title\": \"Intro to Node.js\",\n        \"body\": \"Node is a JavaScript runtime for building servers\",\n        \"author\": \"john\",\n        \"tags\": [\n            \"node\",\n            \"backend\"\n        ]\n    },\n    {\n        \"title\": \"Express Routing\",\n        \"body\": \"Express makes Node web servers easy\",\n        \"author\": \"john\",\n        \"tags\": [\n            \"node\",\n            \"express\"\n        ]\n    },\n    {\n        \"title\": \"MongoDB Aggregation\",\n        \"body\": \"Pipelines transform documents in MongoDB\",\n        \"author\": \"alice\",\n        \"tags\": [\n            \"mongodb\",\n            \"database\"\n        ]\n    },\n    {\n        \"title\": \"React Basics\",\n        \"body\": \"Components are the heart of React apps\",\n        \"author\": \"alice\",\n        \"tags\": [\n            \"react\",\n            \"frontend\"\n        ]\n    }\n]"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/articles/seed",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "articles",
+                "seed"
+              ]
+            }
+          },
+          "status": "Created",
+          "code": 201,
+          "_postman_previewlanguage": null,
+          "header": [
+            {
+              "key": "X-Powered-By",
+              "value": "Express"
+            },
+            {
+              "key": "Content-Type",
+              "value": "application/json; charset=utf-8"
+            },
+            {
+              "key": "Content-Length",
+              "value": "1003"
+            },
+            {
+              "key": "ETag",
+              "value": "W/\"3eb-XIHHBDPVkE0xjPHtZCwcKjib6Mo\""
+            },
+            {
+              "key": "Date",
+              "value": "Mon, 22 Jun 2026 06:51:51 GMT"
+            },
+            {
+              "key": "Connection",
+              "value": "keep-alive"
+            },
+            {
+              "key": "Keep-Alive",
+              "value": "timeout=5"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n    \"success\": true,\n    \"count\": 4,\n    \"data\": [\n        {\n            \"title\": \"Intro to Node.js\",\n            \"body\": \"Node is a JavaScript runtime for building servers\",\n            \"author\": \"john\",\n            \"tags\": [\n                \"node\",\n                \"backend\"\n            ],\n            \"_id\": \"6a38db870b30057ab5388465\",\n            \"__v\": 0,\n            \"createdAt\": \"2026-06-22T06:51:51.692Z\",\n            \"updatedAt\": \"2026-06-22T06:51:51.692Z\"\n        },\n        {\n            \"title\": \"Express Routing\",\n            \"body\": \"Express makes Node web servers easy\",\n            \"author\": \"john\",\n            \"tags\": [\n                \"node\",\n                \"express\"\n            ],\n            \"_id\": \"6a38db870b30057ab5388466\",\n            \"__v\": 0,\n            \"createdAt\": \"2026-06-22T06:51:51.702Z\",\n            \"updatedAt\": \"2026-06-22T06:51:51.702Z\"\n        },\n        {\n            \"title\": \"MongoDB Aggregation\",\n            \"body\": \"Pipelines transform documents in MongoDB\",\n            \"author\": \"alice\",\n            \"tags\": [\n                \"mongodb\",\n                \"database\"\n            ],\n            \"_id\": \"6a38db870b30057ab5388467\",\n            \"__v\": 0,\n            \"createdAt\": \"2026-06-22T06:51:51.703Z\",\n            \"updatedAt\": \"2026-06-22T06:51:51.703Z\"\n        },\n        {\n            \"title\": \"React Basics\",\n            \"body\": \"Components are the heart of React apps\",\n            \"author\": \"alice\",\n            \"tags\": [\n                \"react\",\n                \"frontend\"\n            ],\n            \"_id\": \"6a38db870b30057ab5388468\",\n            \"__v\": 0,\n            \"createdAt\": \"2026-06-22T06:51:51.703Z\",\n            \"updatedAt\": \"2026-06-22T06:51:51.703Z\"\n        }\n    ]\n}"
+        }
+      ]
+    },
+    {
+      "name": "Get Articles",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/articles",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "articles"
+          ]
+        }
+      },
+      "response": [
+        {
+          "name": "Get Articles",
+          "originalRequest": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/articles",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "articles"
+              ]
+            }
+          },
+          "status": "OK",
+          "code": 200,
+          "_postman_previewlanguage": null,
+          "header": [
+            {
+              "key": "X-Powered-By",
+              "value": "Express"
+            },
+            {
+              "key": "Content-Type",
+              "value": "application/json; charset=utf-8"
+            },
+            {
+              "key": "Content-Length",
+              "value": "1003"
+            },
+            {
+              "key": "ETag",
+              "value": "W/\"3eb-zOETCVJQ0thvdBabmjZbQRxxl80\""
+            },
+            {
+              "key": "Date",
+              "value": "Mon, 22 Jun 2026 06:52:01 GMT"
+            },
+            {
+              "key": "Connection",
+              "value": "keep-alive"
+            },
+            {
+              "key": "Keep-Alive",
+              "value": "timeout=5"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n    \"success\": true,\n    \"count\": 4,\n    \"data\": [\n        {\n            \"_id\": \"6a38db870b30057ab5388467\",\n            \"title\": \"MongoDB Aggregation\",\n            \"body\": \"Pipelines transform documents in MongoDB\",\n            \"author\": \"alice\",\n            \"tags\": [\n                \"mongodb\",\n                \"database\"\n            ],\n            \"__v\": 0,\n            \"createdAt\": \"2026-06-22T06:51:51.703Z\",\n            \"updatedAt\": \"2026-06-22T06:51:51.703Z\"\n        },\n        {\n            \"_id\": \"6a38db870b30057ab5388468\",\n            \"title\": \"React Basics\",\n            \"body\": \"Components are the heart of React apps\",\n            \"author\": \"alice\",\n            \"tags\": [\n                \"react\",\n                \"frontend\"\n            ],\n            \"__v\": 0,\n            \"createdAt\": \"2026-06-22T06:51:51.703Z\",\n            \"updatedAt\": \"2026-06-22T06:51:51.703Z\"\n        },\n        {\n            \"_id\": \"6a38db870b30057ab5388466\",\n            \"title\": \"Express Routing\",\n            \"body\": \"Express makes Node web servers easy\",\n            \"author\": \"john\",\n            \"tags\": [\n                \"node\",\n                \"express\"\n            ],\n            \"__v\": 0,\n            \"createdAt\": \"2026-06-22T06:51:51.702Z\",\n            \"updatedAt\": \"2026-06-22T06:51:51.702Z\"\n        },\n        {\n            \"_id\": \"6a38db870b30057ab5388465\",\n            \"title\": \"Intro to Node.js\",\n            \"body\": \"Node is a JavaScript runtime for building servers\",\n            \"author\": \"john\",\n            \"tags\": [\n                \"node\",\n                \"backend\"\n            ],\n            \"__v\": 0,\n            \"createdAt\": \"2026-06-22T06:51:51.692Z\",\n            \"updatedAt\": \"2026-06-22T06:51:51.692Z\"\n        }\n    ]\n}"
+        }
+      ]
+    },
+    {
+      "name": "Search - Full Text (q=node)",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/search?q=node",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "search"
+          ],
+          "query": [
+            {
+              "key": "q",
+              "value": "node"
+            }
+          ]
+        }
+      },
+      "response": [
+        {
+          "name": "Search - Full Text (q=node)",
+          "originalRequest": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/search?q=node",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "search"
+              ],
+              "query": [
+                {
+                  "key": "q",
+                  "value": "node"
+                }
+              ]
+            }
+          },
+          "status": "OK",
+          "code": 200,
+          "_postman_previewlanguage": null,
+          "header": [
+            {
+              "key": "X-Powered-By",
+              "value": "Express"
+            },
+            {
+              "key": "Content-Type",
+              "value": "application/json; charset=utf-8"
+            },
+            {
+              "key": "Content-Length",
+              "value": "600"
+            },
+            {
+              "key": "ETag",
+              "value": "W/\"258-VZPgv5KerrhBooV9+QxFLyPRJSM\""
+            },
+            {
+              "key": "Date",
+              "value": "Mon, 22 Jun 2026 06:53:20 GMT"
+            },
+            {
+              "key": "Connection",
+              "value": "keep-alive"
+            },
+            {
+              "key": "Keep-Alive",
+              "value": "timeout=5"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n    \"success\": true,\n    \"mode\": \"text\",\n    \"query\": \"node\",\n    \"count\": 2,\n    \"data\": [\n        {\n            \"_id\": \"6a38db870b30057ab5388465\",\n            \"title\": \"Intro to Node.js\",\n            \"body\": \"Node is a JavaScript runtime for building servers\",\n            \"author\": \"john\",\n            \"tags\": [\n                \"node\",\n                \"backend\"\n            ],\n            \"__v\": 0,\n            \"createdAt\": \"2026-06-22T06:51:51.692Z\",\n            \"updatedAt\": \"2026-06-22T06:51:51.692Z\",\n            \"score\": 3.933333333333333\n        },\n        {\n            \"_id\": \"6a38db870b30057ab5388466\",\n            \"title\": \"Express Routing\",\n            \"body\": \"Express makes Node web servers easy\",\n            \"author\": \"john\",\n            \"tags\": [\n                \"node\",\n                \"express\"\n            ],\n            \"__v\": 0,\n            \"createdAt\": \"2026-06-22T06:51:51.702Z\",\n            \"updatedAt\": \"2026-06-22T06:51:51.702Z\",\n            \"score\": 0.5833333333333334\n        }\n    ]\n}"
+        }
+      ]
+    },
+    {
+      "name": "Search - Multi-word (q=mongodb pipeline)",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/search?q=mongodb pipeline",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "search"
+          ],
+          "query": [
+            {
+              "key": "q",
+              "value": "mongodb pipeline"
+            }
+          ]
+        }
+      },
+      "response": [
+        {
+          "name": "Search - Multi-word (q=mongodb pipeline)",
+          "originalRequest": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/search?q=mongodb pipeline",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "search"
+              ],
+              "query": [
+                {
+                  "key": "q",
+                  "value": "mongodb pipeline"
+                }
+              ]
+            }
+          },
+          "status": "OK",
+          "code": 200,
+          "_postman_previewlanguage": null,
+          "header": [
+            {
+              "key": "X-Powered-By",
+              "value": "Express"
+            },
+            {
+              "key": "Content-Type",
+              "value": "application/json; charset=utf-8"
+            },
+            {
+              "key": "Content-Length",
+              "value": "334"
+            },
+            {
+              "key": "ETag",
+              "value": "W/\"14e-AJH1SthfpYrbSHvIfyD8LtKRFBk\""
+            },
+            {
+              "key": "Date",
+              "value": "Mon, 22 Jun 2026 06:52:20 GMT"
+            },
+            {
+              "key": "Connection",
+              "value": "keep-alive"
+            },
+            {
+              "key": "Keep-Alive",
+              "value": "timeout=5"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n    \"success\": true,\n    \"mode\": \"text\",\n    \"query\": \"mongodb pipeline\",\n    \"count\": 1,\n    \"data\": [\n        {\n            \"_id\": \"6a38db870b30057ab5388467\",\n            \"title\": \"MongoDB Aggregation\",\n            \"body\": \"Pipelines transform documents in MongoDB\",\n            \"author\": \"alice\",\n            \"tags\": [\n                \"mongodb\",\n                \"database\"\n            ],\n            \"__v\": 0,\n            \"createdAt\": \"2026-06-22T06:51:51.703Z\",\n            \"updatedAt\": \"2026-06-22T06:51:51.703Z\",\n            \"score\": 5\n        }\n    ]\n}"
+        }
+      ]
+    },
+    {
+      "name": "Search - With Filters (q=node&author=john&tag=express)",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/search?q=node&author=john&tag=express",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "search"
+          ],
+          "query": [
+            {
+              "key": "q",
+              "value": "node"
+            },
+            {
+              "key": "author",
+              "value": "john"
+            },
+            {
+              "key": "tag",
+              "value": "express"
+            }
+          ]
+        }
+      },
+      "response": [
+        {
+          "name": "Search - With Filters (q=node&author=john&tag=express)",
+          "originalRequest": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/search?q=node&author=john&tag=express",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "search"
+              ],
+              "query": [
+                {
+                  "key": "q",
+                  "value": "node"
+                },
+                {
+                  "key": "author",
+                  "value": "john"
+                },
+                {
+                  "key": "tag",
+                  "value": "express"
+                }
+              ]
+            }
+          },
+          "status": "OK",
+          "code": 200,
+          "_postman_previewlanguage": null,
+          "header": [
+            {
+              "key": "X-Powered-By",
+              "value": "Express"
+            },
+            {
+              "key": "Content-Type",
+              "value": "application/json; charset=utf-8"
+            },
+            {
+              "key": "Content-Length",
+              "value": "325"
+            },
+            {
+              "key": "ETag",
+              "value": "W/\"145-D5bGE+07VFmsEGSBAl6uKpe7I5U\""
+            },
+            {
+              "key": "Date",
+              "value": "Mon, 22 Jun 2026 06:52:31 GMT"
+            },
+            {
+              "key": "Connection",
+              "value": "keep-alive"
+            },
+            {
+              "key": "Keep-Alive",
+              "value": "timeout=5"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n    \"success\": true,\n    \"mode\": \"text\",\n    \"query\": \"node\",\n    \"count\": 1,\n    \"data\": [\n        {\n            \"_id\": \"6a38db870b30057ab5388466\",\n            \"title\": \"Express Routing\",\n            \"body\": \"Express makes Node web servers easy\",\n            \"author\": \"john\",\n            \"tags\": [\n                \"node\",\n                \"express\"\n            ],\n            \"__v\": 0,\n            \"createdAt\": \"2026-06-22T06:51:51.702Z\",\n            \"updatedAt\": \"2026-06-22T06:51:51.702Z\",\n            \"score\": 0.5833333333333334\n        }\n    ]\n}"
+        }
+      ]
+    },
+    {
+      "name": "Search - Regex Mode (q=react&mode=regex)",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/search?q=react&mode=regex",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "search"
+          ],
+          "query": [
+            {
+              "key": "q",
+              "value": "react"
+            },
+            {
+              "key": "mode",
+              "value": "regex"
+            }
+          ]
+        }
+      },
+      "response": [
+        {
+          "name": "Search - Regex Mode (q=react&mode=regex)",
+          "originalRequest": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/search?q=react&mode=regex",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "search"
+              ],
+              "query": [
+                {
+                  "key": "q",
+                  "value": "react"
+                },
+                {
+                  "key": "mode",
+                  "value": "regex"
+                }
+              ]
+            }
+          },
+          "status": "OK",
+          "code": 200,
+          "_postman_previewlanguage": null,
+          "header": [
+            {
+              "key": "X-Powered-By",
+              "value": "Express"
+            },
+            {
+              "key": "Content-Type",
+              "value": "application/json; charset=utf-8"
+            },
+            {
+              "key": "Content-Length",
+              "value": "303"
+            },
+            {
+              "key": "ETag",
+              "value": "W/\"12f-Rs1UWcqlAHsiYpFFr+nvLdv+Is8\""
+            },
+            {
+              "key": "Date",
+              "value": "Mon, 22 Jun 2026 06:52:42 GMT"
+            },
+            {
+              "key": "Connection",
+              "value": "keep-alive"
+            },
+            {
+              "key": "Keep-Alive",
+              "value": "timeout=5"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n    \"success\": true,\n    \"mode\": \"regex\",\n    \"query\": \"react\",\n    \"count\": 1,\n    \"data\": [\n        {\n            \"_id\": \"6a38db870b30057ab5388468\",\n            \"title\": \"React Basics\",\n            \"body\": \"Components are the heart of React apps\",\n            \"author\": \"alice\",\n            \"tags\": [\n                \"react\",\n                \"frontend\"\n            ],\n            \"__v\": 0,\n            \"createdAt\": \"2026-06-22T06:51:51.703Z\",\n            \"updatedAt\": \"2026-06-22T06:51:51.703Z\"\n        }\n    ]\n}"
+        }
+      ]
+    },
+    {
+      "name": "Search - Missing q (expect 400)",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/search",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "search"
+          ]
+        }
+      },
+      "response": [
+        {
+          "name": "Search - Missing q (expect 400)",
+          "originalRequest": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/search",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "search"
+              ]
+            }
+          },
+          "status": "Bad Request",
+          "code": 400,
+          "_postman_previewlanguage": null,
+          "header": [
+            {
+              "key": "X-Powered-By",
+              "value": "Express"
+            },
+            {
+              "key": "Content-Type",
+              "value": "application/json; charset=utf-8"
+            },
+            {
+              "key": "Content-Length",
+              "value": "63"
+            },
+            {
+              "key": "ETag",
+              "value": "W/\"3f-WaWGIlIrJYn9uga4w35034c3+Mc\""
+            },
+            {
+              "key": "Date",
+              "value": "Mon, 22 Jun 2026 06:52:50 GMT"
+            },
+            {
+              "key": "Connection",
+              "value": "keep-alive"
+            },
+            {
+              "key": "Keep-Alive",
+              "value": "timeout=5"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n    \"success\": false,\n    \"message\": \"Query parameter \\\"q\\\" is required\"\n}"
+        }
+      ]
+    }
+  ],
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:5008"
+    }
+  ]
+}
