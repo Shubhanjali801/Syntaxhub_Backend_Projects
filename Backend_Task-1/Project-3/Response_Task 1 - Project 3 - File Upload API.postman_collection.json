@@ -1,0 +1,505 @@
+{
+  "info": {
+    "_postman_id": "99674914-6e7e-45f4-a845-25ef846d293e",
+    "name": "Task 1 - Project 3 - File Upload API",
+    "description": "File/Image Upload API (multer, images only, 5MB max). For 'Upload Image', select a local image file for the 'image' form-data field, then Send. The new id is stored in {{fileId}} and filename in {{fileName}} for the other requests.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "43522881"
+  },
+  "item": [
+    {
+      "name": "Health Check",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            ""
+          ]
+        }
+      },
+      "response": [
+        {
+          "name": "Health Check",
+          "originalRequest": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                ""
+              ]
+            }
+          },
+          "status": "OK",
+          "code": 200,
+          "_postman_previewlanguage": null,
+          "header": [
+            {
+              "key": "X-Powered-By",
+              "value": "Express"
+            },
+            {
+              "key": "Content-Type",
+              "value": "application/json; charset=utf-8"
+            },
+            {
+              "key": "Content-Length",
+              "value": "61"
+            },
+            {
+              "key": "ETag",
+              "value": "W/\"3d-oDn92j9OSvsF9J62Er8OHokgr5Y\""
+            },
+            {
+              "key": "Date",
+              "value": "Mon, 22 Jun 2026 04:46:02 GMT"
+            },
+            {
+              "key": "Connection",
+              "value": "keep-alive"
+            },
+            {
+              "key": "Keep-Alive",
+              "value": "timeout=5"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n    \"success\": true,\n    \"message\": \"File/Image Upload API is running\"\n}"
+        }
+      ]
+    },
+    {
+      "name": "Upload Image",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "const res = pm.response.json();",
+              "if (res.data) {",
+              "  if (res.data._id) pm.collectionVariables.set('fileId', res.data._id);",
+              "  if (res.data.filename) pm.collectionVariables.set('fileName', res.data.filename);",
+              "}",
+              "pm.test('status is 201', () => pm.response.to.have.status(201));"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "formdata",
+          "formdata": [
+            {
+              "key": "image",
+              "type": "file",
+              "value": null
+            }
+          ]
+        },
+        "url": {
+          "raw": "{{baseUrl}}/upload",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "upload"
+          ]
+        }
+      },
+      "response": [
+        {
+          "name": "Upload Image",
+          "originalRequest": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "image",
+                  "type": "file",
+                  "src": "postman-cloud:///1f169f50-9a7c-4550-930b-f01162bdf283"
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{baseUrl}}/upload",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "upload"
+              ]
+            }
+          },
+          "status": "Created",
+          "code": 201,
+          "_postman_previewlanguage": null,
+          "header": [
+            {
+              "key": "X-Powered-By",
+              "value": "Express"
+            },
+            {
+              "key": "Content-Type",
+              "value": "application/json; charset=utf-8"
+            },
+            {
+              "key": "Content-Length",
+              "value": "457"
+            },
+            {
+              "key": "ETag",
+              "value": "W/\"1c9-ev6U5+G7d7KI0PY8603fdWYPm+4\""
+            },
+            {
+              "key": "Date",
+              "value": "Mon, 22 Jun 2026 04:46:54 GMT"
+            },
+            {
+              "key": "Connection",
+              "value": "keep-alive"
+            },
+            {
+              "key": "Keep-Alive",
+              "value": "timeout=5"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n    \"success\": true,\n    \"data\": {\n        \"filename\": \"1782103614192-436459440.jpg\",\n        \"originalName\": \"anime.jpg\",\n        \"path\": \"C:\\\\Users\\\\shubhi\\\\Desktop\\\\ENGINEERING\\\\Syntaxhub_Backend_Projects\\\\Backend_Task-1\\\\Project-3\\\\uploads\\\\1782103614192-436459440.jpg\",\n        \"url\": \"http://localhost:5002/uploads/1782103614192-436459440.jpg\",\n        \"mimetype\": \"image/jpeg\",\n        \"size\": 39993,\n        \"_id\": \"6a38be3e1da5a60205073a9f\",\n        \"createdAt\": \"2026-06-22T04:46:54.340Z\",\n        \"updatedAt\": \"2026-06-22T04:46:54.340Z\",\n        \"__v\": 0\n    }\n}"
+        }
+      ]
+    },
+    {
+      "name": "Upload - No File (expect 400)",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "formdata",
+          "formdata": []
+        },
+        "url": {
+          "raw": "{{baseUrl}}/upload",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "upload"
+          ]
+        }
+      },
+      "response": [
+        {
+          "name": "Upload - No File (expect 400)",
+          "originalRequest": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "formdata",
+              "formdata": []
+            },
+            "url": {
+              "raw": "{{baseUrl}}/upload",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "upload"
+              ]
+            }
+          },
+          "status": "Bad Request",
+          "code": 400,
+          "_postman_previewlanguage": null,
+          "header": [
+            {
+              "key": "X-Powered-By",
+              "value": "Express"
+            },
+            {
+              "key": "Content-Type",
+              "value": "application/json; charset=utf-8"
+            },
+            {
+              "key": "Content-Length",
+              "value": "46"
+            },
+            {
+              "key": "ETag",
+              "value": "W/\"2e-BUrhHT9lv4SWwHCYxl2NC3puJMA\""
+            },
+            {
+              "key": "Date",
+              "value": "Mon, 22 Jun 2026 04:47:08 GMT"
+            },
+            {
+              "key": "Connection",
+              "value": "keep-alive"
+            },
+            {
+              "key": "Keep-Alive",
+              "value": "timeout=5"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n    \"success\": false,\n    \"message\": \"No file uploaded\"\n}"
+        }
+      ]
+    },
+    {
+      "name": "Get All Files",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/files",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "files"
+          ]
+        }
+      },
+      "response": [
+        {
+          "name": "Get All Files",
+          "originalRequest": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/files",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "files"
+              ]
+            }
+          },
+          "status": "OK",
+          "code": 200,
+          "_postman_previewlanguage": null,
+          "header": [
+            {
+              "key": "X-Powered-By",
+              "value": "Express"
+            },
+            {
+              "key": "Content-Type",
+              "value": "application/json; charset=utf-8"
+            },
+            {
+              "key": "Content-Length",
+              "value": "469"
+            },
+            {
+              "key": "ETag",
+              "value": "W/\"1d5-Jwlg7JFCnf2GeVxH1Frt0gJmFts\""
+            },
+            {
+              "key": "Date",
+              "value": "Mon, 22 Jun 2026 04:47:22 GMT"
+            },
+            {
+              "key": "Connection",
+              "value": "keep-alive"
+            },
+            {
+              "key": "Keep-Alive",
+              "value": "timeout=5"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n    \"success\": true,\n    \"count\": 1,\n    \"data\": [\n        {\n            \"_id\": \"6a38be3e1da5a60205073a9f\",\n            \"filename\": \"1782103614192-436459440.jpg\",\n            \"originalName\": \"anime.jpg\",\n            \"path\": \"C:\\\\Users\\\\shubhi\\\\Desktop\\\\ENGINEERING\\\\Syntaxhub_Backend_Projects\\\\Backend_Task-1\\\\Project-3\\\\uploads\\\\1782103614192-436459440.jpg\",\n            \"url\": \"http://localhost:5002/uploads/1782103614192-436459440.jpg\",\n            \"mimetype\": \"image/jpeg\",\n            \"size\": 39993,\n            \"createdAt\": \"2026-06-22T04:46:54.340Z\",\n            \"updatedAt\": \"2026-06-22T04:46:54.340Z\",\n            \"__v\": 0\n        }\n    ]\n}"
+        }
+      ]
+    },
+    {
+      "name": "Get File By Id",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/files/{{fileId}}",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "files",
+            "{{fileId}}"
+          ]
+        }
+      },
+      "response": [
+        {
+          "name": "Get File By Id",
+          "originalRequest": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/files/{{fileId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "files",
+                "{{fileId}}"
+              ]
+            }
+          },
+          "status": "OK",
+          "code": 200,
+          "_postman_previewlanguage": null,
+          "header": [
+            {
+              "key": "X-Powered-By",
+              "value": "Express"
+            },
+            {
+              "key": "Content-Type",
+              "value": "application/json; charset=utf-8"
+            },
+            {
+              "key": "Content-Length",
+              "value": "457"
+            },
+            {
+              "key": "ETag",
+              "value": "W/\"1c9-SqI+my03l/v2GeLORQH1l7rdxhk\""
+            },
+            {
+              "key": "Date",
+              "value": "Mon, 22 Jun 2026 04:47:34 GMT"
+            },
+            {
+              "key": "Connection",
+              "value": "keep-alive"
+            },
+            {
+              "key": "Keep-Alive",
+              "value": "timeout=5"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n    \"success\": true,\n    \"data\": {\n        \"_id\": \"6a38be3e1da5a60205073a9f\",\n        \"filename\": \"1782103614192-436459440.jpg\",\n        \"originalName\": \"anime.jpg\",\n        \"path\": \"C:\\\\Users\\\\shubhi\\\\Desktop\\\\ENGINEERING\\\\Syntaxhub_Backend_Projects\\\\Backend_Task-1\\\\Project-3\\\\uploads\\\\1782103614192-436459440.jpg\",\n        \"url\": \"http://localhost:5002/uploads/1782103614192-436459440.jpg\",\n        \"mimetype\": \"image/jpeg\",\n        \"size\": 39993,\n        \"createdAt\": \"2026-06-22T04:46:54.340Z\",\n        \"updatedAt\": \"2026-06-22T04:46:54.340Z\",\n        \"__v\": 0\n    }\n}"
+        }
+      ]
+    },
+    {
+      "name": "Serve Image (static)",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/uploads/{{fileName}}",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "uploads",
+            "{{fileName}}"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Delete File",
+      "request": {
+        "method": "DELETE",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/files/{{fileId}}",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "files",
+            "{{fileId}}"
+          ]
+        }
+      },
+      "response": [
+        {
+          "name": "Delete File",
+          "originalRequest": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/files/{{fileId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "files",
+                "{{fileId}}"
+              ]
+            }
+          },
+          "status": "OK",
+          "code": 200,
+          "_postman_previewlanguage": null,
+          "header": [
+            {
+              "key": "X-Powered-By",
+              "value": "Express"
+            },
+            {
+              "key": "Content-Type",
+              "value": "application/json; charset=utf-8"
+            },
+            {
+              "key": "Content-Length",
+              "value": "482"
+            },
+            {
+              "key": "ETag",
+              "value": "W/\"1e2-C/yblR/KJZlRsaRYOXgcookV7Y4\""
+            },
+            {
+              "key": "Date",
+              "value": "Mon, 22 Jun 2026 04:49:05 GMT"
+            },
+            {
+              "key": "Connection",
+              "value": "keep-alive"
+            },
+            {
+              "key": "Keep-Alive",
+              "value": "timeout=5"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n    \"success\": true,\n    \"message\": \"File deleted\",\n    \"data\": {\n        \"_id\": \"6a38be3e1da5a60205073a9f\",\n        \"filename\": \"1782103614192-436459440.jpg\",\n        \"originalName\": \"anime.jpg\",\n        \"path\": \"C:\\\\Users\\\\shubhi\\\\Desktop\\\\ENGINEERING\\\\Syntaxhub_Backend_Projects\\\\Backend_Task-1\\\\Project-3\\\\uploads\\\\1782103614192-436459440.jpg\",\n        \"url\": \"http://localhost:5002/uploads/1782103614192-436459440.jpg\",\n        \"mimetype\": \"image/jpeg\",\n        \"size\": 39993,\n        \"createdAt\": \"2026-06-22T04:46:54.340Z\",\n        \"updatedAt\": \"2026-06-22T04:46:54.340Z\",\n        \"__v\": 0\n    }\n}"
+        }
+      ]
+    }
+  ],
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:5002"
+    },
+    {
+      "key": "fileId",
+      "value": ""
+    },
+    {
+      "key": "fileName",
+      "value": ""
+    }
+  ]
+}
