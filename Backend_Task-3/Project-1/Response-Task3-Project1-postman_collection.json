@@ -1,0 +1,1017 @@
+{
+  "info": {
+    "_postman_id": "3182ec0e-f82d-45a8-9d8e-e108426c688a",
+    "name": "Task 3 - Project 1 - Notes App",
+    "description": "Notes App backend (JWT-owned notes, populate, soft-delete/archive). Run Signup -> Login (stores {{token}}) -> Create Note (stores {{noteId}}).",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "43522881"
+  },
+  "item": [
+    {
+      "name": "Health Check",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            ""
+          ]
+        }
+      },
+      "response": [
+        {
+          "name": "Health Check",
+          "originalRequest": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                ""
+              ]
+            }
+          },
+          "status": "OK",
+          "code": 200,
+          "_postman_previewlanguage": null,
+          "header": [
+            {
+              "key": "X-Powered-By",
+              "value": "Express"
+            },
+            {
+              "key": "Content-Type",
+              "value": "application/json; charset=utf-8"
+            },
+            {
+              "key": "Content-Length",
+              "value": "53"
+            },
+            {
+              "key": "ETag",
+              "value": "W/\"35-pxknZTOnpudjatNDjoAymgwfzhE\""
+            },
+            {
+              "key": "Date",
+              "value": "Mon, 22 Jun 2026 06:17:14 GMT"
+            },
+            {
+              "key": "Connection",
+              "value": "keep-alive"
+            },
+            {
+              "key": "Keep-Alive",
+              "value": "timeout=5"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n    \"success\": true,\n    \"message\": \"Notes App API is running\"\n}"
+        }
+      ]
+    },
+    {
+      "name": "Signup",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"username\": \"asha\",\n  \"email\": \"asha@example.com\",\n  \"password\": \"secret123\"\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/auth/signup",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "auth",
+            "signup"
+          ]
+        }
+      },
+      "response": [
+        {
+          "name": "Signup",
+          "originalRequest": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"username\": \"asshha\",\n  \"email\": \"asshha@example.com\",\n  \"password\": \"secresth123\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/auth/signup",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "auth",
+                "signup"
+              ]
+            }
+          },
+          "status": "Created",
+          "code": 201,
+          "_postman_previewlanguage": null,
+          "header": [
+            {
+              "key": "X-Powered-By",
+              "value": "Express"
+            },
+            {
+              "key": "Content-Type",
+              "value": "application/json; charset=utf-8"
+            },
+            {
+              "key": "Content-Length",
+              "value": "147"
+            },
+            {
+              "key": "ETag",
+              "value": "W/\"93-zrryXZ9Np+0LfpuqaETlN2x6STE\""
+            },
+            {
+              "key": "Date",
+              "value": "Mon, 22 Jun 2026 06:17:45 GMT"
+            },
+            {
+              "key": "Connection",
+              "value": "keep-alive"
+            },
+            {
+              "key": "Keep-Alive",
+              "value": "timeout=5"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n    \"success\": true,\n    \"message\": \"User registered successfully\",\n    \"data\": {\n        \"id\": \"6a38d38983894265e1266e4e\",\n        \"username\": \"asshha\",\n        \"email\": \"asshha@example.com\"\n    }\n}"
+        }
+      ]
+    },
+    {
+      "name": "Login",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "const res = pm.response.json();",
+              "if (res.token) pm.collectionVariables.set('token', res.token);",
+              "pm.test('status is 200', () => pm.response.to.have.status(200));"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"identifier\": \"asha@example.com\",\n  \"password\": \"secret123\"\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/auth/login",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "auth",
+            "login"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Get Me (user + notes)",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token}}"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/auth/me",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "auth",
+            "me"
+          ]
+        }
+      },
+      "response": [
+        {
+          "name": "Get Me (user + notes)",
+          "originalRequest": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/auth/me",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "auth",
+                "me"
+              ]
+            }
+          },
+          "status": "OK",
+          "code": 200,
+          "_postman_previewlanguage": null,
+          "header": [
+            {
+              "key": "X-Powered-By",
+              "value": "Express"
+            },
+            {
+              "key": "Content-Type",
+              "value": "application/json; charset=utf-8"
+            },
+            {
+              "key": "Content-Length",
+              "value": "236"
+            },
+            {
+              "key": "ETag",
+              "value": "W/\"ec-naGSkaP74k+H1HXI2rHheVKnT/o\""
+            },
+            {
+              "key": "Date",
+              "value": "Mon, 22 Jun 2026 06:19:04 GMT"
+            },
+            {
+              "key": "Connection",
+              "value": "keep-alive"
+            },
+            {
+              "key": "Keep-Alive",
+              "value": "timeout=5"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n    \"success\": true,\n    \"data\": {\n        \"_id\": \"6a38d38983894265e1266e4e\",\n        \"username\": \"asshha\",\n        \"email\": \"asshha@example.com\",\n        \"createdAt\": \"2026-06-22T06:17:45.443Z\",\n        \"updatedAt\": \"2026-06-22T06:17:45.443Z\",\n        \"__v\": 0,\n        \"notes\": [],\n        \"id\": \"6a38d38983894265e1266e4e\"\n    }\n}"
+        }
+      ]
+    },
+    {
+      "name": "Create Note",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "const res = pm.response.json();",
+              "if (res.data && res.data._id) pm.collectionVariables.set('noteId', res.data._id);",
+              "pm.test('status is 201', () => pm.response.to.have.status(201));"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token}}"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"title\": \"My first note\",\n  \"content\": \"Remember to test the API\",\n  \"category\": \"work\"\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/notes",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "notes"
+          ]
+        }
+      },
+      "response": [
+        {
+          "name": "Create Note",
+          "originalRequest": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"My first note\",\n  \"content\": \"Remember to test the API\",\n  \"category\": \"work\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/notes",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "notes"
+              ]
+            }
+          },
+          "status": "Created",
+          "code": 201,
+          "_postman_previewlanguage": null,
+          "header": [
+            {
+              "key": "X-Powered-By",
+              "value": "Express"
+            },
+            {
+              "key": "Content-Type",
+              "value": "application/json; charset=utf-8"
+            },
+            {
+              "key": "Content-Length",
+              "value": "294"
+            },
+            {
+              "key": "ETag",
+              "value": "W/\"126-5wt69n678C+MRhs4IU0wAA9bT04\""
+            },
+            {
+              "key": "Date",
+              "value": "Mon, 22 Jun 2026 06:19:21 GMT"
+            },
+            {
+              "key": "Connection",
+              "value": "keep-alive"
+            },
+            {
+              "key": "Keep-Alive",
+              "value": "timeout=5"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n    \"success\": true,\n    \"data\": {\n        \"title\": \"My first note\",\n        \"content\": \"Remember to test the API\",\n        \"category\": \"work\",\n        \"user\": \"6a38d38983894265e1266e4e\",\n        \"isArchived\": false,\n        \"isDeleted\": false,\n        \"_id\": \"6a38d3e983894265e1266e55\",\n        \"createdAt\": \"2026-06-22T06:19:21.107Z\",\n        \"updatedAt\": \"2026-06-22T06:19:21.107Z\",\n        \"__v\": 0\n    }\n}"
+        }
+      ]
+    },
+    {
+      "name": "Get My Notes",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token}}"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/notes",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "notes"
+          ]
+        }
+      },
+      "response": [
+        {
+          "name": "Get My Notes",
+          "originalRequest": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/notes",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "notes"
+              ]
+            }
+          },
+          "status": "OK",
+          "code": 200,
+          "_postman_previewlanguage": null,
+          "header": [
+            {
+              "key": "X-Powered-By",
+              "value": "Express"
+            },
+            {
+              "key": "Content-Type",
+              "value": "application/json; charset=utf-8"
+            },
+            {
+              "key": "Content-Length",
+              "value": "306"
+            },
+            {
+              "key": "ETag",
+              "value": "W/\"132-B1E1z1GiDrJ60K+zMyk9088ED9E\""
+            },
+            {
+              "key": "Date",
+              "value": "Mon, 22 Jun 2026 06:19:44 GMT"
+            },
+            {
+              "key": "Connection",
+              "value": "keep-alive"
+            },
+            {
+              "key": "Keep-Alive",
+              "value": "timeout=5"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n    \"success\": true,\n    \"count\": 1,\n    \"data\": [\n        {\n            \"_id\": \"6a38d3e983894265e1266e55\",\n            \"title\": \"My first note\",\n            \"content\": \"Remember to test the API\",\n            \"category\": \"work\",\n            \"user\": \"6a38d38983894265e1266e4e\",\n            \"isArchived\": false,\n            \"isDeleted\": false,\n            \"createdAt\": \"2026-06-22T06:19:21.107Z\",\n            \"updatedAt\": \"2026-06-22T06:19:21.107Z\",\n            \"__v\": 0\n        }\n    ]\n}"
+        }
+      ]
+    },
+    {
+      "name": "Get My Notes - Filter (archived/category)",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token}}"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/notes?archived=false&category=work",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "notes"
+          ],
+          "query": [
+            {
+              "key": "archived",
+              "value": "false"
+            },
+            {
+              "key": "category",
+              "value": "work"
+            }
+          ]
+        }
+      },
+      "response": [
+        {
+          "name": "Get My Notes - Filter (archived/category)",
+          "originalRequest": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/notes?archived=false&category=work",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "notes"
+              ],
+              "query": [
+                {
+                  "key": "archived",
+                  "value": "false"
+                },
+                {
+                  "key": "category",
+                  "value": "work"
+                }
+              ]
+            }
+          },
+          "status": "OK",
+          "code": 200,
+          "_postman_previewlanguage": null,
+          "header": [
+            {
+              "key": "X-Powered-By",
+              "value": "Express"
+            },
+            {
+              "key": "Content-Type",
+              "value": "application/json; charset=utf-8"
+            },
+            {
+              "key": "Content-Length",
+              "value": "306"
+            },
+            {
+              "key": "ETag",
+              "value": "W/\"132-B1E1z1GiDrJ60K+zMyk9088ED9E\""
+            },
+            {
+              "key": "Date",
+              "value": "Mon, 22 Jun 2026 06:20:06 GMT"
+            },
+            {
+              "key": "Connection",
+              "value": "keep-alive"
+            },
+            {
+              "key": "Keep-Alive",
+              "value": "timeout=5"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n    \"success\": true,\n    \"count\": 1,\n    \"data\": [\n        {\n            \"_id\": \"6a38d3e983894265e1266e55\",\n            \"title\": \"My first note\",\n            \"content\": \"Remember to test the API\",\n            \"category\": \"work\",\n            \"user\": \"6a38d38983894265e1266e4e\",\n            \"isArchived\": false,\n            \"isDeleted\": false,\n            \"createdAt\": \"2026-06-22T06:19:21.107Z\",\n            \"updatedAt\": \"2026-06-22T06:19:21.107Z\",\n            \"__v\": 0\n        }\n    ]\n}"
+        }
+      ]
+    },
+    {
+      "name": "Get Single Note (populated user)",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token}}"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/notes/{{noteId}}",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "notes",
+            "{{noteId}}"
+          ]
+        }
+      },
+      "response": [
+        {
+          "name": "Get Single Note (populated user)",
+          "originalRequest": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/notes/{{noteId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "notes",
+                "{{noteId}}"
+              ]
+            }
+          },
+          "status": "OK",
+          "code": 200,
+          "_postman_previewlanguage": null,
+          "header": [
+            {
+              "key": "X-Powered-By",
+              "value": "Express"
+            },
+            {
+              "key": "Content-Type",
+              "value": "application/json; charset=utf-8"
+            },
+            {
+              "key": "Content-Length",
+              "value": "383"
+            },
+            {
+              "key": "ETag",
+              "value": "W/\"17f-Ip5biK0rBewFsiN5nstZkVLmDlk\""
+            },
+            {
+              "key": "Date",
+              "value": "Mon, 22 Jun 2026 06:21:26 GMT"
+            },
+            {
+              "key": "Connection",
+              "value": "keep-alive"
+            },
+            {
+              "key": "Keep-Alive",
+              "value": "timeout=5"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n    \"success\": true,\n    \"data\": {\n        \"_id\": \"6a38d3e983894265e1266e55\",\n        \"title\": \"My first note\",\n        \"content\": \"Remember to test the API\",\n        \"category\": \"work\",\n        \"user\": {\n            \"_id\": \"6a38d38983894265e1266e4e\",\n            \"username\": \"asshha\",\n            \"email\": \"asshha@example.com\",\n            \"id\": \"6a38d38983894265e1266e4e\"\n        },\n        \"isArchived\": false,\n        \"isDeleted\": false,\n        \"createdAt\": \"2026-06-22T06:19:21.107Z\",\n        \"updatedAt\": \"2026-06-22T06:19:21.107Z\",\n        \"__v\": 0\n    }\n}"
+        }
+      ]
+    },
+    {
+      "name": "Update Note",
+      "request": {
+        "method": "PUT",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token}}"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"content\": \"Updated content\"\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/notes/{{noteId}}",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "notes",
+            "{{noteId}}"
+          ]
+        }
+      },
+      "response": [
+        {
+          "name": "Update Note",
+          "originalRequest": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"content\": \"Updated content\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/notes/{{noteId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "notes",
+                "{{noteId}}"
+              ]
+            }
+          },
+          "status": "OK",
+          "code": 200,
+          "_postman_previewlanguage": null,
+          "header": [
+            {
+              "key": "X-Powered-By",
+              "value": "Express"
+            },
+            {
+              "key": "Content-Type",
+              "value": "application/json; charset=utf-8"
+            },
+            {
+              "key": "Content-Length",
+              "value": "285"
+            },
+            {
+              "key": "ETag",
+              "value": "W/\"11d-A+yGqZxTmO2gD/kHApaQ07JQTnQ\""
+            },
+            {
+              "key": "Date",
+              "value": "Mon, 22 Jun 2026 06:21:58 GMT"
+            },
+            {
+              "key": "Connection",
+              "value": "keep-alive"
+            },
+            {
+              "key": "Keep-Alive",
+              "value": "timeout=5"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n    \"success\": true,\n    \"data\": {\n        \"_id\": \"6a38d3e983894265e1266e55\",\n        \"title\": \"My first note\",\n        \"content\": \"Updated content\",\n        \"category\": \"work\",\n        \"user\": \"6a38d38983894265e1266e4e\",\n        \"isArchived\": false,\n        \"isDeleted\": false,\n        \"createdAt\": \"2026-06-22T06:19:21.107Z\",\n        \"updatedAt\": \"2026-06-22T06:21:57.950Z\",\n        \"__v\": 0\n    }\n}"
+        }
+      ]
+    },
+    {
+      "name": "Archive Note",
+      "request": {
+        "method": "PATCH",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token}}"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"archived\": true\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/notes/{{noteId}}/archive",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "notes",
+            "{{noteId}}",
+            "archive"
+          ]
+        }
+      },
+      "response": [
+        {
+          "name": "Archive Note",
+          "originalRequest": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"archived\": true\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/notes/{{noteId}}/archive",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "notes",
+                "{{noteId}}",
+                "archive"
+              ]
+            }
+          },
+          "status": "OK",
+          "code": 200,
+          "_postman_previewlanguage": null,
+          "header": [
+            {
+              "key": "X-Powered-By",
+              "value": "Express"
+            },
+            {
+              "key": "Content-Type",
+              "value": "application/json; charset=utf-8"
+            },
+            {
+              "key": "Content-Length",
+              "value": "310"
+            },
+            {
+              "key": "ETag",
+              "value": "W/\"136-zfgR/AKiTRcMLOOtGtmb7Pb+8EE\""
+            },
+            {
+              "key": "Date",
+              "value": "Mon, 22 Jun 2026 06:22:14 GMT"
+            },
+            {
+              "key": "Connection",
+              "value": "keep-alive"
+            },
+            {
+              "key": "Keep-Alive",
+              "value": "timeout=5"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n    \"success\": true,\n    \"message\": \"Note archived\",\n    \"data\": {\n        \"_id\": \"6a38d3e983894265e1266e55\",\n        \"title\": \"My first note\",\n        \"content\": \"Updated content\",\n        \"category\": \"work\",\n        \"user\": \"6a38d38983894265e1266e4e\",\n        \"isArchived\": true,\n        \"isDeleted\": false,\n        \"createdAt\": \"2026-06-22T06:19:21.107Z\",\n        \"updatedAt\": \"2026-06-22T06:22:14.242Z\",\n        \"__v\": 0\n    }\n}"
+        }
+      ]
+    },
+    {
+      "name": "Delete Note (soft)",
+      "request": {
+        "method": "DELETE",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token}}"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/notes/{{noteId}}",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "notes",
+            "{{noteId}}"
+          ]
+        }
+      },
+      "response": [
+        {
+          "name": "Delete Note (soft)",
+          "originalRequest": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/notes/{{noteId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "notes",
+                "{{noteId}}"
+              ]
+            }
+          },
+          "status": "OK",
+          "code": 200,
+          "_postman_previewlanguage": null,
+          "header": [
+            {
+              "key": "X-Powered-By",
+              "value": "Express"
+            },
+            {
+              "key": "Content-Type",
+              "value": "application/json; charset=utf-8"
+            },
+            {
+              "key": "Content-Length",
+              "value": "315"
+            },
+            {
+              "key": "ETag",
+              "value": "W/\"13b-U/125G7dj/41ksU0sCf4DCiv8Zk\""
+            },
+            {
+              "key": "Date",
+              "value": "Mon, 22 Jun 2026 06:22:40 GMT"
+            },
+            {
+              "key": "Connection",
+              "value": "keep-alive"
+            },
+            {
+              "key": "Keep-Alive",
+              "value": "timeout=5"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n    \"success\": true,\n    \"message\": \"Note deleted (soft)\",\n    \"data\": {\n        \"_id\": \"6a38d3e983894265e1266e55\",\n        \"title\": \"My first note\",\n        \"content\": \"Updated content\",\n        \"category\": \"work\",\n        \"user\": \"6a38d38983894265e1266e4e\",\n        \"isArchived\": true,\n        \"isDeleted\": true,\n        \"createdAt\": \"2026-06-22T06:19:21.107Z\",\n        \"updatedAt\": \"2026-06-22T06:22:40.189Z\",\n        \"__v\": 0\n    }\n}"
+        }
+      ]
+    },
+    {
+      "name": "Get Notes - No Token (expect 401)",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/notes",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "notes"
+          ]
+        }
+      },
+      "response": [
+        {
+          "name": "Get Notes - No Token (expect 401)",
+          "originalRequest": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/notes",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "notes"
+              ]
+            }
+          },
+          "status": "Unauthorized",
+          "code": 401,
+          "_postman_previewlanguage": null,
+          "header": [
+            {
+              "key": "X-Powered-By",
+              "value": "Express"
+            },
+            {
+              "key": "Content-Type",
+              "value": "application/json; charset=utf-8"
+            },
+            {
+              "key": "Content-Length",
+              "value": "63"
+            },
+            {
+              "key": "ETag",
+              "value": "W/\"3f-TeIfaERlGGGdR7v0qsUeYoXNDrQ\""
+            },
+            {
+              "key": "Date",
+              "value": "Mon, 22 Jun 2026 06:22:54 GMT"
+            },
+            {
+              "key": "Connection",
+              "value": "keep-alive"
+            },
+            {
+              "key": "Keep-Alive",
+              "value": "timeout=5"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n    \"success\": false,\n    \"message\": \"Not authorized, no token provided\"\n}"
+        }
+      ]
+    }
+  ],
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:5006"
+    },
+    {
+      "key": "token",
+      "value": ""
+    },
+    {
+      "key": "noteId",
+      "value": ""
+    }
+  ]
+}
