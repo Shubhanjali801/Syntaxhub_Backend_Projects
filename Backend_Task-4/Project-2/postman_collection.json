@@ -1,0 +1,241 @@
+{
+  "info": {
+    "name": "Task 4 - Project 2 - Activity Log / Audit Trail",
+    "description": "Audit Trail API. Flow: Signup Admin (with adminSecret) -> Login Admin (stores {{adminToken}}). Signup User -> Login User (stores {{userToken}}, {{targetUserId}}). Perform sensitive actions (update/block/unblock/delete) which write audit logs, then fetch the audit trail with filters (user/action/date) — admin only.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    { "key": "baseUrl", "value": "http://localhost:5010" },
+    { "key": "adminToken", "value": "" },
+    { "key": "userToken", "value": "" },
+    { "key": "adminUserId", "value": "" },
+    { "key": "targetUserId", "value": "" },
+    { "key": "logId", "value": "" }
+  ],
+  "item": [
+    {
+      "name": "Health Check",
+      "request": { "method": "GET", "header": [], "url": { "raw": "{{baseUrl}}/", "host": ["{{baseUrl}}"], "path": [""] } }
+    },
+    {
+      "name": "Signup Admin (with adminSecret)",
+      "event": [
+        { "listen": "test", "script": { "type": "text/javascript", "exec": [
+          "const res = pm.response.json();",
+          "if (res.data && res.data.id) pm.collectionVariables.set('adminUserId', res.data.id);"
+        ] } }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "body": { "mode": "raw", "raw": "{\n  \"username\": \"admin1\",\n  \"email\": \"admin1@example.com\",\n  \"password\": \"secret123\",\n  \"role\": \"admin\",\n  \"adminSecret\": \"super_admin_bootstrap_secret\"\n}" },
+        "url": { "raw": "{{baseUrl}}/auth/signup", "host": ["{{baseUrl}}"], "path": ["auth", "signup"] }
+      }
+    },
+    {
+      "name": "Login Admin",
+      "event": [
+        { "listen": "test", "script": { "type": "text/javascript", "exec": [
+          "const res = pm.response.json();",
+          "if (res.token) pm.collectionVariables.set('adminToken', res.token);",
+          "pm.test('admin login 200', () => pm.response.to.have.status(200));"
+        ] } }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "body": { "mode": "raw", "raw": "{\n  \"identifier\": \"admin1@example.com\",\n  \"password\": \"secret123\"\n}" },
+        "url": { "raw": "{{baseUrl}}/auth/login", "host": ["{{baseUrl}}"], "path": ["auth", "login"] }
+      }
+    },
+    {
+      "name": "Signup User",
+      "event": [
+        { "listen": "test", "script": { "type": "text/javascript", "exec": [
+          "const res = pm.response.json();",
+          "if (res.data && res.data.id) pm.collectionVariables.set('targetUserId', res.data.id);",
+          "pm.test('signup 201', () => pm.response.to.have.status(201));"
+        ] } }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "body": { "mode": "raw", "raw": "{\n  \"username\": \"user1\",\n  \"email\": \"user1@example.com\",\n  \"password\": \"secret123\"\n}" },
+        "url": { "raw": "{{baseUrl}}/auth/signup", "host": ["{{baseUrl}}"], "path": ["auth", "signup"] }
+      }
+    },
+    {
+      "name": "Login User",
+      "event": [
+        { "listen": "test", "script": { "type": "text/javascript", "exec": [
+          "const res = pm.response.json();",
+          "if (res.token) pm.collectionVariables.set('userToken', res.token);"
+        ] } }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "body": { "mode": "raw", "raw": "{\n  \"identifier\": \"user1@example.com\",\n  \"password\": \"secret123\"\n}" },
+        "url": { "raw": "{{baseUrl}}/auth/login", "host": ["{{baseUrl}}"], "path": ["auth", "login"] }
+      }
+    },
+    {
+      "name": "Admin: List Users",
+      "request": {
+        "method": "GET",
+        "header": [{ "key": "Authorization", "value": "Bearer {{adminToken}}" }],
+        "url": { "raw": "{{baseUrl}}/users", "host": ["{{baseUrl}}"], "path": ["users"] }
+      }
+    },
+    {
+      "name": "Sensitive: Update User (logs UPDATE_USER)",
+      "request": {
+        "method": "PATCH",
+        "header": [
+          { "key": "Content-Type", "value": "application/json" },
+          { "key": "Authorization", "value": "Bearer {{adminToken}}" }
+        ],
+        "body": { "mode": "raw", "raw": "{\n  \"username\": \"user1_renamed\"\n}" },
+        "url": { "raw": "{{baseUrl}}/users/{{targetUserId}}", "host": ["{{baseUrl}}"], "path": ["users", "{{targetUserId}}"] }
+      }
+    },
+    {
+      "name": "Sensitive: Block User (logs BLOCK_USER)",
+      "request": {
+        "method": "PATCH",
+        "header": [{ "key": "Authorization", "value": "Bearer {{adminToken}}" }],
+        "url": { "raw": "{{baseUrl}}/users/{{targetUserId}}/block", "host": ["{{baseUrl}}"], "path": ["users", "{{targetUserId}}", "block"] }
+      }
+    },
+    {
+      "name": "Sensitive: Unblock User (logs UNBLOCK_USER)",
+      "request": {
+        "method": "PATCH",
+        "header": [{ "key": "Authorization", "value": "Bearer {{adminToken}}" }],
+        "url": { "raw": "{{baseUrl}}/users/{{targetUserId}}/unblock", "host": ["{{baseUrl}}"], "path": ["users", "{{targetUserId}}", "unblock"] }
+      }
+    },
+    {
+      "name": "User tries Audit route (expect 403)",
+      "request": {
+        "method": "GET",
+        "header": [{ "key": "Authorization", "value": "Bearer {{userToken}}" }],
+        "url": { "raw": "{{baseUrl}}/audit", "host": ["{{baseUrl}}"], "path": ["audit"] }
+      }
+    },
+    {
+      "name": "Audit: Fetch All Logs (paged)",
+      "event": [
+        { "listen": "test", "script": { "type": "text/javascript", "exec": [
+          "const res = pm.response.json();",
+          "if (res.data && res.data.length) pm.collectionVariables.set('logId', res.data[0]._id);",
+          "pm.test('audit 200', () => pm.response.to.have.status(200));"
+        ] } }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [{ "key": "Authorization", "value": "Bearer {{adminToken}}" }],
+        "url": {
+          "raw": "{{baseUrl}}/audit?page=1&limit=20&populate=true",
+          "host": ["{{baseUrl}}"],
+          "path": ["audit"],
+          "query": [
+            { "key": "page", "value": "1" },
+            { "key": "limit", "value": "20" },
+            { "key": "populate", "value": "true" }
+          ]
+        }
+      }
+    },
+    {
+      "name": "Audit: Filter by Action (DELETE_USER)",
+      "request": {
+        "method": "GET",
+        "header": [{ "key": "Authorization", "value": "Bearer {{adminToken}}" }],
+        "url": {
+          "raw": "{{baseUrl}}/audit?action=DELETE_USER",
+          "host": ["{{baseUrl}}"],
+          "path": ["audit"],
+          "query": [{ "key": "action", "value": "DELETE_USER" }]
+        }
+      }
+    },
+    {
+      "name": "Audit: Filter by User (actor)",
+      "request": {
+        "method": "GET",
+        "header": [{ "key": "Authorization", "value": "Bearer {{adminToken}}" }],
+        "url": {
+          "raw": "{{baseUrl}}/audit?user={{adminUserId}}",
+          "host": ["{{baseUrl}}"],
+          "path": ["audit"],
+          "query": [{ "key": "user", "value": "{{adminUserId}}" }]
+        }
+      }
+    },
+    {
+      "name": "Audit: Filter by Target Resource",
+      "request": {
+        "method": "GET",
+        "header": [{ "key": "Authorization", "value": "Bearer {{adminToken}}" }],
+        "url": {
+          "raw": "{{baseUrl}}/audit?target={{targetUserId}}&populate=true",
+          "host": ["{{baseUrl}}"],
+          "path": ["audit"],
+          "query": [
+            { "key": "target", "value": "{{targetUserId}}" },
+            { "key": "populate", "value": "true" }
+          ]
+        }
+      }
+    },
+    {
+      "name": "Audit: Filter by Date Range",
+      "request": {
+        "method": "GET",
+        "header": [{ "key": "Authorization", "value": "Bearer {{adminToken}}" }],
+        "url": {
+          "raw": "{{baseUrl}}/audit?from=2026-01-01&to=2026-12-31",
+          "host": ["{{baseUrl}}"],
+          "path": ["audit"],
+          "query": [
+            { "key": "from", "value": "2026-01-01" },
+            { "key": "to", "value": "2026-12-31" }
+          ]
+        }
+      }
+    },
+    {
+      "name": "Audit: Stats (counts by action)",
+      "request": {
+        "method": "GET",
+        "header": [{ "key": "Authorization", "value": "Bearer {{adminToken}}" }],
+        "url": { "raw": "{{baseUrl}}/audit/stats", "host": ["{{baseUrl}}"], "path": ["audit", "stats"] }
+      }
+    },
+    {
+      "name": "Audit: Get Single Log (linked resources)",
+      "request": {
+        "method": "GET",
+        "header": [{ "key": "Authorization", "value": "Bearer {{adminToken}}" }],
+        "url": { "raw": "{{baseUrl}}/audit/{{logId}}", "host": ["{{baseUrl}}"], "path": ["audit", "{{logId}}"] }
+      }
+    },
+    {
+      "name": "Sensitive: Delete User (logs DELETE_USER)",
+      "request": {
+        "method": "DELETE",
+        "header": [{ "key": "Authorization", "value": "Bearer {{adminToken}}" }],
+        "url": { "raw": "{{baseUrl}}/users/{{targetUserId}}", "host": ["{{baseUrl}}"], "path": ["users", "{{targetUserId}}"] }
+      }
+    },
+    {
+      "name": "No token on audit route (expect 401)",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": { "raw": "{{baseUrl}}/audit", "host": ["{{baseUrl}}"], "path": ["audit"] }
+      }
+    }
+  ]
+}

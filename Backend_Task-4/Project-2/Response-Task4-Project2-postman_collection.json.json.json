@@ -1,0 +1,1621 @@
+{
+  "info": {
+    "_postman_id": "d48a013d-673a-4ce9-b8c9-a0929532be0f",
+    "name": "Task 4 - Project 2 - Activity Log / Audit Trail",
+    "description": "Audit Trail API. Flow: Signup Admin (with adminSecret) -> Login Admin (stores {{adminToken}}). Signup User -> Login User (stores {{userToken}}, {{targetUserId}}). Perform sensitive actions (update/block/unblock/delete) which write audit logs, then fetch the audit trail with filters (user/action/date) — admin only.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "43522881"
+  },
+  "item": [
+    {
+      "name": "Health Check",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            ""
+          ]
+        }
+      },
+      "response": [
+        {
+          "name": "Health Check",
+          "originalRequest": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                ""
+              ]
+            }
+          },
+          "status": "OK",
+          "code": 200,
+          "_postman_previewlanguage": null,
+          "header": [
+            {
+              "key": "X-Powered-By",
+              "value": "Express"
+            },
+            {
+              "key": "Content-Type",
+              "value": "application/json; charset=utf-8"
+            },
+            {
+              "key": "Content-Length",
+              "value": "70"
+            },
+            {
+              "key": "ETag",
+              "value": "W/\"46-85mTAuhJhrna8joV7OZ9epvToik\""
+            },
+            {
+              "key": "Date",
+              "value": "Wed, 24 Jun 2026 10:29:09 GMT"
+            },
+            {
+              "key": "Connection",
+              "value": "keep-alive"
+            },
+            {
+              "key": "Keep-Alive",
+              "value": "timeout=5"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n    \"success\": true,\n    \"message\": \"Activity Log / Audit Trail API is running\"\n}"
+        }
+      ]
+    },
+    {
+      "name": "Signup Admin (with adminSecret)",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "const res = pm.response.json();",
+              "if (res.data && res.data.id) pm.collectionVariables.set('adminUserId', res.data.id);"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"username\": \"admin1\",\n  \"email\": \"admin1@example.com\",\n  \"password\": \"secret123\",\n  \"role\": \"admin\",\n  \"adminSecret\": \"super_admin_bootstrap_secret\"\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/auth/signup",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "auth",
+            "signup"
+          ]
+        }
+      },
+      "response": [
+        {
+          "name": "Signup Admin (with adminSecret)",
+          "originalRequest": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"username\": \"shubh423\",\n  \"email\": \"Shubhanjali32@example.com\",\n  \"password\": \"shubh@4894\",\n  \"role\": \"admin\",\n  \"adminSecret\": \"super_admin_bootstrap_secret\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/auth/signup",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "auth",
+                "signup"
+              ]
+            }
+          },
+          "status": "Created",
+          "code": 201,
+          "_postman_previewlanguage": null,
+          "header": [
+            {
+              "key": "X-Powered-By",
+              "value": "Express"
+            },
+            {
+              "key": "Content-Type",
+              "value": "application/json; charset=utf-8"
+            },
+            {
+              "key": "Content-Length",
+              "value": "171"
+            },
+            {
+              "key": "ETag",
+              "value": "W/\"ab-f8Y2rBzQftrGtYOBaniMYr0hISM\""
+            },
+            {
+              "key": "Date",
+              "value": "Wed, 24 Jun 2026 10:30:11 GMT"
+            },
+            {
+              "key": "Connection",
+              "value": "keep-alive"
+            },
+            {
+              "key": "Keep-Alive",
+              "value": "timeout=5"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n    \"success\": true,\n    \"message\": \"User registered successfully\",\n    \"data\": {\n        \"id\": \"6a3bb1b3b4097003d88a9b5d\",\n        \"username\": \"shubh423\",\n        \"email\": \"shubhanjali32@example.com\",\n        \"role\": \"admin\"\n    }\n}"
+        }
+      ]
+    },
+    {
+      "name": "Login Admin",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "const res = pm.response.json();",
+              "if (res.token) pm.collectionVariables.set('adminToken', res.token);",
+              "pm.test('admin login 200', () => pm.response.to.have.status(200));"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"identifier\": \"admin1@example.com\",\n  \"password\": \"secret123\"\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/auth/login",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "auth",
+            "login"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Signup User",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "const res = pm.response.json();",
+              "if (res.data && res.data.id) pm.collectionVariables.set('targetUserId', res.data.id);",
+              "pm.test('signup 201', () => pm.response.to.have.status(201));"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"username\": \"user1\",\n  \"email\": \"user1@example.com\",\n  \"password\": \"secret123\"\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/auth/signup",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "auth",
+            "signup"
+          ]
+        }
+      },
+      "response": [
+        {
+          "name": "Signup User",
+          "originalRequest": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"username\": \"user1\",\n  \"email\": \"user1@example.com\",\n  \"password\": \"secret123\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/auth/signup",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "auth",
+                "signup"
+              ]
+            }
+          },
+          "status": "Created",
+          "code": 201,
+          "_postman_previewlanguage": null,
+          "header": [
+            {
+              "key": "X-Powered-By",
+              "value": "Express"
+            },
+            {
+              "key": "Content-Type",
+              "value": "application/json; charset=utf-8"
+            },
+            {
+              "key": "Content-Length",
+              "value": "159"
+            },
+            {
+              "key": "ETag",
+              "value": "W/\"9f-G6e2xpHsoqLWTZ+rnpVw29zZU9k\""
+            },
+            {
+              "key": "Date",
+              "value": "Wed, 24 Jun 2026 10:30:45 GMT"
+            },
+            {
+              "key": "Connection",
+              "value": "keep-alive"
+            },
+            {
+              "key": "Keep-Alive",
+              "value": "timeout=5"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n    \"success\": true,\n    \"message\": \"User registered successfully\",\n    \"data\": {\n        \"id\": \"6a3bb1d5b4097003d88a9b65\",\n        \"username\": \"user1\",\n        \"email\": \"user1@example.com\",\n        \"role\": \"user\"\n    }\n}"
+        }
+      ]
+    },
+    {
+      "name": "Login User",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "const res = pm.response.json();",
+              "if (res.token) pm.collectionVariables.set('userToken', res.token);"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"identifier\": \"user1@example.com\",\n  \"password\": \"secret123\"\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/auth/login",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "auth",
+            "login"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Admin: List Users",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{adminToken}}"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/users",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "users"
+          ]
+        }
+      },
+      "response": [
+        {
+          "name": "Admin: List Users",
+          "originalRequest": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/users",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "users"
+              ]
+            }
+          },
+          "status": "OK",
+          "code": 200,
+          "_postman_previewlanguage": null,
+          "header": [
+            {
+              "key": "X-Powered-By",
+              "value": "Express"
+            },
+            {
+              "key": "Content-Type",
+              "value": "application/json; charset=utf-8"
+            },
+            {
+              "key": "Content-Length",
+              "value": "447"
+            },
+            {
+              "key": "ETag",
+              "value": "W/\"1bf-4MGOkKAHqVnoeAkhNL/hIjzvlv0\""
+            },
+            {
+              "key": "Date",
+              "value": "Wed, 24 Jun 2026 10:31:48 GMT"
+            },
+            {
+              "key": "Connection",
+              "value": "keep-alive"
+            },
+            {
+              "key": "Keep-Alive",
+              "value": "timeout=5"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n    \"success\": true,\n    \"count\": 2,\n    \"data\": [\n        {\n            \"_id\": \"6a3bb1d5b4097003d88a9b65\",\n            \"username\": \"user1\",\n            \"email\": \"user1@example.com\",\n            \"role\": \"user\",\n            \"isBlocked\": false,\n            \"createdAt\": \"2026-06-24T10:30:45.583Z\",\n            \"updatedAt\": \"2026-06-24T10:30:45.583Z\",\n            \"__v\": 0\n        },\n        {\n            \"_id\": \"6a3bb1b3b4097003d88a9b5d\",\n            \"username\": \"shubh423\",\n            \"email\": \"shubhanjali32@example.com\",\n            \"role\": \"admin\",\n            \"isBlocked\": false,\n            \"createdAt\": \"2026-06-24T10:30:11.654Z\",\n            \"updatedAt\": \"2026-06-24T10:30:11.654Z\",\n            \"__v\": 0\n        }\n    ]\n}"
+        }
+      ]
+    },
+    {
+      "name": "Sensitive: Update User (logs UPDATE_USER)",
+      "request": {
+        "method": "PATCH",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{adminToken}}"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"username\": \"user1_renamed\"\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/users/{{targetUserId}}",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "users",
+            "{{targetUserId}}"
+          ]
+        }
+      },
+      "response": [
+        {
+          "name": "Sensitive: Update User (logs UPDATE_USER)",
+          "originalRequest": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminToken}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"username\": \"user1_renamed\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/users/{{targetUserId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "users",
+                "{{targetUserId}}"
+              ]
+            }
+          },
+          "status": "OK",
+          "code": 200,
+          "_postman_previewlanguage": null,
+          "header": [
+            {
+              "key": "X-Powered-By",
+              "value": "Express"
+            },
+            {
+              "key": "Content-Type",
+              "value": "application/json; charset=utf-8"
+            },
+            {
+              "key": "Content-Length",
+              "value": "256"
+            },
+            {
+              "key": "ETag",
+              "value": "W/\"100-mEXTenMuKJ4QNpI71hu2JV5DHAs\""
+            },
+            {
+              "key": "Date",
+              "value": "Wed, 24 Jun 2026 10:33:27 GMT"
+            },
+            {
+              "key": "Connection",
+              "value": "keep-alive"
+            },
+            {
+              "key": "Keep-Alive",
+              "value": "timeout=5"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n    \"success\": true,\n    \"message\": \"User updated\",\n    \"data\": {\n        \"_id\": \"6a3bb1d5b4097003d88a9b65\",\n        \"username\": \"user1_renamed\",\n        \"email\": \"user1@example.com\",\n        \"role\": \"user\",\n        \"isBlocked\": false,\n        \"createdAt\": \"2026-06-24T10:30:45.583Z\",\n        \"updatedAt\": \"2026-06-24T10:33:27.426Z\",\n        \"__v\": 0\n    }\n}"
+        }
+      ]
+    },
+    {
+      "name": "Sensitive: Block User (logs BLOCK_USER)",
+      "request": {
+        "method": "PATCH",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{adminToken}}"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/users/{{targetUserId}}/block",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "users",
+            "{{targetUserId}}",
+            "block"
+          ]
+        }
+      },
+      "response": [
+        {
+          "name": "Sensitive: Block User (logs BLOCK_USER)",
+          "originalRequest": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/users/{{targetUserId}}/block",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "users",
+                "{{targetUserId}}",
+                "block"
+              ]
+            }
+          },
+          "status": "OK",
+          "code": 200,
+          "_postman_previewlanguage": null,
+          "header": [
+            {
+              "key": "X-Powered-By",
+              "value": "Express"
+            },
+            {
+              "key": "Content-Type",
+              "value": "application/json; charset=utf-8"
+            },
+            {
+              "key": "Content-Length",
+              "value": "255"
+            },
+            {
+              "key": "ETag",
+              "value": "W/\"ff-YVnRlkxUIY0INZU5cYEz8X5JjBw\""
+            },
+            {
+              "key": "Date",
+              "value": "Wed, 24 Jun 2026 10:33:51 GMT"
+            },
+            {
+              "key": "Connection",
+              "value": "keep-alive"
+            },
+            {
+              "key": "Keep-Alive",
+              "value": "timeout=5"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n    \"success\": true,\n    \"message\": \"User blocked\",\n    \"data\": {\n        \"_id\": \"6a3bb1d5b4097003d88a9b65\",\n        \"username\": \"user1_renamed\",\n        \"email\": \"user1@example.com\",\n        \"role\": \"user\",\n        \"isBlocked\": true,\n        \"createdAt\": \"2026-06-24T10:30:45.583Z\",\n        \"updatedAt\": \"2026-06-24T10:33:51.245Z\",\n        \"__v\": 0\n    }\n}"
+        }
+      ]
+    },
+    {
+      "name": "Sensitive: Unblock User (logs UNBLOCK_USER)",
+      "request": {
+        "method": "PATCH",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{adminToken}}"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/users/{{targetUserId}}/unblock",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "users",
+            "{{targetUserId}}",
+            "unblock"
+          ]
+        }
+      },
+      "response": [
+        {
+          "name": "Sensitive: Unblock User (logs UNBLOCK_USER)",
+          "originalRequest": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/users/{{targetUserId}}/unblock",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "users",
+                "{{targetUserId}}",
+                "unblock"
+              ]
+            }
+          },
+          "status": "OK",
+          "code": 200,
+          "_postman_previewlanguage": null,
+          "header": [
+            {
+              "key": "X-Powered-By",
+              "value": "Express"
+            },
+            {
+              "key": "Content-Type",
+              "value": "application/json; charset=utf-8"
+            },
+            {
+              "key": "Content-Length",
+              "value": "258"
+            },
+            {
+              "key": "ETag",
+              "value": "W/\"102-tMHBthPE/2FjuDY1Y0QUZPrAJHA\""
+            },
+            {
+              "key": "Date",
+              "value": "Wed, 24 Jun 2026 10:33:58 GMT"
+            },
+            {
+              "key": "Connection",
+              "value": "keep-alive"
+            },
+            {
+              "key": "Keep-Alive",
+              "value": "timeout=5"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n    \"success\": true,\n    \"message\": \"User unblocked\",\n    \"data\": {\n        \"_id\": \"6a3bb1d5b4097003d88a9b65\",\n        \"username\": \"user1_renamed\",\n        \"email\": \"user1@example.com\",\n        \"role\": \"user\",\n        \"isBlocked\": false,\n        \"createdAt\": \"2026-06-24T10:30:45.583Z\",\n        \"updatedAt\": \"2026-06-24T10:33:58.416Z\",\n        \"__v\": 0\n    }\n}"
+        }
+      ]
+    },
+    {
+      "name": "User tries Audit route (expect 403)",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{userToken}}"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/audit",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "audit"
+          ]
+        }
+      },
+      "response": [
+        {
+          "name": "User tries Audit route (expect 403)",
+          "originalRequest": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{userToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/audit",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "audit"
+              ]
+            }
+          },
+          "status": "OK",
+          "code": 200,
+          "_postman_previewlanguage": null,
+          "header": [
+            {
+              "key": "X-Powered-By",
+              "value": "Express"
+            },
+            {
+              "key": "Content-Type",
+              "value": "application/json; charset=utf-8"
+            },
+            {
+              "key": "Content-Length",
+              "value": "3845"
+            },
+            {
+              "key": "ETag",
+              "value": "W/\"f05-tjdryNrqmZHjsz/BUNNpS3rD8Uc\""
+            },
+            {
+              "key": "Date",
+              "value": "Wed, 24 Jun 2026 10:36:32 GMT"
+            },
+            {
+              "key": "Connection",
+              "value": "keep-alive"
+            },
+            {
+              "key": "Keep-Alive",
+              "value": "timeout=5"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n    \"success\": true,\n    \"count\": 10,\n    \"total\": 10,\n    \"page\": 1,\n    \"pages\": 1,\n    \"data\": [\n        {\n            \"_id\": \"6a3bb316b4097003d88a9b8c\",\n            \"actor\": \"6a3bb310b4097003d88a9b87\",\n            \"actorUsername\": \"admin1\",\n            \"action\": \"LOGIN\",\n            \"status\": \"SUCCESS\",\n            \"details\": \"Successful login\",\n            \"ip\": \"::1\",\n            \"method\": \"POST\",\n            \"path\": \"/auth/login\",\n            \"createdAt\": \"2026-06-24T10:36:06.228Z\",\n            \"updatedAt\": \"2026-06-24T10:36:06.228Z\",\n            \"__v\": 0\n        },\n        {\n            \"_id\": \"6a3bb310b4097003d88a9b89\",\n            \"actor\": \"6a3bb310b4097003d88a9b87\",\n            \"actorUsername\": \"admin1\",\n            \"action\": \"CREATE_USER\",\n            \"status\": \"SUCCESS\",\n            \"targetModel\": \"User\",\n            \"target\": \"6a3bb310b4097003d88a9b87\",\n            \"targetLabel\": \"admin1\",\n            \"details\": \"Self-registered as admin\",\n            \"ip\": \"::1\",\n            \"method\": \"POST\",\n            \"path\": \"/auth/signup\",\n            \"createdAt\": \"2026-06-24T10:36:00.960Z\",\n            \"updatedAt\": \"2026-06-24T10:36:00.960Z\",\n            \"__v\": 0\n        },\n        {\n            \"_id\": \"6a3bb296b4097003d88a9b7f\",\n            \"actor\": \"6a3bb1b3b4097003d88a9b5d\",\n            \"actorUsername\": \"shubh423\",\n            \"action\": \"UNBLOCK_USER\",\n            \"status\": \"SUCCESS\",\n            \"targetModel\": \"User\",\n            \"target\": \"6a3bb1d5b4097003d88a9b65\",\n            \"targetLabel\": \"user1_renamed\",\n            \"changes\": {\n                \"before\": {\n                    \"isBlocked\": true\n                },\n                \"after\": {\n                    \"isBlocked\": false\n                }\n            },\n            \"details\": \"\",\n            \"ip\": \"::1\",\n            \"method\": \"PATCH\",\n            \"path\": \"/users/6a3bb1d5b4097003d88a9b65/unblock\",\n            \"createdAt\": \"2026-06-24T10:33:58.418Z\",\n            \"updatedAt\": \"2026-06-24T10:33:58.418Z\",\n            \"__v\": 0\n        },\n        {\n            \"_id\": \"6a3bb28fb4097003d88a9b7a\",\n            \"actor\": \"6a3bb1b3b4097003d88a9b5d\",\n            \"actorUsername\": \"shubh423\",\n            \"action\": \"BLOCK_USER\",\n            \"status\": \"SUCCESS\",\n            \"targetModel\": \"User\",\n            \"target\": \"6a3bb1d5b4097003d88a9b65\",\n            \"targetLabel\": \"user1_renamed\",\n            \"changes\": {\n                \"before\": {\n                    \"isBlocked\": false\n                },\n                \"after\": {\n                    \"isBlocked\": true\n                }\n            },\n            \"details\": \"\",\n            \"ip\": \"::1\",\n            \"method\": \"PATCH\",\n            \"path\": \"/users/6a3bb1d5b4097003d88a9b65/block\",\n            \"createdAt\": \"2026-06-24T10:33:51.247Z\",\n            \"updatedAt\": \"2026-06-24T10:33:51.247Z\",\n            \"__v\": 0\n        },\n        {\n            \"_id\": \"6a3bb277b4097003d88a9b75\",\n            \"actor\": \"6a3bb1b3b4097003d88a9b5d\",\n            \"actorUsername\": \"shubh423\",\n            \"action\": \"UPDATE_USER\",\n            \"status\": \"SUCCESS\",\n            \"targetModel\": \"User\",\n            \"target\": \"6a3bb1d5b4097003d88a9b65\",\n            \"targetLabel\": \"user1_renamed\",\n            \"changes\": {\n                \"before\": {\n                    \"username\": \"user1\"\n                },\n                \"after\": {\n                    \"username\": \"user1_renamed\"\n                }\n            },\n            \"details\": \"Updated fields: username\",\n            \"ip\": \"::1\",\n            \"method\": \"PATCH\",\n            \"path\": \"/users/6a3bb1d5b4097003d88a9b65\",\n            \"createdAt\": \"2026-06-24T10:33:27.456Z\",\n            \"updatedAt\": \"2026-06-24T10:33:27.456Z\",\n            \"__v\": 0\n        },\n        {\n            \"_id\": \"6a3bb26ab4097003d88a9b70\",\n            \"actor\": \"6a3bb1d5b4097003d88a9b65\",\n            \"actorUsername\": \"user1\",\n            \"action\": \"LOGIN\",\n            \"status\": \"SUCCESS\",\n            \"details\": \"Successful login\",\n            \"ip\": \"::1\",\n            \"method\": \"POST\",\n            \"path\": \"/auth/login\",\n            \"createdAt\": \"2026-06-24T10:33:14.504Z\",\n            \"updatedAt\": \"2026-06-24T10:33:14.504Z\",\n            \"__v\": 0\n        },\n        {\n            \"_id\": \"6a3bb1e6b4097003d88a9b6a\",\n            \"actor\": \"6a3bb1d5b4097003d88a9b65\",\n            \"actorUsername\": \"user1\",\n            \"action\": \"LOGIN\",\n            \"status\": \"SUCCESS\",\n            \"details\": \"Successful login\",\n            \"ip\": \"::1\",\n            \"method\": \"POST\",\n            \"path\": \"/auth/login\",\n            \"createdAt\": \"2026-06-24T10:31:02.325Z\",\n            \"updatedAt\": \"2026-06-24T10:31:02.325Z\",\n            \"__v\": 0\n        },\n        {\n            \"_id\": \"6a3bb1d5b4097003d88a9b67\",\n            \"actor\": \"6a3bb1d5b4097003d88a9b65\",\n            \"actorUsername\": \"user1\",\n            \"action\": \"CREATE_USER\",\n            \"status\": \"SUCCESS\",\n            \"targetModel\": \"User\",\n            \"target\": \"6a3bb1d5b4097003d88a9b65\",\n            \"targetLabel\": \"user1\",\n            \"details\": \"Self-registered as user\",\n            \"ip\": \"::1\",\n            \"method\": \"POST\",\n            \"path\": \"/auth/signup\",\n            \"createdAt\": \"2026-06-24T10:30:45.677Z\",\n            \"updatedAt\": \"2026-06-24T10:30:45.677Z\",\n            \"__v\": 0\n        },\n        {\n            \"_id\": \"6a3bb1cab4097003d88a9b62\",\n            \"actor\": \"6a3bb1b3b4097003d88a9b5d\",\n            \"actorUsername\": \"shubh423\",\n            \"action\": \"LOGIN\",\n            \"status\": \"SUCCESS\",\n            \"details\": \"Successful login\",\n            \"ip\": \"::1\",\n            \"method\": \"POST\",\n            \"path\": \"/auth/login\",\n            \"createdAt\": \"2026-06-24T10:30:34.521Z\",\n            \"updatedAt\": \"2026-06-24T10:30:34.521Z\",\n            \"__v\": 0\n        },\n        {\n            \"_id\": \"6a3bb1b3b4097003d88a9b5f\",\n            \"actor\": \"6a3bb1b3b4097003d88a9b5d\",\n            \"actorUsername\": \"shubh423\",\n            \"action\": \"CREATE_USER\",\n            \"status\": \"SUCCESS\",\n            \"targetModel\": \"User\",\n            \"target\": \"6a3bb1b3b4097003d88a9b5d\",\n            \"targetLabel\": \"shubh423\",\n            \"details\": \"Self-registered as admin\",\n            \"ip\": \"::1\",\n            \"method\": \"POST\",\n            \"path\": \"/auth/signup\",\n            \"createdAt\": \"2026-06-24T10:30:11.774Z\",\n            \"updatedAt\": \"2026-06-24T10:30:11.774Z\",\n            \"__v\": 0\n        }\n    ]\n}"
+        }
+      ]
+    },
+    {
+      "name": "Audit: Fetch All Logs (paged)",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "const res = pm.response.json();",
+              "if (res.data && res.data.length) pm.collectionVariables.set('logId', res.data[0]._id);",
+              "pm.test('audit 200', () => pm.response.to.have.status(200));"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{adminToken}}"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/audit?page=1&limit=20&populate=true",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "audit"
+          ],
+          "query": [
+            {
+              "key": "page",
+              "value": "1"
+            },
+            {
+              "key": "limit",
+              "value": "20"
+            },
+            {
+              "key": "populate",
+              "value": "true"
+            }
+          ]
+        }
+      },
+      "response": [
+        {
+          "name": "Audit: Fetch All Logs (paged)",
+          "originalRequest": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/audit?page=1&limit=20&populate=true",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "audit"
+              ],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "1"
+                },
+                {
+                  "key": "limit",
+                  "value": "20"
+                },
+                {
+                  "key": "populate",
+                  "value": "true"
+                }
+              ]
+            }
+          },
+          "status": "OK",
+          "code": 200,
+          "_postman_previewlanguage": null,
+          "header": [
+            {
+              "key": "X-Powered-By",
+              "value": "Express"
+            },
+            {
+              "key": "Content-Type",
+              "value": "application/json; charset=utf-8"
+            },
+            {
+              "key": "Content-Length",
+              "value": "5086"
+            },
+            {
+              "key": "ETag",
+              "value": "W/\"13de-Yxxq9gCI2JWG5n09DI98YrnAvC0\""
+            },
+            {
+              "key": "Date",
+              "value": "Wed, 24 Jun 2026 10:36:50 GMT"
+            },
+            {
+              "key": "Connection",
+              "value": "keep-alive"
+            },
+            {
+              "key": "Keep-Alive",
+              "value": "timeout=5"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n    \"success\": true,\n    \"count\": 10,\n    \"total\": 10,\n    \"page\": 1,\n    \"pages\": 1,\n    \"data\": [\n        {\n            \"_id\": \"6a3bb316b4097003d88a9b8c\",\n            \"actor\": {\n                \"_id\": \"6a3bb310b4097003d88a9b87\",\n                \"username\": \"admin1\",\n                \"email\": \"admin1@example.com\",\n                \"role\": \"admin\"\n            },\n            \"actorUsername\": \"admin1\",\n            \"action\": \"LOGIN\",\n            \"status\": \"SUCCESS\",\n            \"details\": \"Successful login\",\n            \"ip\": \"::1\",\n            \"method\": \"POST\",\n            \"path\": \"/auth/login\",\n            \"createdAt\": \"2026-06-24T10:36:06.228Z\",\n            \"updatedAt\": \"2026-06-24T10:36:06.228Z\",\n            \"__v\": 0\n        },\n        {\n            \"_id\": \"6a3bb310b4097003d88a9b89\",\n            \"actor\": {\n                \"_id\": \"6a3bb310b4097003d88a9b87\",\n                \"username\": \"admin1\",\n                \"email\": \"admin1@example.com\",\n                \"role\": \"admin\"\n            },\n            \"actorUsername\": \"admin1\",\n            \"action\": \"CREATE_USER\",\n            \"status\": \"SUCCESS\",\n            \"targetModel\": \"User\",\n            \"target\": {\n                \"_id\": \"6a3bb310b4097003d88a9b87\",\n                \"username\": \"admin1\",\n                \"email\": \"admin1@example.com\",\n                \"role\": \"admin\"\n            },\n            \"targetLabel\": \"admin1\",\n            \"details\": \"Self-registered as admin\",\n            \"ip\": \"::1\",\n            \"method\": \"POST\",\n            \"path\": \"/auth/signup\",\n            \"createdAt\": \"2026-06-24T10:36:00.960Z\",\n            \"updatedAt\": \"2026-06-24T10:36:00.960Z\",\n            \"__v\": 0\n        },\n        {\n            \"_id\": \"6a3bb296b4097003d88a9b7f\",\n            \"actor\": {\n                \"_id\": \"6a3bb1b3b4097003d88a9b5d\",\n                \"username\": \"shubh423\",\n                \"email\": \"shubhanjali32@example.com\",\n                \"role\": \"admin\"\n            },\n            \"actorUsername\": \"shubh423\",\n            \"action\": \"UNBLOCK_USER\",\n            \"status\": \"SUCCESS\",\n            \"targetModel\": \"User\",\n            \"target\": {\n                \"_id\": \"6a3bb1d5b4097003d88a9b65\",\n                \"username\": \"user1_renamed\",\n                \"email\": \"user1@example.com\",\n                \"role\": \"user\"\n            },\n            \"targetLabel\": \"user1_renamed\",\n            \"changes\": {\n                \"before\": {\n                    \"isBlocked\": true\n                },\n                \"after\": {\n                    \"isBlocked\": false\n                }\n            },\n            \"details\": \"\",\n            \"ip\": \"::1\",\n            \"method\": \"PATCH\",\n            \"path\": \"/users/6a3bb1d5b4097003d88a9b65/unblock\",\n            \"createdAt\": \"2026-06-24T10:33:58.418Z\",\n            \"updatedAt\": \"2026-06-24T10:33:58.418Z\",\n            \"__v\": 0\n        },\n        {\n            \"_id\": \"6a3bb28fb4097003d88a9b7a\",\n            \"actor\": {\n                \"_id\": \"6a3bb1b3b4097003d88a9b5d\",\n                \"username\": \"shubh423\",\n                \"email\": \"shubhanjali32@example.com\",\n                \"role\": \"admin\"\n            },\n            \"actorUsername\": \"shubh423\",\n            \"action\": \"BLOCK_USER\",\n            \"status\": \"SUCCESS\",\n            \"targetModel\": \"User\",\n            \"target\": {\n                \"_id\": \"6a3bb1d5b4097003d88a9b65\",\n                \"username\": \"user1_renamed\",\n                \"email\": \"user1@example.com\",\n                \"role\": \"user\"\n            },\n            \"targetLabel\": \"user1_renamed\",\n            \"changes\": {\n                \"before\": {\n                    \"isBlocked\": false\n                },\n                \"after\": {\n                    \"isBlocked\": true\n                }\n            },\n            \"details\": \"\",\n            \"ip\": \"::1\",\n            \"method\": \"PATCH\",\n            \"path\": \"/users/6a3bb1d5b4097003d88a9b65/block\",\n            \"createdAt\": \"2026-06-24T10:33:51.247Z\",\n            \"updatedAt\": \"2026-06-24T10:33:51.247Z\",\n            \"__v\": 0\n        },\n        {\n            \"_id\": \"6a3bb277b4097003d88a9b75\",\n            \"actor\": {\n                \"_id\": \"6a3bb1b3b4097003d88a9b5d\",\n                \"username\": \"shubh423\",\n                \"email\": \"shubhanjali32@example.com\",\n                \"role\": \"admin\"\n            },\n            \"actorUsername\": \"shubh423\",\n            \"action\": \"UPDATE_USER\",\n            \"status\": \"SUCCESS\",\n            \"targetModel\": \"User\",\n            \"target\": {\n                \"_id\": \"6a3bb1d5b4097003d88a9b65\",\n                \"username\": \"user1_renamed\",\n                \"email\": \"user1@example.com\",\n                \"role\": \"user\"\n            },\n            \"targetLabel\": \"user1_renamed\",\n            \"changes\": {\n                \"before\": {\n                    \"username\": \"user1\"\n                },\n                \"after\": {\n                    \"username\": \"user1_renamed\"\n                }\n            },\n            \"details\": \"Updated fields: username\",\n            \"ip\": \"::1\",\n            \"method\": \"PATCH\",\n            \"path\": \"/users/6a3bb1d5b4097003d88a9b65\",\n            \"createdAt\": \"2026-06-24T10:33:27.456Z\",\n            \"updatedAt\": \"2026-06-24T10:33:27.456Z\",\n            \"__v\": 0\n        },\n        {\n            \"_id\": \"6a3bb26ab4097003d88a9b70\",\n            \"actor\": {\n                \"_id\": \"6a3bb1d5b4097003d88a9b65\",\n                \"username\": \"user1_renamed\",\n                \"email\": \"user1@example.com\",\n                \"role\": \"user\"\n            },\n            \"actorUsername\": \"user1\",\n            \"action\": \"LOGIN\",\n            \"status\": \"SUCCESS\",\n            \"details\": \"Successful login\",\n            \"ip\": \"::1\",\n            \"method\": \"POST\",\n            \"path\": \"/auth/login\",\n            \"createdAt\": \"2026-06-24T10:33:14.504Z\",\n            \"updatedAt\": \"2026-06-24T10:33:14.504Z\",\n            \"__v\": 0\n        },\n        {\n            \"_id\": \"6a3bb1e6b4097003d88a9b6a\",\n            \"actor\": {\n                \"_id\": \"6a3bb1d5b4097003d88a9b65\",\n                \"username\": \"user1_renamed\",\n                \"email\": \"user1@example.com\",\n                \"role\": \"user\"\n            },\n            \"actorUsername\": \"user1\",\n            \"action\": \"LOGIN\",\n            \"status\": \"SUCCESS\",\n            \"details\": \"Successful login\",\n            \"ip\": \"::1\",\n            \"method\": \"POST\",\n            \"path\": \"/auth/login\",\n            \"createdAt\": \"2026-06-24T10:31:02.325Z\",\n            \"updatedAt\": \"2026-06-24T10:31:02.325Z\",\n            \"__v\": 0\n        },\n        {\n            \"_id\": \"6a3bb1d5b4097003d88a9b67\",\n            \"actor\": {\n                \"_id\": \"6a3bb1d5b4097003d88a9b65\",\n                \"username\": \"user1_renamed\",\n                \"email\": \"user1@example.com\",\n                \"role\": \"user\"\n            },\n            \"actorUsername\": \"user1\",\n            \"action\": \"CREATE_USER\",\n            \"status\": \"SUCCESS\",\n            \"targetModel\": \"User\",\n            \"target\": {\n                \"_id\": \"6a3bb1d5b4097003d88a9b65\",\n                \"username\": \"user1_renamed\",\n                \"email\": \"user1@example.com\",\n                \"role\": \"user\"\n            },\n            \"targetLabel\": \"user1\",\n            \"details\": \"Self-registered as user\",\n            \"ip\": \"::1\",\n            \"method\": \"POST\",\n            \"path\": \"/auth/signup\",\n            \"createdAt\": \"2026-06-24T10:30:45.677Z\",\n            \"updatedAt\": \"2026-06-24T10:30:45.677Z\",\n            \"__v\": 0\n        },\n        {\n            \"_id\": \"6a3bb1cab4097003d88a9b62\",\n            \"actor\": {\n                \"_id\": \"6a3bb1b3b4097003d88a9b5d\",\n                \"username\": \"shubh423\",\n                \"email\": \"shubhanjali32@example.com\",\n                \"role\": \"admin\"\n            },\n            \"actorUsername\": \"shubh423\",\n            \"action\": \"LOGIN\",\n            \"status\": \"SUCCESS\",\n            \"details\": \"Successful login\",\n            \"ip\": \"::1\",\n            \"method\": \"POST\",\n            \"path\": \"/auth/login\",\n            \"createdAt\": \"2026-06-24T10:30:34.521Z\",\n            \"updatedAt\": \"2026-06-24T10:30:34.521Z\",\n            \"__v\": 0\n        },\n        {\n            \"_id\": \"6a3bb1b3b4097003d88a9b5f\",\n            \"actor\": {\n                \"_id\": \"6a3bb1b3b4097003d88a9b5d\",\n                \"username\": \"shubh423\",\n                \"email\": \"shubhanjali32@example.com\",\n                \"role\": \"admin\"\n            },\n            \"actorUsername\": \"shubh423\",\n            \"action\": \"CREATE_USER\",\n            \"status\": \"SUCCESS\",\n            \"targetModel\": \"User\",\n            \"target\": {\n                \"_id\": \"6a3bb1b3b4097003d88a9b5d\",\n                \"username\": \"shubh423\",\n                \"email\": \"shubhanjali32@example.com\",\n                \"role\": \"admin\"\n            },\n            \"targetLabel\": \"shubh423\",\n            \"details\": \"Self-registered as admin\",\n            \"ip\": \"::1\",\n            \"method\": \"POST\",\n            \"path\": \"/auth/signup\",\n            \"createdAt\": \"2026-06-24T10:30:11.774Z\",\n            \"updatedAt\": \"2026-06-24T10:30:11.774Z\",\n            \"__v\": 0\n        }\n    ]\n}"
+        }
+      ]
+    },
+    {
+      "name": "Audit: Filter by Action (DELETE_USER)",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{adminToken}}"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/audit?action=DELETE_USER",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "audit"
+          ],
+          "query": [
+            {
+              "key": "action",
+              "value": "DELETE_USER"
+            }
+          ]
+        }
+      },
+      "response": [
+        {
+          "name": "Audit: Filter by Action (DELETE_USER)",
+          "originalRequest": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/audit?action=DELETE_USER",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "audit"
+              ],
+              "query": [
+                {
+                  "key": "action",
+                  "value": "DELETE_USER"
+                }
+              ]
+            }
+          },
+          "status": "OK",
+          "code": 200,
+          "_postman_previewlanguage": null,
+          "header": [
+            {
+              "key": "X-Powered-By",
+              "value": "Express"
+            },
+            {
+              "key": "Content-Type",
+              "value": "application/json; charset=utf-8"
+            },
+            {
+              "key": "Content-Length",
+              "value": "65"
+            },
+            {
+              "key": "ETag",
+              "value": "W/\"41-3BkOulnOTnJSt6rpyQYr18Tpcts\""
+            },
+            {
+              "key": "Date",
+              "value": "Wed, 24 Jun 2026 10:37:01 GMT"
+            },
+            {
+              "key": "Connection",
+              "value": "keep-alive"
+            },
+            {
+              "key": "Keep-Alive",
+              "value": "timeout=5"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n    \"success\": true,\n    \"count\": 0,\n    \"total\": 0,\n    \"page\": 1,\n    \"pages\": 0,\n    \"data\": []\n}"
+        }
+      ]
+    },
+    {
+      "name": "Audit: Filter by User (actor)",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{adminToken}}"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/audit?user={{adminUserId}}",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "audit"
+          ],
+          "query": [
+            {
+              "key": "user",
+              "value": "{{adminUserId}}"
+            }
+          ]
+        }
+      },
+      "response": [
+        {
+          "name": "Audit: Filter by User (actor)",
+          "originalRequest": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/audit?user={{adminUserId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "audit"
+              ],
+              "query": [
+                {
+                  "key": "user",
+                  "value": "{{adminUserId}}"
+                }
+              ]
+            }
+          },
+          "status": "OK",
+          "code": 200,
+          "_postman_previewlanguage": null,
+          "header": [
+            {
+              "key": "X-Powered-By",
+              "value": "Express"
+            },
+            {
+              "key": "Content-Type",
+              "value": "application/json; charset=utf-8"
+            },
+            {
+              "key": "Content-Length",
+              "value": "747"
+            },
+            {
+              "key": "ETag",
+              "value": "W/\"2eb-YgZpzc5syNayDn7LDHlZ6gX8DJQ\""
+            },
+            {
+              "key": "Date",
+              "value": "Wed, 24 Jun 2026 10:37:35 GMT"
+            },
+            {
+              "key": "Connection",
+              "value": "keep-alive"
+            },
+            {
+              "key": "Keep-Alive",
+              "value": "timeout=5"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n    \"success\": true,\n    \"count\": 2,\n    \"total\": 2,\n    \"page\": 1,\n    \"pages\": 1,\n    \"data\": [\n        {\n            \"_id\": \"6a3bb316b4097003d88a9b8c\",\n            \"actor\": \"6a3bb310b4097003d88a9b87\",\n            \"actorUsername\": \"admin1\",\n            \"action\": \"LOGIN\",\n            \"status\": \"SUCCESS\",\n            \"details\": \"Successful login\",\n            \"ip\": \"::1\",\n            \"method\": \"POST\",\n            \"path\": \"/auth/login\",\n            \"createdAt\": \"2026-06-24T10:36:06.228Z\",\n            \"updatedAt\": \"2026-06-24T10:36:06.228Z\",\n            \"__v\": 0\n        },\n        {\n            \"_id\": \"6a3bb310b4097003d88a9b89\",\n            \"actor\": \"6a3bb310b4097003d88a9b87\",\n            \"actorUsername\": \"admin1\",\n            \"action\": \"CREATE_USER\",\n            \"status\": \"SUCCESS\",\n            \"targetModel\": \"User\",\n            \"target\": \"6a3bb310b4097003d88a9b87\",\n            \"targetLabel\": \"admin1\",\n            \"details\": \"Self-registered as admin\",\n            \"ip\": \"::1\",\n            \"method\": \"POST\",\n            \"path\": \"/auth/signup\",\n            \"createdAt\": \"2026-06-24T10:36:00.960Z\",\n            \"updatedAt\": \"2026-06-24T10:36:00.960Z\",\n            \"__v\": 0\n        }\n    ]\n}"
+        }
+      ]
+    },
+    {
+      "name": "Audit: Filter by Target Resource",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{adminToken}}"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/audit?target={{targetUserId}}&populate=true",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "audit"
+          ],
+          "query": [
+            {
+              "key": "target",
+              "value": "{{targetUserId}}"
+            },
+            {
+              "key": "populate",
+              "value": "true"
+            }
+          ]
+        }
+      },
+      "response": [
+        {
+          "name": "Audit: Filter by Target Resource",
+          "originalRequest": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/audit?target={{targetUserId}}&populate=true",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "audit"
+              ],
+              "query": [
+                {
+                  "key": "target",
+                  "value": "{{targetUserId}}"
+                },
+                {
+                  "key": "populate",
+                  "value": "true"
+                }
+              ]
+            }
+          },
+          "status": "OK",
+          "code": 200,
+          "_postman_previewlanguage": null,
+          "header": [
+            {
+              "key": "X-Powered-By",
+              "value": "Express"
+            },
+            {
+              "key": "Content-Type",
+              "value": "application/json; charset=utf-8"
+            },
+            {
+              "key": "Content-Length",
+              "value": "2513"
+            },
+            {
+              "key": "ETag",
+              "value": "W/\"9d1-FCg7/4OyUOxu+roatvYyAoYUZQI\""
+            },
+            {
+              "key": "Date",
+              "value": "Wed, 24 Jun 2026 10:38:00 GMT"
+            },
+            {
+              "key": "Connection",
+              "value": "keep-alive"
+            },
+            {
+              "key": "Keep-Alive",
+              "value": "timeout=5"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n    \"success\": true,\n    \"count\": 4,\n    \"total\": 4,\n    \"page\": 1,\n    \"pages\": 1,\n    \"data\": [\n        {\n            \"_id\": \"6a3bb296b4097003d88a9b7f\",\n            \"actor\": {\n                \"_id\": \"6a3bb1b3b4097003d88a9b5d\",\n                \"username\": \"shubh423\",\n                \"email\": \"shubhanjali32@example.com\",\n                \"role\": \"admin\"\n            },\n            \"actorUsername\": \"shubh423\",\n            \"action\": \"UNBLOCK_USER\",\n            \"status\": \"SUCCESS\",\n            \"targetModel\": \"User\",\n            \"target\": {\n                \"_id\": \"6a3bb1d5b4097003d88a9b65\",\n                \"username\": \"user1_renamed\",\n                \"email\": \"user1@example.com\",\n                \"role\": \"user\"\n            },\n            \"targetLabel\": \"user1_renamed\",\n            \"changes\": {\n                \"before\": {\n                    \"isBlocked\": true\n                },\n                \"after\": {\n                    \"isBlocked\": false\n                }\n            },\n            \"details\": \"\",\n            \"ip\": \"::1\",\n            \"method\": \"PATCH\",\n            \"path\": \"/users/6a3bb1d5b4097003d88a9b65/unblock\",\n            \"createdAt\": \"2026-06-24T10:33:58.418Z\",\n            \"updatedAt\": \"2026-06-24T10:33:58.418Z\",\n            \"__v\": 0\n        },\n        {\n            \"_id\": \"6a3bb28fb4097003d88a9b7a\",\n            \"actor\": {\n                \"_id\": \"6a3bb1b3b4097003d88a9b5d\",\n                \"username\": \"shubh423\",\n                \"email\": \"shubhanjali32@example.com\",\n                \"role\": \"admin\"\n            },\n            \"actorUsername\": \"shubh423\",\n            \"action\": \"BLOCK_USER\",\n            \"status\": \"SUCCESS\",\n            \"targetModel\": \"User\",\n            \"target\": {\n                \"_id\": \"6a3bb1d5b4097003d88a9b65\",\n                \"username\": \"user1_renamed\",\n                \"email\": \"user1@example.com\",\n                \"role\": \"user\"\n            },\n            \"targetLabel\": \"user1_renamed\",\n            \"changes\": {\n                \"before\": {\n                    \"isBlocked\": false\n                },\n                \"after\": {\n                    \"isBlocked\": true\n                }\n            },\n            \"details\": \"\",\n            \"ip\": \"::1\",\n            \"method\": \"PATCH\",\n            \"path\": \"/users/6a3bb1d5b4097003d88a9b65/block\",\n            \"createdAt\": \"2026-06-24T10:33:51.247Z\",\n            \"updatedAt\": \"2026-06-24T10:33:51.247Z\",\n            \"__v\": 0\n        },\n        {\n            \"_id\": \"6a3bb277b4097003d88a9b75\",\n            \"actor\": {\n                \"_id\": \"6a3bb1b3b4097003d88a9b5d\",\n                \"username\": \"shubh423\",\n                \"email\": \"shubhanjali32@example.com\",\n                \"role\": \"admin\"\n            },\n            \"actorUsername\": \"shubh423\",\n            \"action\": \"UPDATE_USER\",\n            \"status\": \"SUCCESS\",\n            \"targetModel\": \"User\",\n            \"target\": {\n                \"_id\": \"6a3bb1d5b4097003d88a9b65\",\n                \"username\": \"user1_renamed\",\n                \"email\": \"user1@example.com\",\n                \"role\": \"user\"\n            },\n            \"targetLabel\": \"user1_renamed\",\n            \"changes\": {\n                \"before\": {\n                    \"username\": \"user1\"\n                },\n                \"after\": {\n                    \"username\": \"user1_renamed\"\n                }\n            },\n            \"details\": \"Updated fields: username\",\n            \"ip\": \"::1\",\n            \"method\": \"PATCH\",\n            \"path\": \"/users/6a3bb1d5b4097003d88a9b65\",\n            \"createdAt\": \"2026-06-24T10:33:27.456Z\",\n            \"updatedAt\": \"2026-06-24T10:33:27.456Z\",\n            \"__v\": 0\n        },\n        {\n            \"_id\": \"6a3bb1d5b4097003d88a9b67\",\n            \"actor\": {\n                \"_id\": \"6a3bb1d5b4097003d88a9b65\",\n                \"username\": \"user1_renamed\",\n                \"email\": \"user1@example.com\",\n                \"role\": \"user\"\n            },\n            \"actorUsername\": \"user1\",\n            \"action\": \"CREATE_USER\",\n            \"status\": \"SUCCESS\",\n            \"targetModel\": \"User\",\n            \"target\": {\n                \"_id\": \"6a3bb1d5b4097003d88a9b65\",\n                \"username\": \"user1_renamed\",\n                \"email\": \"user1@example.com\",\n                \"role\": \"user\"\n            },\n            \"targetLabel\": \"user1\",\n            \"details\": \"Self-registered as user\",\n            \"ip\": \"::1\",\n            \"method\": \"POST\",\n            \"path\": \"/auth/signup\",\n            \"createdAt\": \"2026-06-24T10:30:45.677Z\",\n            \"updatedAt\": \"2026-06-24T10:30:45.677Z\",\n            \"__v\": 0\n        }\n    ]\n}"
+        }
+      ]
+    },
+    {
+      "name": "Audit: Filter by Date Range",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{adminToken}}"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/audit?from=2026-01-01&to=2026-12-31",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "audit"
+          ],
+          "query": [
+            {
+              "key": "from",
+              "value": "2026-01-01"
+            },
+            {
+              "key": "to",
+              "value": "2026-12-31"
+            }
+          ]
+        }
+      },
+      "response": [
+        {
+          "name": "Audit: Filter by Date Range",
+          "originalRequest": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/audit?from=2026-01-01&to=2026-12-31",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "audit"
+              ],
+              "query": [
+                {
+                  "key": "from",
+                  "value": "2026-01-01"
+                },
+                {
+                  "key": "to",
+                  "value": "2026-12-31"
+                }
+              ]
+            }
+          },
+          "status": "OK",
+          "code": 200,
+          "_postman_previewlanguage": null,
+          "header": [
+            {
+              "key": "X-Powered-By",
+              "value": "Express"
+            },
+            {
+              "key": "Content-Type",
+              "value": "application/json; charset=utf-8"
+            },
+            {
+              "key": "Content-Length",
+              "value": "3845"
+            },
+            {
+              "key": "ETag",
+              "value": "W/\"f05-tjdryNrqmZHjsz/BUNNpS3rD8Uc\""
+            },
+            {
+              "key": "Date",
+              "value": "Wed, 24 Jun 2026 10:38:51 GMT"
+            },
+            {
+              "key": "Connection",
+              "value": "keep-alive"
+            },
+            {
+              "key": "Keep-Alive",
+              "value": "timeout=5"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n    \"success\": true,\n    \"count\": 10,\n    \"total\": 10,\n    \"page\": 1,\n    \"pages\": 1,\n    \"data\": [\n        {\n            \"_id\": \"6a3bb316b4097003d88a9b8c\",\n            \"actor\": \"6a3bb310b4097003d88a9b87\",\n            \"actorUsername\": \"admin1\",\n            \"action\": \"LOGIN\",\n            \"status\": \"SUCCESS\",\n            \"details\": \"Successful login\",\n            \"ip\": \"::1\",\n            \"method\": \"POST\",\n            \"path\": \"/auth/login\",\n            \"createdAt\": \"2026-06-24T10:36:06.228Z\",\n            \"updatedAt\": \"2026-06-24T10:36:06.228Z\",\n            \"__v\": 0\n        },\n        {\n            \"_id\": \"6a3bb310b4097003d88a9b89\",\n            \"actor\": \"6a3bb310b4097003d88a9b87\",\n            \"actorUsername\": \"admin1\",\n            \"action\": \"CREATE_USER\",\n            \"status\": \"SUCCESS\",\n            \"targetModel\": \"User\",\n            \"target\": \"6a3bb310b4097003d88a9b87\",\n            \"targetLabel\": \"admin1\",\n            \"details\": \"Self-registered as admin\",\n            \"ip\": \"::1\",\n            \"method\": \"POST\",\n            \"path\": \"/auth/signup\",\n            \"createdAt\": \"2026-06-24T10:36:00.960Z\",\n            \"updatedAt\": \"2026-06-24T10:36:00.960Z\",\n            \"__v\": 0\n        },\n        {\n            \"_id\": \"6a3bb296b4097003d88a9b7f\",\n            \"actor\": \"6a3bb1b3b4097003d88a9b5d\",\n            \"actorUsername\": \"shubh423\",\n            \"action\": \"UNBLOCK_USER\",\n            \"status\": \"SUCCESS\",\n            \"targetModel\": \"User\",\n            \"target\": \"6a3bb1d5b4097003d88a9b65\",\n            \"targetLabel\": \"user1_renamed\",\n            \"changes\": {\n                \"before\": {\n                    \"isBlocked\": true\n                },\n                \"after\": {\n                    \"isBlocked\": false\n                }\n            },\n            \"details\": \"\",\n            \"ip\": \"::1\",\n            \"method\": \"PATCH\",\n            \"path\": \"/users/6a3bb1d5b4097003d88a9b65/unblock\",\n            \"createdAt\": \"2026-06-24T10:33:58.418Z\",\n            \"updatedAt\": \"2026-06-24T10:33:58.418Z\",\n            \"__v\": 0\n        },\n        {\n            \"_id\": \"6a3bb28fb4097003d88a9b7a\",\n            \"actor\": \"6a3bb1b3b4097003d88a9b5d\",\n            \"actorUsername\": \"shubh423\",\n            \"action\": \"BLOCK_USER\",\n            \"status\": \"SUCCESS\",\n            \"targetModel\": \"User\",\n            \"target\": \"6a3bb1d5b4097003d88a9b65\",\n            \"targetLabel\": \"user1_renamed\",\n            \"changes\": {\n                \"before\": {\n                    \"isBlocked\": false\n                },\n                \"after\": {\n                    \"isBlocked\": true\n                }\n            },\n            \"details\": \"\",\n            \"ip\": \"::1\",\n            \"method\": \"PATCH\",\n            \"path\": \"/users/6a3bb1d5b4097003d88a9b65/block\",\n            \"createdAt\": \"2026-06-24T10:33:51.247Z\",\n            \"updatedAt\": \"2026-06-24T10:33:51.247Z\",\n            \"__v\": 0\n        },\n        {\n            \"_id\": \"6a3bb277b4097003d88a9b75\",\n            \"actor\": \"6a3bb1b3b4097003d88a9b5d\",\n            \"actorUsername\": \"shubh423\",\n            \"action\": \"UPDATE_USER\",\n            \"status\": \"SUCCESS\",\n            \"targetModel\": \"User\",\n            \"target\": \"6a3bb1d5b4097003d88a9b65\",\n            \"targetLabel\": \"user1_renamed\",\n            \"changes\": {\n                \"before\": {\n                    \"username\": \"user1\"\n                },\n                \"after\": {\n                    \"username\": \"user1_renamed\"\n                }\n            },\n            \"details\": \"Updated fields: username\",\n            \"ip\": \"::1\",\n            \"method\": \"PATCH\",\n            \"path\": \"/users/6a3bb1d5b4097003d88a9b65\",\n            \"createdAt\": \"2026-06-24T10:33:27.456Z\",\n            \"updatedAt\": \"2026-06-24T10:33:27.456Z\",\n            \"__v\": 0\n        },\n        {\n            \"_id\": \"6a3bb26ab4097003d88a9b70\",\n            \"actor\": \"6a3bb1d5b4097003d88a9b65\",\n            \"actorUsername\": \"user1\",\n            \"action\": \"LOGIN\",\n            \"status\": \"SUCCESS\",\n            \"details\": \"Successful login\",\n            \"ip\": \"::1\",\n            \"method\": \"POST\",\n            \"path\": \"/auth/login\",\n            \"createdAt\": \"2026-06-24T10:33:14.504Z\",\n            \"updatedAt\": \"2026-06-24T10:33:14.504Z\",\n            \"__v\": 0\n        },\n        {\n            \"_id\": \"6a3bb1e6b4097003d88a9b6a\",\n            \"actor\": \"6a3bb1d5b4097003d88a9b65\",\n            \"actorUsername\": \"user1\",\n            \"action\": \"LOGIN\",\n            \"status\": \"SUCCESS\",\n            \"details\": \"Successful login\",\n            \"ip\": \"::1\",\n            \"method\": \"POST\",\n            \"path\": \"/auth/login\",\n            \"createdAt\": \"2026-06-24T10:31:02.325Z\",\n            \"updatedAt\": \"2026-06-24T10:31:02.325Z\",\n            \"__v\": 0\n        },\n        {\n            \"_id\": \"6a3bb1d5b4097003d88a9b67\",\n            \"actor\": \"6a3bb1d5b4097003d88a9b65\",\n            \"actorUsername\": \"user1\",\n            \"action\": \"CREATE_USER\",\n            \"status\": \"SUCCESS\",\n            \"targetModel\": \"User\",\n            \"target\": \"6a3bb1d5b4097003d88a9b65\",\n            \"targetLabel\": \"user1\",\n            \"details\": \"Self-registered as user\",\n            \"ip\": \"::1\",\n            \"method\": \"POST\",\n            \"path\": \"/auth/signup\",\n            \"createdAt\": \"2026-06-24T10:30:45.677Z\",\n            \"updatedAt\": \"2026-06-24T10:30:45.677Z\",\n            \"__v\": 0\n        },\n        {\n            \"_id\": \"6a3bb1cab4097003d88a9b62\",\n            \"actor\": \"6a3bb1b3b4097003d88a9b5d\",\n            \"actorUsername\": \"shubh423\",\n            \"action\": \"LOGIN\",\n            \"status\": \"SUCCESS\",\n            \"details\": \"Successful login\",\n            \"ip\": \"::1\",\n            \"method\": \"POST\",\n            \"path\": \"/auth/login\",\n            \"createdAt\": \"2026-06-24T10:30:34.521Z\",\n            \"updatedAt\": \"2026-06-24T10:30:34.521Z\",\n            \"__v\": 0\n        },\n        {\n            \"_id\": \"6a3bb1b3b4097003d88a9b5f\",\n            \"actor\": \"6a3bb1b3b4097003d88a9b5d\",\n            \"actorUsername\": \"shubh423\",\n            \"action\": \"CREATE_USER\",\n            \"status\": \"SUCCESS\",\n            \"targetModel\": \"User\",\n            \"target\": \"6a3bb1b3b4097003d88a9b5d\",\n            \"targetLabel\": \"shubh423\",\n            \"details\": \"Self-registered as admin\",\n            \"ip\": \"::1\",\n            \"method\": \"POST\",\n            \"path\": \"/auth/signup\",\n            \"createdAt\": \"2026-06-24T10:30:11.774Z\",\n            \"updatedAt\": \"2026-06-24T10:30:11.774Z\",\n            \"__v\": 0\n        }\n    ]\n}"
+        }
+      ]
+    },
+    {
+      "name": "Audit: Stats (counts by action)",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{adminToken}}"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/audit/stats",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "audit",
+            "stats"
+          ]
+        }
+      },
+      "response": [
+        {
+          "name": "Audit: Stats (counts by action)",
+          "originalRequest": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/audit/stats",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "audit",
+                "stats"
+              ]
+            }
+          },
+          "status": "OK",
+          "code": 200,
+          "_postman_previewlanguage": null,
+          "header": [
+            {
+              "key": "X-Powered-By",
+              "value": "Express"
+            },
+            {
+              "key": "Content-Type",
+              "value": "application/json; charset=utf-8"
+            },
+            {
+              "key": "Content-Length",
+              "value": "194"
+            },
+            {
+              "key": "ETag",
+              "value": "W/\"c2-zU4R4znAw7r4dXJFYHxx3wsDszo\""
+            },
+            {
+              "key": "Date",
+              "value": "Wed, 24 Jun 2026 10:39:02 GMT"
+            },
+            {
+              "key": "Connection",
+              "value": "keep-alive"
+            },
+            {
+              "key": "Keep-Alive",
+              "value": "timeout=5"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n    \"success\": true,\n    \"total\": 10,\n    \"byAction\": [\n        {\n            \"_id\": \"LOGIN\",\n            \"count\": 4\n        },\n        {\n            \"_id\": \"CREATE_USER\",\n            \"count\": 3\n        },\n        {\n            \"_id\": \"UNBLOCK_USER\",\n            \"count\": 1\n        },\n        {\n            \"_id\": \"UPDATE_USER\",\n            \"count\": 1\n        },\n        {\n            \"_id\": \"BLOCK_USER\",\n            \"count\": 1\n        }\n    ]\n}"
+        }
+      ]
+    },
+    {
+      "name": "Audit: Get Single Log (linked resources)",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{adminToken}}"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/audit/{{logId}}",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "audit",
+            "{{logId}}"
+          ]
+        }
+      },
+      "response": [
+        {
+          "name": "Audit: Get Single Log (linked resources)",
+          "originalRequest": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/audit/{{logId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "audit",
+                "{{logId}}"
+              ]
+            }
+          },
+          "status": "OK",
+          "code": 200,
+          "_postman_previewlanguage": null,
+          "header": [
+            {
+              "key": "X-Powered-By",
+              "value": "Express"
+            },
+            {
+              "key": "Content-Type",
+              "value": "application/json; charset=utf-8"
+            },
+            {
+              "key": "Content-Length",
+              "value": "389"
+            },
+            {
+              "key": "ETag",
+              "value": "W/\"185-vFgBRtxKhYy30GOEgmRtoXLYVbU\""
+            },
+            {
+              "key": "Date",
+              "value": "Wed, 24 Jun 2026 10:40:14 GMT"
+            },
+            {
+              "key": "Connection",
+              "value": "keep-alive"
+            },
+            {
+              "key": "Keep-Alive",
+              "value": "timeout=5"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n    \"success\": true,\n    \"data\": {\n        \"_id\": \"6a3bb316b4097003d88a9b8c\",\n        \"actor\": {\n            \"_id\": \"6a3bb310b4097003d88a9b87\",\n            \"username\": \"admin1\",\n            \"email\": \"admin1@example.com\",\n            \"role\": \"admin\"\n        },\n        \"actorUsername\": \"admin1\",\n        \"action\": \"LOGIN\",\n        \"status\": \"SUCCESS\",\n        \"details\": \"Successful login\",\n        \"ip\": \"::1\",\n        \"method\": \"POST\",\n        \"path\": \"/auth/login\",\n        \"createdAt\": \"2026-06-24T10:36:06.228Z\",\n        \"updatedAt\": \"2026-06-24T10:36:06.228Z\",\n        \"__v\": 0\n    }\n}"
+        }
+      ]
+    },
+    {
+      "name": "Sensitive: Delete User (logs DELETE_USER)",
+      "request": {
+        "method": "DELETE",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{adminToken}}"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/users/{{targetUserId}}",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "users",
+            "{{targetUserId}}"
+          ]
+        }
+      },
+      "response": [
+        {
+          "name": "Sensitive: Delete User (logs DELETE_USER)",
+          "originalRequest": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/users/{{targetUserId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "users",
+                "{{targetUserId}}"
+              ]
+            }
+          },
+          "status": "OK",
+          "code": 200,
+          "_postman_previewlanguage": null,
+          "header": [
+            {
+              "key": "X-Powered-By",
+              "value": "Express"
+            },
+            {
+              "key": "Content-Type",
+              "value": "application/json; charset=utf-8"
+            },
+            {
+              "key": "Content-Length",
+              "value": "256"
+            },
+            {
+              "key": "ETag",
+              "value": "W/\"100-7NUVrcpTeFsq2WxzNKVIkleogqg\""
+            },
+            {
+              "key": "Date",
+              "value": "Wed, 24 Jun 2026 10:40:41 GMT"
+            },
+            {
+              "key": "Connection",
+              "value": "keep-alive"
+            },
+            {
+              "key": "Keep-Alive",
+              "value": "timeout=5"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n    \"success\": true,\n    \"message\": \"User deleted\",\n    \"data\": {\n        \"_id\": \"6a3bb1d5b4097003d88a9b65\",\n        \"username\": \"user1_renamed\",\n        \"email\": \"user1@example.com\",\n        \"role\": \"user\",\n        \"isBlocked\": false,\n        \"createdAt\": \"2026-06-24T10:30:45.583Z\",\n        \"updatedAt\": \"2026-06-24T10:33:58.416Z\",\n        \"__v\": 0\n    }\n}"
+        }
+      ]
+    },
+    {
+      "name": "No token on audit route (expect 401)",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/audit",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "audit"
+          ]
+        }
+      },
+      "response": [
+        {
+          "name": "No token on audit route (expect 401)",
+          "originalRequest": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/audit",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "audit"
+              ]
+            }
+          },
+          "status": "Unauthorized",
+          "code": 401,
+          "_postman_previewlanguage": null,
+          "header": [
+            {
+              "key": "X-Powered-By",
+              "value": "Express"
+            },
+            {
+              "key": "Content-Type",
+              "value": "application/json; charset=utf-8"
+            },
+            {
+              "key": "Content-Length",
+              "value": "63"
+            },
+            {
+              "key": "ETag",
+              "value": "W/\"3f-TeIfaERlGGGdR7v0qsUeYoXNDrQ\""
+            },
+            {
+              "key": "Date",
+              "value": "Wed, 24 Jun 2026 10:40:50 GMT"
+            },
+            {
+              "key": "Connection",
+              "value": "keep-alive"
+            },
+            {
+              "key": "Keep-Alive",
+              "value": "timeout=5"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n    \"success\": false,\n    \"message\": \"Not authorized, no token provided\"\n}"
+        }
+      ]
+    }
+  ],
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:5010"
+    },
+    {
+      "key": "adminToken",
+      "value": ""
+    },
+    {
+      "key": "userToken",
+      "value": ""
+    },
+    {
+      "key": "adminUserId",
+      "value": ""
+    },
+    {
+      "key": "targetUserId",
+      "value": ""
+    },
+    {
+      "key": "logId",
+      "value": ""
+    }
+  ]
+}
