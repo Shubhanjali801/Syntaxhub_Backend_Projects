@@ -116,6 +116,22 @@ Filter + paginate:
 curl "http://localhost:5001/products?category=electronics&minPrice=500&maxPrice=2000&page=1&limit=5"
 ```
 
+Get all products:
+```bash
+curl http://localhost:5001/products
+```
+
+Update a Product:
+```bash
+curl -X PUT http://localhost:5001/products/<id> \
+  -H "Content-Type: application/json" \
+  -d '{"price":1100}'
+```
+
+Delete a Product:
+```bash
+curl -X DELETE http://localhost:5001/products/<id>
+```
 ---
 
 _Environment: Node 24, npm 11._
