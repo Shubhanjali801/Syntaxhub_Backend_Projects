@@ -1,0 +1,1386 @@
+{
+  "info": {
+    "_postman_id": "67d85892-90be-4012-a742-7705b2213ed2",
+    "name": "Task 4 - Project 3 - Scheduled Tasks",
+    "description": "Scheduled Tasks API (node-cron). Flow: Signup Admin (with adminSecret) -> Login Admin (stores {{adminToken}}). Create a stale record + a fresh record. List jobs, trigger deleteStaleRecords / sendEmailSummary manually, then read the job execution logs. Job routes are admin only.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "43522881"
+  },
+  "item": [
+    {
+      "name": "Health Check",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            ""
+          ]
+        }
+      },
+      "response": [
+        {
+          "name": "Health Check",
+          "originalRequest": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                ""
+              ]
+            }
+          },
+          "status": "OK",
+          "code": 200,
+          "_postman_previewlanguage": null,
+          "header": [
+            {
+              "key": "X-Powered-By",
+              "value": "Express"
+            },
+            {
+              "key": "Content-Type",
+              "value": "application/json; charset=utf-8"
+            },
+            {
+              "key": "Content-Length",
+              "value": "59"
+            },
+            {
+              "key": "ETag",
+              "value": "W/\"3b-ekxsK273s5soni3xWoub2cEnPYM\""
+            },
+            {
+              "key": "Date",
+              "value": "Wed, 24 Jun 2026 11:17:47 GMT"
+            },
+            {
+              "key": "Connection",
+              "value": "keep-alive"
+            },
+            {
+              "key": "Keep-Alive",
+              "value": "timeout=5"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n    \"success\": true,\n    \"message\": \"Scheduled Tasks API is running\"\n}"
+        }
+      ]
+    },
+    {
+      "name": "Signup Admin (with adminSecret)",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"username\": \"admin1\",\n  \"email\": \"admin1@example.com\",\n  \"password\": \"secret123\",\n  \"role\": \"admin\",\n  \"adminSecret\": \"super_admin_bootstrap_secret\"\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/auth/signup",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "auth",
+            "signup"
+          ]
+        }
+      },
+      "response": [
+        {
+          "name": "Signup Admin (with adminSecret)",
+          "originalRequest": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"username\": \"SummerAdmin\",\n  \"email\": \"summerAdmin1@example.com\",\n  \"password\": \"summer234\",\n  \"role\": \"admin\",\n  \"adminSecret\": \"super_admin_bootstrap_secret\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/auth/signup",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "auth",
+                "signup"
+              ]
+            }
+          },
+          "status": "Created",
+          "code": 201,
+          "_postman_previewlanguage": null,
+          "header": [
+            {
+              "key": "X-Powered-By",
+              "value": "Express"
+            },
+            {
+              "key": "Content-Type",
+              "value": "application/json; charset=utf-8"
+            },
+            {
+              "key": "Content-Length",
+              "value": "173"
+            },
+            {
+              "key": "ETag",
+              "value": "W/\"ad-711imwPtx1jDQkHRRuf06w0NYnM\""
+            },
+            {
+              "key": "Date",
+              "value": "Wed, 24 Jun 2026 11:19:07 GMT"
+            },
+            {
+              "key": "Connection",
+              "value": "keep-alive"
+            },
+            {
+              "key": "Keep-Alive",
+              "value": "timeout=5"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n    \"success\": true,\n    \"message\": \"User registered successfully\",\n    \"data\": {\n        \"id\": \"6a3bbd2a18578cd523666888\",\n        \"username\": \"SummerAdmin\",\n        \"email\": \"summeradmin1@example.com\",\n        \"role\": \"admin\"\n    }\n}"
+        }
+      ]
+    },
+    {
+      "name": "Login Admin",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "const res = pm.response.json();",
+              "if (res.token) pm.collectionVariables.set('adminToken', res.token);",
+              "pm.test('admin login 200', () => pm.response.to.have.status(200));"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"identifier\": \"admin1@example.com\",\n  \"password\": \"secret123\"\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/auth/login",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "auth",
+            "login"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Signup User",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"username\": \"user1\",\n  \"email\": \"user1@example.com\",\n  \"password\": \"secret123\"\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/auth/signup",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "auth",
+            "signup"
+          ]
+        }
+      },
+      "response": [
+        {
+          "name": "Signup User",
+          "originalRequest": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"username\": \"anmoluser\",\n  \"email\": \"anmol@example.com\",\n  \"password\": \"anmole344\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/auth/signup",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "auth",
+                "signup"
+              ]
+            }
+          },
+          "status": "Created",
+          "code": 201,
+          "_postman_previewlanguage": null,
+          "header": [
+            {
+              "key": "X-Powered-By",
+              "value": "Express"
+            },
+            {
+              "key": "Content-Type",
+              "value": "application/json; charset=utf-8"
+            },
+            {
+              "key": "Content-Length",
+              "value": "163"
+            },
+            {
+              "key": "ETag",
+              "value": "W/\"a3-eTT+DnZen+4jWDhOaTYfjtI0XRE\""
+            },
+            {
+              "key": "Date",
+              "value": "Wed, 24 Jun 2026 11:21:40 GMT"
+            },
+            {
+              "key": "Connection",
+              "value": "keep-alive"
+            },
+            {
+              "key": "Keep-Alive",
+              "value": "timeout=5"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n    \"success\": true,\n    \"message\": \"User registered successfully\",\n    \"data\": {\n        \"id\": \"6a3bbdc418578cd52366688d\",\n        \"username\": \"anmoluser\",\n        \"email\": \"anmol@example.com\",\n        \"role\": \"user\"\n    }\n}"
+        }
+      ]
+    },
+    {
+      "name": "Login User",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "const res = pm.response.json();",
+              "if (res.token) pm.collectionVariables.set('userToken', res.token);"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"identifier\": \"user1@example.com\",\n  \"password\": \"secret123\"\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/auth/login",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "auth",
+            "login"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Create Stale Record (past expiry)",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "const res = pm.response.json();",
+              "if (res.data && res.data._id) pm.collectionVariables.set('recordId', res.data._id);",
+              "pm.test('record created 201', () => pm.response.to.have.status(201));"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{userToken}}"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"title\": \"stale record\",\n  \"data\": \"should be deleted by the job\",\n  \"expiresAt\": \"2000-01-01T00:00:00.000Z\"\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/records",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "records"
+          ]
+        }
+      },
+      "response": [
+        {
+          "name": "Create Stale Record (past expiry)",
+          "originalRequest": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{userToken}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"stale record\",\n  \"data\": \"should be deleted by the job\",\n  \"expiresAt\": \"2000-01-01T00:00:00.000Z\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/records",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "records"
+              ]
+            }
+          },
+          "status": "Created",
+          "code": 201,
+          "_postman_previewlanguage": null,
+          "header": [
+            {
+              "key": "X-Powered-By",
+              "value": "Express"
+            },
+            {
+              "key": "Content-Type",
+              "value": "application/json; charset=utf-8"
+            },
+            {
+              "key": "Content-Length",
+              "value": "324"
+            },
+            {
+              "key": "ETag",
+              "value": "W/\"144-QURbIPM3qBTanqGxdQMoCCM6knU\""
+            },
+            {
+              "key": "Date",
+              "value": "Wed, 24 Jun 2026 11:22:37 GMT"
+            },
+            {
+              "key": "Connection",
+              "value": "keep-alive"
+            },
+            {
+              "key": "Keep-Alive",
+              "value": "timeout=5"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n    \"success\": true,\n    \"message\": \"Record created\",\n    \"data\": {\n        \"title\": \"stale record\",\n        \"data\": \"should be deleted by the job\",\n        \"status\": \"active\",\n        \"expiresAt\": \"2000-01-01T00:00:00.000Z\",\n        \"owner\": \"6a3bbdc418578cd52366688d\",\n        \"_id\": \"6a3bbdfd18578cd523666892\",\n        \"createdAt\": \"2026-06-24T11:22:37.793Z\",\n        \"updatedAt\": \"2026-06-24T11:22:37.793Z\",\n        \"__v\": 0\n    }\n}"
+        }
+      ]
+    },
+    {
+      "name": "Create Fresh Record",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{userToken}}"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"title\": \"fresh record\",\n  \"data\": \"should survive cleanup\"\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/records",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "records"
+          ]
+        }
+      },
+      "response": [
+        {
+          "name": "Create Fresh Record",
+          "originalRequest": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{userToken}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"fresh record\",\n  \"data\": \"should survive cleanup\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/records",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "records"
+              ]
+            }
+          },
+          "status": "Created",
+          "code": 201,
+          "_postman_previewlanguage": null,
+          "header": [
+            {
+              "key": "X-Powered-By",
+              "value": "Express"
+            },
+            {
+              "key": "Content-Type",
+              "value": "application/json; charset=utf-8"
+            },
+            {
+              "key": "Content-Length",
+              "value": "279"
+            },
+            {
+              "key": "ETag",
+              "value": "W/\"117-rZx6Y9aL+D5kW/8rfmsrDLi35iw\""
+            },
+            {
+              "key": "Date",
+              "value": "Wed, 24 Jun 2026 11:22:49 GMT"
+            },
+            {
+              "key": "Connection",
+              "value": "keep-alive"
+            },
+            {
+              "key": "Keep-Alive",
+              "value": "timeout=5"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n    \"success\": true,\n    \"message\": \"Record created\",\n    \"data\": {\n        \"title\": \"fresh record\",\n        \"data\": \"should survive cleanup\",\n        \"status\": \"active\",\n        \"owner\": \"6a3bbdc418578cd52366688d\",\n        \"_id\": \"6a3bbe0918578cd523666895\",\n        \"createdAt\": \"2026-06-24T11:22:49.395Z\",\n        \"updatedAt\": \"2026-06-24T11:22:49.395Z\",\n        \"__v\": 0\n    }\n}"
+        }
+      ]
+    },
+    {
+      "name": "List Records",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{userToken}}"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/records",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "records"
+          ]
+        }
+      },
+      "response": [
+        {
+          "name": "List Records",
+          "originalRequest": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{userToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/records",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "records"
+              ]
+            }
+          },
+          "status": "OK",
+          "code": 200,
+          "_postman_previewlanguage": null,
+          "header": [
+            {
+              "key": "X-Powered-By",
+              "value": "Express"
+            },
+            {
+              "key": "Content-Type",
+              "value": "application/json; charset=utf-8"
+            },
+            {
+              "key": "Content-Length",
+              "value": "1999"
+            },
+            {
+              "key": "ETag",
+              "value": "W/\"7cf-ZRqq6QLZyo4MZFfK62LkDC4HbXg\""
+            },
+            {
+              "key": "Date",
+              "value": "Wed, 24 Jun 2026 11:23:04 GMT"
+            },
+            {
+              "key": "Connection",
+              "value": "keep-alive"
+            },
+            {
+              "key": "Keep-Alive",
+              "value": "timeout=5"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n    \"success\": true,\n    \"count\": 8,\n    \"data\": [\n        {\n            \"_id\": \"6a3bbe0918578cd523666895\",\n            \"title\": \"fresh record\",\n            \"data\": \"should survive cleanup\",\n            \"status\": \"active\",\n            \"owner\": \"6a3bbdc418578cd52366688d\",\n            \"createdAt\": \"2026-06-24T11:22:49.395Z\",\n            \"updatedAt\": \"2026-06-24T11:22:49.395Z\",\n            \"__v\": 0\n        },\n        {\n            \"_id\": \"6a3bbdfd18578cd523666892\",\n            \"title\": \"stale record\",\n            \"data\": \"should be deleted by the job\",\n            \"status\": \"active\",\n            \"expiresAt\": \"2000-01-01T00:00:00.000Z\",\n            \"owner\": \"6a3bbdc418578cd52366688d\",\n            \"createdAt\": \"2026-06-24T11:22:37.793Z\",\n            \"updatedAt\": \"2026-06-24T11:22:37.793Z\",\n            \"__v\": 0\n        },\n        {\n            \"data\": \"\",\n            \"status\": \"active\",\n            \"_id\": \"6a38d690335437e0a293e7fc\",\n            \"title\": \"A\",\n            \"category\": \"work\",\n            \"author\": \"john\",\n            \"amount\": 100,\n            \"date\": \"2024-01-10T00:00:00.000Z\",\n            \"__v\": 0,\n            \"createdAt\": \"2026-06-22T06:30:40.299Z\",\n            \"updatedAt\": \"2026-06-22T06:30:40.299Z\"\n        },\n        {\n            \"data\": \"\",\n            \"status\": \"active\",\n            \"_id\": \"6a38d690335437e0a293e7fd\",\n            \"title\": \"B\",\n            \"category\": \"work\",\n            \"author\": \"john\",\n            \"amount\": 200,\n            \"date\": \"2024-01-20T00:00:00.000Z\",\n            \"__v\": 0,\n            \"createdAt\": \"2026-06-22T06:30:40.299Z\",\n            \"updatedAt\": \"2026-06-22T06:30:40.299Z\"\n        },\n        {\n            \"data\": \"\",\n            \"status\": \"active\",\n            \"_id\": \"6a38d690335437e0a293e7fe\",\n            \"title\": \"C\",\n            \"category\": \"personal\",\n            \"author\": \"alice\",\n            \"amount\": 50,\n            \"date\": \"2024-02-05T00:00:00.000Z\",\n            \"__v\": 0,\n            \"createdAt\": \"2026-06-22T06:30:40.299Z\",\n            \"updatedAt\": \"2026-06-22T06:30:40.299Z\"\n        },\n        {\n            \"data\": \"\",\n            \"status\": \"active\",\n            \"_id\": \"6a38d690335437e0a293e7ff\",\n            \"title\": \"D\",\n            \"category\": \"work\",\n            \"author\": \"alice\",\n            \"amount\": 300,\n            \"date\": \"2024-02-15T00:00:00.000Z\",\n            \"__v\": 0,\n            \"createdAt\": \"2026-06-22T06:30:40.299Z\",\n            \"updatedAt\": \"2026-06-22T06:30:40.299Z\"\n        },\n        {\n            \"data\": \"\",\n            \"status\": \"active\",\n            \"_id\": \"6a38d690335437e0a293e800\",\n            \"title\": \"E\",\n            \"category\": \"ideas\",\n            \"author\": \"john\",\n            \"amount\": 0,\n            \"date\": \"2024-03-01T00:00:00.000Z\",\n            \"__v\": 0,\n            \"createdAt\": \"2026-06-22T06:30:40.299Z\",\n            \"updatedAt\": \"2026-06-22T06:30:40.299Z\"\n        },\n        {\n            \"data\": \"\",\n            \"status\": \"active\",\n            \"_id\": \"6a38d67c335437e0a293e7fa\",\n            \"title\": \"Sample\",\n            \"category\": \"work\",\n            \"author\": \"john\",\n            \"amount\": 100,\n            \"date\": \"2024-03-15T00:00:00.000Z\",\n            \"createdAt\": \"2026-06-22T06:30:20.887Z\",\n            \"updatedAt\": \"2026-06-22T06:30:20.887Z\",\n            \"__v\": 0\n        }\n    ]\n}"
+        }
+      ]
+    },
+    {
+      "name": "List Stale Records Only",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{userToken}}"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/records?stale=true",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "records"
+          ],
+          "query": [
+            {
+              "key": "stale",
+              "value": "true"
+            }
+          ]
+        }
+      },
+      "response": [
+        {
+          "name": "List Stale Records Only",
+          "originalRequest": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{userToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/records?stale=true",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "records"
+              ],
+              "query": [
+                {
+                  "key": "stale",
+                  "value": "true"
+                }
+              ]
+            }
+          },
+          "status": "OK",
+          "code": 200,
+          "_postman_previewlanguage": null,
+          "header": [
+            {
+              "key": "X-Powered-By",
+              "value": "Express"
+            },
+            {
+              "key": "Content-Type",
+              "value": "application/json; charset=utf-8"
+            },
+            {
+              "key": "Content-Length",
+              "value": "309"
+            },
+            {
+              "key": "ETag",
+              "value": "W/\"135-gOs7gkUU1KenK8CpVpAYlmYIn6Y\""
+            },
+            {
+              "key": "Date",
+              "value": "Wed, 24 Jun 2026 11:23:16 GMT"
+            },
+            {
+              "key": "Connection",
+              "value": "keep-alive"
+            },
+            {
+              "key": "Keep-Alive",
+              "value": "timeout=5"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n    \"success\": true,\n    \"count\": 1,\n    \"data\": [\n        {\n            \"_id\": \"6a3bbdfd18578cd523666892\",\n            \"title\": \"stale record\",\n            \"data\": \"should be deleted by the job\",\n            \"status\": \"active\",\n            \"expiresAt\": \"2000-01-01T00:00:00.000Z\",\n            \"owner\": \"6a3bbdc418578cd52366688d\",\n            \"createdAt\": \"2026-06-24T11:22:37.793Z\",\n            \"updatedAt\": \"2026-06-24T11:22:37.793Z\",\n            \"__v\": 0\n        }\n    ]\n}"
+        }
+      ]
+    },
+    {
+      "name": "User tries Jobs route (expect 403)",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{userToken}}"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/jobs",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "jobs"
+          ]
+        }
+      },
+      "response": [
+        {
+          "name": "User tries Jobs route (expect 403)",
+          "originalRequest": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{userToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/jobs",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "jobs"
+              ]
+            }
+          },
+          "status": "Forbidden",
+          "code": 403,
+          "_postman_previewlanguage": null,
+          "header": [
+            {
+              "key": "X-Powered-By",
+              "value": "Express"
+            },
+            {
+              "key": "Content-Type",
+              "value": "application/json; charset=utf-8"
+            },
+            {
+              "key": "Content-Length",
+              "value": "66"
+            },
+            {
+              "key": "ETag",
+              "value": "W/\"42-UGXf4WsaOCr4u4IMOeP7vj956HE\""
+            },
+            {
+              "key": "Date",
+              "value": "Wed, 24 Jun 2026 11:23:26 GMT"
+            },
+            {
+              "key": "Connection",
+              "value": "keep-alive"
+            },
+            {
+              "key": "Keep-Alive",
+              "value": "timeout=5"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n    \"success\": false,\n    \"message\": \"Access denied: requires role [admin]\"\n}"
+        }
+      ]
+    },
+    {
+      "name": "Admin: List Jobs",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{adminToken}}"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/jobs",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "jobs"
+          ]
+        }
+      },
+      "response": [
+        {
+          "name": "Admin: List Jobs",
+          "originalRequest": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/jobs",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "jobs"
+              ]
+            }
+          },
+          "status": "OK",
+          "code": 200,
+          "_postman_previewlanguage": null,
+          "header": [
+            {
+              "key": "X-Powered-By",
+              "value": "Express"
+            },
+            {
+              "key": "Content-Type",
+              "value": "application/json; charset=utf-8"
+            },
+            {
+              "key": "Content-Length",
+              "value": "342"
+            },
+            {
+              "key": "ETag",
+              "value": "W/\"156-flUCSidXnZwfZ4cvIBIguclA2Nw\""
+            },
+            {
+              "key": "Date",
+              "value": "Wed, 24 Jun 2026 11:23:44 GMT"
+            },
+            {
+              "key": "Connection",
+              "value": "keep-alive"
+            },
+            {
+              "key": "Keep-Alive",
+              "value": "timeout=5"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n    \"success\": true,\n    \"count\": 2,\n    \"data\": [\n        {\n            \"name\": \"deleteStaleRecords\",\n            \"description\": \"Delete records whose expiry has passed (or that are older than STALE_RECORD_DAYS).\",\n            \"schedule\": \"0 * * * *\",\n            \"lastRun\": null\n        },\n        {\n            \"name\": \"sendEmailSummary\",\n            \"description\": \"Compose and (mock) send a daily summary of record counts.\",\n            \"schedule\": \"0 8 * * *\",\n            \"lastRun\": null\n        }\n    ]\n}"
+        }
+      ]
+    },
+    {
+      "name": "Admin: Trigger deleteStaleRecords",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{adminToken}}"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/jobs/deleteStaleRecords/run",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "jobs",
+            "deleteStaleRecords",
+            "run"
+          ]
+        }
+      },
+      "response": [
+        {
+          "name": "Admin: Trigger deleteStaleRecords",
+          "originalRequest": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/jobs/deleteStaleRecords/run",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "jobs",
+                "deleteStaleRecords",
+                "run"
+              ]
+            }
+          },
+          "status": "OK",
+          "code": 200,
+          "_postman_previewlanguage": null,
+          "header": [
+            {
+              "key": "X-Powered-By",
+              "value": "Express"
+            },
+            {
+              "key": "Content-Type",
+              "value": "application/json; charset=utf-8"
+            },
+            {
+              "key": "Content-Length",
+              "value": "493"
+            },
+            {
+              "key": "ETag",
+              "value": "W/\"1ed-wvG49LfVQy337oCx8i1+jRqku1E\""
+            },
+            {
+              "key": "Date",
+              "value": "Wed, 24 Jun 2026 11:24:00 GMT"
+            },
+            {
+              "key": "Connection",
+              "value": "keep-alive"
+            },
+            {
+              "key": "Keep-Alive",
+              "value": "timeout=5"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n    \"success\": true,\n    \"message\": \"Job \\\"deleteStaleRecords\\\" finished with status: success\",\n    \"data\": {\n        \"job\": \"deleteStaleRecords\",\n        \"trigger\": \"manual\",\n        \"status\": \"success\",\n        \"startedAt\": \"2026-06-24T11:24:00.721Z\",\n        \"triggeredBy\": \"6a3bbd2a18578cd523666888\",\n        \"_id\": \"6a3bbe5018578cd5236668a0\",\n        \"createdAt\": \"2026-06-24T11:24:00.722Z\",\n        \"updatedAt\": \"2026-06-24T11:24:00.829Z\",\n        \"__v\": 0,\n        \"result\": {\n            \"deletedCount\": 1,\n            \"staleDays\": 30,\n            \"ranAt\": \"2026-06-24T11:24:00.779Z\"\n        },\n        \"finishedAt\": \"2026-06-24T11:24:00.826Z\",\n        \"durationMs\": 105\n    }\n}"
+        }
+      ]
+    },
+    {
+      "name": "Admin: Trigger sendEmailSummary",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{adminToken}}"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/jobs/sendEmailSummary/run",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "jobs",
+            "sendEmailSummary",
+            "run"
+          ]
+        }
+      },
+      "response": [
+        {
+          "name": "Admin: Trigger sendEmailSummary",
+          "originalRequest": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/jobs/sendEmailSummary/run",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "jobs",
+                "sendEmailSummary",
+                "run"
+              ]
+            }
+          },
+          "status": "OK",
+          "code": 200,
+          "_postman_previewlanguage": null,
+          "header": [
+            {
+              "key": "X-Powered-By",
+              "value": "Express"
+            },
+            {
+              "key": "Content-Type",
+              "value": "application/json; charset=utf-8"
+            },
+            {
+              "key": "Content-Length",
+              "value": "552"
+            },
+            {
+              "key": "ETag",
+              "value": "W/\"228-H6LVhOItoLQd1Hkg2lQ47KkTU0s\""
+            },
+            {
+              "key": "Date",
+              "value": "Wed, 24 Jun 2026 11:24:23 GMT"
+            },
+            {
+              "key": "Connection",
+              "value": "keep-alive"
+            },
+            {
+              "key": "Keep-Alive",
+              "value": "timeout=5"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n    \"success\": true,\n    \"message\": \"Job \\\"sendEmailSummary\\\" finished with status: success\",\n    \"data\": {\n        \"job\": \"sendEmailSummary\",\n        \"trigger\": \"manual\",\n        \"status\": \"success\",\n        \"startedAt\": \"2026-06-24T11:24:22.313Z\",\n        \"triggeredBy\": \"6a3bbd2a18578cd523666888\",\n        \"_id\": \"6a3bbe6618578cd5236668a5\",\n        \"createdAt\": \"2026-06-24T11:24:22.314Z\",\n        \"updatedAt\": \"2026-06-24T11:24:23.000Z\",\n        \"__v\": 0,\n        \"result\": {\n            \"to\": \"shubhanjali32@gmail.com\",\n            \"summary\": {\n                \"total\": 7,\n                \"active\": 1,\n                \"archived\": 0,\n                \"createdToday\": 1\n            },\n            \"sentAt\": \"2026-06-24T11:24:22.361Z\"\n        },\n        \"finishedAt\": \"2026-06-24T11:24:22.999Z\",\n        \"durationMs\": 686\n    }\n}"
+        }
+      ]
+    },
+    {
+      "name": "Admin: Trigger Unknown Job (expect 404)",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{adminToken}}"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/jobs/doesNotExist/run",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "jobs",
+            "doesNotExist",
+            "run"
+          ]
+        }
+      },
+      "response": [
+        {
+          "name": "Admin: Trigger Unknown Job (expect 404)",
+          "originalRequest": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/jobs/doesNotExist/run",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "jobs",
+                "doesNotExist",
+                "run"
+              ]
+            }
+          },
+          "status": "Not Found",
+          "code": 404,
+          "_postman_previewlanguage": null,
+          "header": [
+            {
+              "key": "X-Powered-By",
+              "value": "Express"
+            },
+            {
+              "key": "Content-Type",
+              "value": "application/json; charset=utf-8"
+            },
+            {
+              "key": "Content-Length",
+              "value": "55"
+            },
+            {
+              "key": "ETag",
+              "value": "W/\"37-Qie6LxgyAAGL1DtbFYXouN/BwqM\""
+            },
+            {
+              "key": "Date",
+              "value": "Wed, 24 Jun 2026 11:24:38 GMT"
+            },
+            {
+              "key": "Connection",
+              "value": "keep-alive"
+            },
+            {
+              "key": "Keep-Alive",
+              "value": "timeout=5"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n    \"success\": false,\n    \"message\": \"Unknown job: doesNotExist\"\n}"
+        }
+      ]
+    },
+    {
+      "name": "Admin: Job Logs (all)",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{adminToken}}"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/jobs/logs",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "jobs",
+            "logs"
+          ]
+        }
+      },
+      "response": [
+        {
+          "name": "Admin: Job Logs (all)",
+          "originalRequest": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/jobs/logs",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "jobs",
+                "logs"
+              ]
+            }
+          },
+          "status": "OK",
+          "code": 200,
+          "_postman_previewlanguage": null,
+          "header": [
+            {
+              "key": "X-Powered-By",
+              "value": "Express"
+            },
+            {
+              "key": "Content-Type",
+              "value": "application/json; charset=utf-8"
+            },
+            {
+              "key": "Content-Length",
+              "value": "927"
+            },
+            {
+              "key": "ETag",
+              "value": "W/\"39f-ZvVTpyjI71OntQ9fHFntbYH3RZE\""
+            },
+            {
+              "key": "Date",
+              "value": "Wed, 24 Jun 2026 11:25:23 GMT"
+            },
+            {
+              "key": "Connection",
+              "value": "keep-alive"
+            },
+            {
+              "key": "Keep-Alive",
+              "value": "timeout=5"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n    \"success\": true,\n    \"count\": 2,\n    \"total\": 2,\n    \"page\": 1,\n    \"pages\": 1,\n    \"data\": [\n        {\n            \"_id\": \"6a3bbe6618578cd5236668a5\",\n            \"job\": \"sendEmailSummary\",\n            \"trigger\": \"manual\",\n            \"status\": \"success\",\n            \"startedAt\": \"2026-06-24T11:24:22.313Z\",\n            \"triggeredBy\": \"6a3bbd2a18578cd523666888\",\n            \"createdAt\": \"2026-06-24T11:24:22.314Z\",\n            \"updatedAt\": \"2026-06-24T11:24:23.000Z\",\n            \"__v\": 0,\n            \"durationMs\": 686,\n            \"finishedAt\": \"2026-06-24T11:24:22.999Z\",\n            \"result\": {\n                \"to\": \"shubhanjali32@gmail.com\",\n                \"summary\": {\n                    \"total\": 7,\n                    \"active\": 1,\n                    \"archived\": 0,\n                    \"createdToday\": 1\n                },\n                \"sentAt\": \"2026-06-24T11:24:22.361Z\"\n            }\n        },\n        {\n            \"_id\": \"6a3bbe5018578cd5236668a0\",\n            \"job\": \"deleteStaleRecords\",\n            \"trigger\": \"manual\",\n            \"status\": \"success\",\n            \"startedAt\": \"2026-06-24T11:24:00.721Z\",\n            \"triggeredBy\": \"6a3bbd2a18578cd523666888\",\n            \"createdAt\": \"2026-06-24T11:24:00.722Z\",\n            \"updatedAt\": \"2026-06-24T11:24:00.829Z\",\n            \"__v\": 0,\n            \"durationMs\": 105,\n            \"finishedAt\": \"2026-06-24T11:24:00.826Z\",\n            \"result\": {\n                \"deletedCount\": 1,\n                \"staleDays\": 30,\n                \"ranAt\": \"2026-06-24T11:24:00.779Z\"\n            }\n        }\n    ]\n}"
+        }
+      ]
+    },
+    {
+      "name": "Admin: Job Logs filtered (deleteStaleRecords, success)",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{adminToken}}"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/jobs/logs?job=deleteStaleRecords&status=success",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "jobs",
+            "logs"
+          ],
+          "query": [
+            {
+              "key": "job",
+              "value": "deleteStaleRecords"
+            },
+            {
+              "key": "status",
+              "value": "success"
+            }
+          ]
+        }
+      },
+      "response": [
+        {
+          "name": "Admin: Job Logs filtered (deleteStaleRecords, success)",
+          "originalRequest": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/jobs/logs?job=deleteStaleRecords&status=success",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "jobs",
+                "logs"
+              ],
+              "query": [
+                {
+                  "key": "job",
+                  "value": "deleteStaleRecords"
+                },
+                {
+                  "key": "status",
+                  "value": "success"
+                }
+              ]
+            }
+          },
+          "status": "OK",
+          "code": 200,
+          "_postman_previewlanguage": null,
+          "header": [
+            {
+              "key": "X-Powered-By",
+              "value": "Express"
+            },
+            {
+              "key": "Content-Type",
+              "value": "application/json; charset=utf-8"
+            },
+            {
+              "key": "Content-Length",
+              "value": "465"
+            },
+            {
+              "key": "ETag",
+              "value": "W/\"1d1-d1/sjoFTn5nUS/HvRUJB8jt9XHI\""
+            },
+            {
+              "key": "Date",
+              "value": "Wed, 24 Jun 2026 11:25:40 GMT"
+            },
+            {
+              "key": "Connection",
+              "value": "keep-alive"
+            },
+            {
+              "key": "Keep-Alive",
+              "value": "timeout=5"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n    \"success\": true,\n    \"count\": 1,\n    \"total\": 1,\n    \"page\": 1,\n    \"pages\": 1,\n    \"data\": [\n        {\n            \"_id\": \"6a3bbe5018578cd5236668a0\",\n            \"job\": \"deleteStaleRecords\",\n            \"trigger\": \"manual\",\n            \"status\": \"success\",\n            \"startedAt\": \"2026-06-24T11:24:00.721Z\",\n            \"triggeredBy\": \"6a3bbd2a18578cd523666888\",\n            \"createdAt\": \"2026-06-24T11:24:00.722Z\",\n            \"updatedAt\": \"2026-06-24T11:24:00.829Z\",\n            \"__v\": 0,\n            \"durationMs\": 105,\n            \"finishedAt\": \"2026-06-24T11:24:00.826Z\",\n            \"result\": {\n                \"deletedCount\": 1,\n                \"staleDays\": 30,\n                \"ranAt\": \"2026-06-24T11:24:00.779Z\"\n            }\n        }\n    ]\n}"
+        }
+      ]
+    },
+    {
+      "name": "No token on jobs route (expect 401)",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/jobs",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "jobs"
+          ]
+        }
+      },
+      "response": [
+        {
+          "name": "No token on jobs route (expect 401)",
+          "originalRequest": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/jobs",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "jobs"
+              ]
+            }
+          },
+          "status": "Unauthorized",
+          "code": 401,
+          "_postman_previewlanguage": null,
+          "header": [
+            {
+              "key": "X-Powered-By",
+              "value": "Express"
+            },
+            {
+              "key": "Content-Type",
+              "value": "application/json; charset=utf-8"
+            },
+            {
+              "key": "Content-Length",
+              "value": "63"
+            },
+            {
+              "key": "ETag",
+              "value": "W/\"3f-TeIfaERlGGGdR7v0qsUeYoXNDrQ\""
+            },
+            {
+              "key": "Date",
+              "value": "Wed, 24 Jun 2026 11:26:01 GMT"
+            },
+            {
+              "key": "Connection",
+              "value": "keep-alive"
+            },
+            {
+              "key": "Keep-Alive",
+              "value": "timeout=5"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n    \"success\": false,\n    \"message\": \"Not authorized, no token provided\"\n}"
+        }
+      ]
+    }
+  ],
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:5011"
+    },
+    {
+      "key": "adminToken",
+      "value": ""
+    },
+    {
+      "key": "userToken",
+      "value": ""
+    },
+    {
+      "key": "recordId",
+      "value": ""
+    }
+  ]
+}

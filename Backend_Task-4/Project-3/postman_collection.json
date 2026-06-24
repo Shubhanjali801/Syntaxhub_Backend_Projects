@@ -1,0 +1,193 @@
+{
+  "info": {
+    "name": "Task 4 - Project 3 - Scheduled Tasks",
+    "description": "Scheduled Tasks API (node-cron). Flow: Signup Admin (with adminSecret) -> Login Admin (stores {{adminToken}}). Create a stale record + a fresh record. List jobs, trigger deleteStaleRecords / sendEmailSummary manually, then read the job execution logs. Job routes are admin only.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    { "key": "baseUrl", "value": "http://localhost:5011" },
+    { "key": "adminToken", "value": "" },
+    { "key": "userToken", "value": "" },
+    { "key": "recordId", "value": "" }
+  ],
+  "item": [
+    {
+      "name": "Health Check",
+      "request": { "method": "GET", "header": [], "url": { "raw": "{{baseUrl}}/", "host": ["{{baseUrl}}"], "path": [""] } }
+    },
+    {
+      "name": "Signup Admin (with adminSecret)",
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "body": { "mode": "raw", "raw": "{\n  \"username\": \"SummerAdmin\",\n  \"email\": \"summerAdmin1@example.com\",\n  \"password\": \"summer234\",\n  \"role\": \"admin\",\n  \"adminSecret\": \"super_admin_bootstrap_secret\"\n}" },
+        "url": { "raw": "{{baseUrl}}/auth/signup", "host": ["{{baseUrl}}"], "path": ["auth", "signup"] }
+      }
+
+    },
+    {
+      "name": "Login Admin",
+      "event": [
+        { "listen": "test", "script": { "type": "text/javascript", "exec": [
+          "const res = pm.response.json();",
+          "if (res.token) pm.collectionVariables.set('adminToken', res.token);",
+          "pm.test('admin login 200', () => pm.response.to.have.status(200));"
+        ] } }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "body": { "mode": "raw", "raw": "{\n  \"identifier\": \"summerAdmin1@example.com\",\n  \"password\": \"summer234\"\n}" },
+        "url": { "raw": "{{baseUrl}}/auth/login", "host": ["{{baseUrl}}"], "path": ["auth", "login"] }
+      }
+    },
+    {
+      "name": "Signup User",
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "body": { "mode": "raw", "raw": "{\n  \"username\": \"user1\",\n  \"email\": \"user1@example.com\",\n  \"password\": \"secret123\"\n}" },
+        "url": { "raw": "{{baseUrl}}/auth/signup", "host": ["{{baseUrl}}"], "path": ["auth", "signup"] }
+      }
+    },
+    {
+      "name": "Login User",
+      "event": [
+        { "listen": "test", "script": { "type": "text/javascript", "exec": [
+          "const res = pm.response.json();",
+          "if (res.token) pm.collectionVariables.set('userToken', res.token);"
+        ] } }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "body": { "mode": "raw", "raw": "{\n  \"identifier\": \"user1@example.com\",\n  \"password\": \"secret123\"\n}" },
+        "url": { "raw": "{{baseUrl}}/auth/login", "host": ["{{baseUrl}}"], "path": ["auth", "login"] }
+      }
+    },
+    {
+      "name": "Create Stale Record (past expiry)",
+      "event": [
+        { "listen": "test", "script": { "type": "text/javascript", "exec": [
+          "const res = pm.response.json();",
+          "if (res.data && res.data._id) pm.collectionVariables.set('recordId', res.data._id);",
+          "pm.test('record created 201', () => pm.response.to.have.status(201));"
+        ] } }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Content-Type", "value": "application/json" },
+          { "key": "Authorization", "value": "Bearer {{userToken}}" }
+        ],
+        "body": { "mode": "raw", "raw": "{\n  \"title\": \"stale record\",\n  \"data\": \"should be deleted by the job\",\n  \"expiresAt\": \"2000-01-01T00:00:00.000Z\"\n}" },
+        "url": { "raw": "{{baseUrl}}/records", "host": ["{{baseUrl}}"], "path": ["records"] }
+      }
+    },
+    {
+      "name": "Create Fresh Record",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Content-Type", "value": "application/json" },
+          { "key": "Authorization", "value": "Bearer {{userToken}}" }
+        ],
+        "body": { "mode": "raw", "raw": "{\n  \"title\": \"fresh record\",\n  \"data\": \"should survive cleanup\"\n}" },
+        "url": { "raw": "{{baseUrl}}/records", "host": ["{{baseUrl}}"], "path": ["records"] }
+      }
+    },
+    {
+      "name": "List Records",
+      "request": {
+        "method": "GET",
+        "header": [{ "key": "Authorization", "value": "Bearer {{userToken}}" }],
+        "url": { "raw": "{{baseUrl}}/records", "host": ["{{baseUrl}}"], "path": ["records"] }
+      }
+    },
+    {
+      "name": "List Stale Records Only",
+      "request": {
+        "method": "GET",
+        "header": [{ "key": "Authorization", "value": "Bearer {{userToken}}" }],
+        "url": {
+          "raw": "{{baseUrl}}/records?stale=true",
+          "host": ["{{baseUrl}}"],
+          "path": ["records"],
+          "query": [{ "key": "stale", "value": "true" }]
+        }
+      }
+    },
+    {
+      "name": "User tries Jobs route (expect 403)",
+      "request": {
+        "method": "GET",
+        "header": [{ "key": "Authorization", "value": "Bearer {{userToken}}" }],
+        "url": { "raw": "{{baseUrl}}/jobs", "host": ["{{baseUrl}}"], "path": ["jobs"] }
+      }
+    },
+    {
+      "name": "Admin: List Jobs",
+      "request": {
+        "method": "GET",
+        "header": [{ "key": "Authorization", "value": "Bearer {{adminToken}}" }],
+        "url": { "raw": "{{baseUrl}}/jobs", "host": ["{{baseUrl}}"], "path": ["jobs"] }
+      }
+    },
+    {
+      "name": "Admin: Trigger deleteStaleRecords",
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "Authorization", "value": "Bearer {{adminToken}}" }],
+        "url": { "raw": "{{baseUrl}}/jobs/deleteStaleRecords/run", "host": ["{{baseUrl}}"], "path": ["jobs", "deleteStaleRecords", "run"] }
+      }
+    },
+    {
+      "name": "Admin: Trigger sendEmailSummary",
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "Authorization", "value": "Bearer {{adminToken}}" }],
+        "url": { "raw": "{{baseUrl}}/jobs/sendEmailSummary/run", "host": ["{{baseUrl}}"], "path": ["jobs", "sendEmailSummary", "run"] }
+      }
+    },
+    {
+      "name": "Admin: Trigger Unknown Job (expect 404)",
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "Authorization", "value": "Bearer {{adminToken}}" }],
+        "url": { "raw": "{{baseUrl}}/jobs/doesNotExist/run", "host": ["{{baseUrl}}"], "path": ["jobs", "doesNotExist", "run"] }
+      }
+    },
+    {
+      "name": "Admin: Job Logs (all)",
+      "request": {
+        "method": "GET",
+        "header": [{ "key": "Authorization", "value": "Bearer {{adminToken}}" }],
+        "url": { "raw": "{{baseUrl}}/jobs/logs", "host": ["{{baseUrl}}"], "path": ["jobs", "logs"] }
+      }
+    },
+    {
+      "name": "Admin: Job Logs filtered (deleteStaleRecords, success)",
+      "request": {
+        "method": "GET",
+        "header": [{ "key": "Authorization", "value": "Bearer {{adminToken}}" }],
+        "url": {
+          "raw": "{{baseUrl}}/jobs/logs?job=deleteStaleRecords&status=success",
+          "host": ["{{baseUrl}}"],
+          "path": ["jobs", "logs"],
+          "query": [
+            { "key": "job", "value": "deleteStaleRecords" },
+            { "key": "status", "value": "success" }
+          ]
+        }
+      }
+    },
+    {
+      "name": "No token on jobs route (expect 401)",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": { "raw": "{{baseUrl}}/jobs", "host": ["{{baseUrl}}"], "path": ["jobs"] }
+      }
+    }
+  ]
+}

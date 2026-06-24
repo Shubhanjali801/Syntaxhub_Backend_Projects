@@ -1,0 +1,35 @@
+{
+  "name": "backend_task-4_project-3",
+  "version": "1.0.0",
+  "description": "Scheduled Tasks API — node-cron jobs (delete stale records, email summary), list/trigger jobs via endpoints, execution logging with success/failure + error handling (Syntecxhub Backend Task 4 / Project 3)",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon server.js",
+    "dev": "node --watch server.js"
+  },
+  "keywords": [
+    "express",
+    "mongoose",
+    "mongodb",
+    "node-cron",
+    "scheduler",
+    "cron",
+    "jwt",
+    "rest-api"
+  ],
+  "author": "Shubhanjali",
+  "license": "ISC",
+  "type": "commonjs",
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "dotenv": "^16.4.5",
+    "express": "^4.21.2",
+    "jsonwebtoken": "^9.0.2",
+    "mongoose": "^8.9.5",
+    "node-cron": "^4.5.0"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.9"
+  }
+}
